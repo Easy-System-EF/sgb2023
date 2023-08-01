@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="332.0" prefWidth="526.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.sgb.ProdutoMVRListController">
+   <children>
+      <ToolBar blendMode="DIFFERENCE" prefHeight="40.0" prefWidth="560.0">
+        <items>
+            <Label prefHeight="22.0" prefWidth="463.0" text="                                                   Produto MVR">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelUser" textFill="#70c0c6">
+               <font>
+                  <Font size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+        </items>
+         <effect>
+            <Blend />
+         </effect>
+      </ToolBar>
+      <TableView fx:id="tableViewProduto" blendMode="DARKEN" prefHeight="443.0" prefWidth="715.0">
+        <columns>
+          <TableColumn fx:id="tableColumnCodigoProd" editable="false" prefWidth="60.0" text="Código" />
+            <TableColumn fx:id="tableColumnNomeProd" editable="false" prefWidth="269.0" text="Nome" />
+            <TableColumn fx:id="tableColumnPercentualProd" editable="false" prefWidth="97.0" text="Percentual %" />
+            <TableColumn fx:id="tableColumnLetraProd" editable="false" prefWidth="93.0" text="Classififcação" />
+        </columns>
+         <effect>
+            <Blend />
+         </effect>
+      </TableView>
+   </children>
+</VBox>
