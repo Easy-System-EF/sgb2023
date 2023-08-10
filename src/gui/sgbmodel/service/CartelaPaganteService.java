@@ -25,6 +25,10 @@ public class CartelaPaganteService {
 		return dao.findByCartela(idCar);
 	}
 	
+	public List<CartelaPagante> findAll() {
+		return dao.findAll();
+	}
+	
 	public CartelaPagante findById(Integer codigo) {
 		return dao.findById(codigo);
 	}

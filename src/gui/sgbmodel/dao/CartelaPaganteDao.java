@@ -10,6 +10,7 @@ public interface CartelaPaganteDao {
 	void deleteById(Integer numero);
  	List<CartelaPagante> findBySituacao(String local, String situacao);
  	List<CartelaPagante> findByCartela(Integer idCar);
+ 	List<CartelaPagante> findAll();
  	List<CartelaPagante> findByMesAnoAberto(int mm, int aa, String str);
  	List<CartelaPagante> findByMesAnoPago(int mm, int aa, String str);
  	CartelaPagante findById(Integer codigo);

@@ -50,7 +50,7 @@ public class FornecedorDaoJDBC implements FornecedorDao {
  			st.setInt(11, obj.getDdd02());
   			st.setInt(12, obj.getTelefone02());
  			st.setString(13, obj.getContato());
- 			st.setInt(14, obj.getDdd01());
+ 			st.setInt(14, obj.getDddContato());
   			st.setInt(15, obj.getTelefoneContato());
  			st.setString(16, obj.getEmail());
  			st.setString(17, obj.getPix());

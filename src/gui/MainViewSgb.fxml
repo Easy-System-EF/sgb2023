@@ -49,6 +49,11 @@
                         <MenuItem fx:id="menuItemConsultaFechamentoMes" mnemonicParsing="false" onAction="#onMenuItemConsultaFechamentoMesAction" text="FechamentoMes" />
                         <MenuItem fx:id="menuItemConsultaProdutoMVR" mnemonicParsing="false" onAction="#onMenuItemConsultaProdutoMVRListAction" text="Produto MVR" />
                      </items></Menu>
+                  <Menu mnemonicParsing="false" text="Backup">
+                    <items>
+                      <MenuItem fx:id="menuItemBackUp" mnemonicParsing="false" onAction="#onMenuItemBackUpAction" text="BackUp SGB" />
+                    </items>
+                  </Menu>
                   <Menu fx:id="Ajuda" mnemonicParsing="false" text="Ajuda">
                      <items>
                         <MenuItem fx:id="menuItemSobre" mnemonicParsing="false" onAction="#onMenuItemSobreAction" text="Sobre" />

@@ -218,6 +218,33 @@ public class CartelaPaganteDaoJDBC implements CartelaPaganteDao {
  	}
 	
 	@Override 
+	public List<CartelaPagante> findAll() {
+ 		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+				 "SELECT * from cartelaPagante ");
+			
+			rs = st.executeQuery();
+			
+			List<CartelaPagante> listPag = new ArrayList<>();
+			
+			while(rs.next()) {
+				CartelaPagante carPag = instantiateCartelaPagantes(rs);
+				listPag.add(carPag);
+			}
+			return listPag;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+ 	}
+	
+	@Override 
 	public CartelaPagante findById(Integer codigo) {
  		PreparedStatement st = null;
 		ResultSet rs = null;

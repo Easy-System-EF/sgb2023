@@ -16,7 +16,6 @@ import gui.sgbmodel.dao.impl.GrupoDaoJDBC;
 import gui.sgbmodel.dao.impl.LoginDaoJDBC;
 import gui.sgbmodel.dao.impl.MesesDaoJDBC;
 import gui.sgbmodel.dao.impl.ProdutoDaoJDBC;
-import gui.sgbmodel.dao.impl.ReceberDaoJDBC;
 import gui.sgbmodel.dao.impl.SituacaoDaoJDBC;
 
 public class DaoFactory {
@@ -56,10 +55,6 @@ public class DaoFactory {
 		return new CartelaDaoJDBC(DB.getConnection());
 	}
 
-  	public static ReceberDao createReceberDao() {
-		return new ReceberDaoJDBC(DB.getConnection());
-	}
-  	
   	public static EntradaDao createEntradaDao() {
 		return new EntradaDaoJDBC(DB.getConnection());
 	}

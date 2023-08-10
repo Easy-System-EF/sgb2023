@@ -7,7 +7,6 @@ public class Cryptograf {
 	static String senhaCryp = "";
 	static String senhaDesCryp = "";
 	
-	
 	public static String criptografa(String str) {
 		senhaCryp = "";
 		char[] charsC = str.toCharArray();

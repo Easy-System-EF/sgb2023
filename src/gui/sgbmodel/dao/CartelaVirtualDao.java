@@ -12,6 +12,7 @@ public interface CartelaVirtualDao {
 	void deleteCartela(Integer codCar);
 	void zeraAll();
  	List<CartelaVirtual> findCartela(Integer idCar);
+ 	List<CartelaVirtual> findAll();
  	List<CartelaVirtual> findSituacao(String local, String situacao);
  	List<CartelaVirtual> findPesquisaFunc(String str);
  	List<CartelaVirtual> findPesquisaProd(String str);

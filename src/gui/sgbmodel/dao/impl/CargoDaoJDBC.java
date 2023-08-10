@@ -40,8 +40,6 @@ public class CargoDaoJDBC implements CargoDao {
  			st.setDouble(2, obj.getSalarioCargo());
  			st.setDouble(3, obj.getComissaoCargo());
 			 
-// 			st.executeUpdate();
-
  			int rowsaffectad = st.executeUpdate();
 			
 			if (rowsaffectad > 0) {
@@ -135,6 +133,7 @@ public class CargoDaoJDBC implements CargoDao {
 			DB.closeResultSet(rs);
 		}
  	}
+	
 	@Override
 	public List<Cargo> findAll() {
 		PreparedStatement st = null; 

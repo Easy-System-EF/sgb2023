@@ -1,5 +1,7 @@
 package gui.sgbmodel.service;
 
+import java.util.List;
+
 import gui.sgbmodel.dao.DaoFactory;
 import gui.sgbmodel.dao.EmpresaDao;
 import gui.sgbmodel.entities.Empresa;
@@ -22,5 +24,9 @@ public class EmpresaService {
 
 	public Empresa findById(Integer cod) {
    		return dao.findById(cod);
+	}
+
+	public List<Empresa> findAll() {
+   		return dao.findAll();
 	}
 }

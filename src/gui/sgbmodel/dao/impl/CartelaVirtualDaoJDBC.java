@@ -190,6 +190,52 @@ public class CartelaVirtualDaoJDBC implements CartelaVirtualDao {
 	}
 
 	@Override
+	public List<CartelaVirtual> findAll() {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT CartelaVirtual.*, funcionario.*, produto.* " + 
+							"FROM CartelaVirtual "
+							+ "INNER JOIN Funcionario " 
+								+ "ON cartelaVirtual.FuncionarioIdVir = funcionario.codigoFun "
+							+ "INNER JOIN Produto " 
+								+ "ON cartelaVirtual.ProdutoIdVir = produto.codigoProd "
+								+ "ORDER BY NumeroVir ");
+
+			rs = st.executeQuery();
+
+			List<CartelaVirtual> listVir = new ArrayList<>();
+			Funcionario fun = new Funcionario();
+			Produto prod = new Produto();
+			CartelaVirtual vir = new CartelaVirtual();
+			Map<Integer, Produto> mapProd = new HashMap<Integer, Produto>();
+			Map<Integer, Funcionario> mapFunc = new HashMap<Integer, Funcionario>();
+
+			while (rs.next()) {
+				fun = mapFunc.get(rs.getInt("FuncionarioIdVir"));
+				if (fun == null) {
+					fun = instantiateFuncionario(rs);
+					mapFunc.put(rs.getInt("FuncionarioIdVir"), fun);
+				}
+				prod = mapProd.get(rs.getInt("ProdutoIdVir"));
+				if (prod == null) {
+					prod = instantiateProduto(rs);
+					mapProd.put(rs.getInt("ProdutoIdVir"), prod);
+				}
+				vir = instantiateVirtual(fun, prod, rs);
+				listVir.add(vir);
+			}
+			return listVir;
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
+
+	@Override
 	public List<CartelaVirtual> findSituacao(String local, String situacao) {
 		PreparedStatement st = null;
 		ResultSet rs = null;

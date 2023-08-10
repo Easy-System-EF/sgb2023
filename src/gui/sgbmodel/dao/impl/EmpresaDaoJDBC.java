@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import db.DB;
 import db.DbException;
@@ -122,6 +124,36 @@ public class EmpresaDaoJDBC implements EmpresaDao {
 			DB.closeResultSet(rs);
 		}
  	}
+	
+	@Override
+	public List<Empresa> findAll() {
+		PreparedStatement st = null; 
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement( 
+					"SELECT * FROM empresa " +
+					"ORDER BY NumeroEmp ");
+			
+			rs = st.executeQuery();
+			
+			List<Empresa> list = new ArrayList<>();
+			
+			while (rs.next())
+			{	if (rs != null)
+				{	Empresa obj = instantiateEmp(rs);
+ 					list.add(obj);
+				}	
+ 			}
+			return list;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	} 
 	
 	private Empresa instantiateEmp(ResultSet rs) throws SQLException {
  		Empresa tab = new Empresa();

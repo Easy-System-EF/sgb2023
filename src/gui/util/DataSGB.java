@@ -1,24 +1,26 @@
 package gui.util;
 
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.Date;
 
 public class DataSGB {
 
 	public static void main(String[] args) {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//		SimpleDateFormat sdfT = new SimpleDateFormat("dd/MM/yyyy HH:MM:ss");
+////		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 //		DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 //		DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").withZone(ZoneId.systemDefault());
-//		// withZone c/ default ou a qtd de hs de fuso horario;
+////		// withZone c/ default ou a qtd de hs de fuso horario;
 //		DateTimeFormatter dtf4 = DateTimeFormatter.ISO_DATE_TIME;
-//		DateTimeFormatter dtf5 = DateTimeFormatter.ISO_INSTANT;
+////		DateTimeFormatter dtf5 = DateTimeFormatter.ISO_INSTANT;
 		
 //		LocalDate d01 = LocalDate.now();
 //		LocalDateTime d02 = LocalDateTime.now();
+		Instant min = DataStaticSGB.instantAtual();
+		Date dt = new Date(System.currentTimeMillis());
+		System.out.println(dt + " " + min);
 //		Instant d03 = Instant.now();
 //		
 //		LocalDate d04 = LocalDate.parse("2023-07-14");
@@ -31,32 +33,32 @@ public class DataSGB {
 //		LocalDate d10 = LocalDate.of(2023, 7, 14);
 //		LocalDateTime d11 = LocalDateTime.of(2023, 7, 14, 11, 30);
 
-		LocalDate dt1 = DataStaticSGB.criaLocalAtual();
-		LocalDate dt2 = DataStaticSGB.converteString("2023-07-15");
-		LocalDate dt3 = DataStaticSGB.criaAnoMesDia(2023, 10, 17);
-		LocalDate dt4 = DataStaticSGB.converteFormataString("15/09/2020");
-		Date dt5 = DataStaticSGB.localParaDateFormatada(dt1);
-		String dt55 = sdf.format(dt5);
-		boolean dt6 = DataStaticSGB.anoBissexto(dt4);
-		Duration dt7 = DataStaticSGB.durationPositivo(dt4, dt3);
-		Duration dt8 = DataStaticSGB.durationNegativo(dt3, dt4);
-		LocalDate dt9 = DataStaticSGB.maisDiasLocal(dt4, 1127);
-		Date dt10 = DataStaticSGB.somaDiasDate(sdf.format(dt5), 30);
-		Duration dt11 = DataStaticSGB.intervalDiasDate(sdf.format(dt5), sdf.format(dt10));
-		Date dt12 = DataStaticSGB.somaMesDate(dt55, 12);
-		
-		System.out.println("dt1 " + dt1);
-		System.out.println("dt2 " + dt2);
-		System.out.println("dt3 " + dt3);
-		System.out.println("dt4 " + dt4);
-		System.out.println("dt5 " + dt55);
-		System.out.println("dt6 " + dt6);
-		System.out.println("dt7 " + dt7.toDays());
-		System.out.println("dt8 " + dt8.toDays());
-		System.out.println("dt9 " + dt9);
-		System.out.println("dt10 " + dt10);
-		System.out.println("dt11 " + dt11.toDays());
-		System.out.println("dt12 " + sdf.format(dt12));
+//		LocalDate dt1 = DataStaticSGB.criaLocalAtual();
+//		LocalDate dt2 = DataStaticSGB.converteString("2023-07-15");
+//		LocalDate dt3 = DataStaticSGB.criaAnoMesDia(2023, 10, 17);
+//		LocalDate dt4 = DataStaticSGB.converteFormataString("15/09/2020");
+//		Date dt5 = DataStaticSGB.localParaDateFormatada(dt1);
+//		String dt55 = sdf.format(dt5);
+//		boolean dt6 = DataStaticSGB.anoBissexto(dt4);
+//		long dt7 = DataStaticSGB.durationPositivo(dt4, dt3).toHours();
+//		long dt8 = DataStaticSGB.durationNegativo(dt3, dt4).toDays();;
+//		LocalDate dt9 = DataStaticSGB.maisDiasLocal(dt4, 1127);
+//		Date dt10 = DataStaticSGB.somaDiasDate(sdf.format(dt5), 30);
+//		Duration dt11 = DataStaticSGB.intervalDiasDate(sdf.format(dt5), sdf.format(dt10));
+//		Date dt12 = DataStaticSGB.somaMesDate(dt55, 12);
+//		
+//		System.out.println("dt1 " + dt1);
+//		System.out.println("dt2 " + dt2);
+//		System.out.println("dt3 " + dt3);
+//		System.out.println("dt4 " + dt4);
+//		System.out.println("dt5 " + dt55);
+//		System.out.println("dt6 " + dt6);
+//		System.out.println("dt7 " + dt7.toDays());
+//		System.out.println("dt8 " + dt8.toDays());
+//		System.out.println("dt9 " + dt9);
+//		System.out.println("dt10 " + dt10);
+//		System.out.println("dt11 " + dt11.toDays());
+//		System.out.println("dt12 " + sdf.format(dt12));
 		
 //// INSTANCIAÇÃO datas		
 //		// output formato iso default
@@ -126,5 +128,6 @@ public class DataSGB {
 //		System.out.println("intervalo +  datas d04 local date parse " + d2.toDays());
 //		System.out.println("intervalo -  datas d06 instant parse    " + d3.toDays());
 //		System.out.println("intervalo +  datas d06 instant parse    " + d4.toDays());
+		
 	}
 }

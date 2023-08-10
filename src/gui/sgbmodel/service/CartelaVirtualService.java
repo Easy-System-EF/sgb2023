@@ -30,6 +30,10 @@ public class CartelaVirtualService {
    		return dao.findCartela(idCar);
 	} 
 	
+	public List<CartelaVirtual> findAll() {
+   		return dao.findAll();
+	} 
+	
 	public List<CartelaVirtual> findPesquisaFunc(String str) {
    		return dao.findPesquisaFunc(str);
 	} 

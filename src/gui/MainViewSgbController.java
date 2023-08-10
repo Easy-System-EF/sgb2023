@@ -6,6 +6,9 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import application.MainSgb;
+import gui.copia.Copia;
+import gui.copia.CopiaService;
+import gui.copia.CopiaSgbController;
 import gui.listerneres.DataChangeListener;
 import gui.sgb.AdiantamentoListController;
 import gui.sgb.CargoListController;
@@ -126,6 +129,9 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	@FXML
 	private MenuItem menuItemConsultaProdutoMVR;
 	
+	@FXML
+	private MenuItem menuItemBackUp;
+
 	@FXML
 	private MenuItem menuItemSobre;
 
@@ -343,7 +349,7 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	@SuppressWarnings("static-access")
 	@FXML  
 	public void onMenuItemRelatorioParcelaAbertoAction() {
-		classe = "Compromisso Aberto ";
+		classe = "Parcela em Aberto ";
 		if (senha != "Ok") {
 			temLogar();
 		} 
@@ -365,7 +371,7 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	@SuppressWarnings("static-access")
 	@FXML
 	public void onMenuItemRelatorioParcelaPagoAction() {
-		classe = "Compromisso Pago ";
+		classe = "Parcela Paga ";
 		if (senha != "Ok") {
 			temLogar();
 		} 
@@ -435,7 +441,7 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	@SuppressWarnings("static-access")
 	@FXML
 	public void onMenuItemConsultaCartelaAbertoAction() {
-		classe = "Con Receber";
+		classe = "Con Cartela em Aberto ";
 		if (senha != "Ok") {
 			temLogar();
 		} 
@@ -461,7 +467,7 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	@SuppressWarnings("static-access")
 	@FXML
 	public void onMenuItemConsultaCartelaPagoAction() {
-		classe = "Con Recebido ";
+		classe = "Con CartelaPago ";
 		if (senha != "Ok") {
 			temLogar();
 		} 
@@ -565,10 +571,25 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	// parametros <consumer> do loadView
 	@FXML
 	public void onMenuItemSobreAction() {
+		classe = "Sobre ";
 		if (senha != "Ok") {
 			temLogar();
 		} else {	
 		loadView("/gui/Sobre.fxml", x -> {
+		});}
+	}
+
+	@FXML
+	public void onMenuItemBackUpAction() {
+		classe = "BackUp ";
+		if (senha != "Ok") {
+			temLogar();
+		} else {	
+			loadView("/gui/copia/CopiaList.fxml", (CopiaSgbController controller) -> {
+				controller.user = user;
+				controller.setBackUpService(new CopiaService());
+				controller.setEntity(new Copia());
+				controller.updateTableView();
 		});}
 	}
 

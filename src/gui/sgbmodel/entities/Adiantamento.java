@@ -168,5 +168,5 @@ public class Adiantamento extends Funcionario implements Serializable{
 		return "Adiantamento [numeroAdi=" + numeroAdi + ", dataAdi=" + dataAdi + ", valeAdi=" + valeAdi + ", mesAdi="
 				+ mesAdi + ", anoAdi=" + anoAdi + ", valorCartelaAdi=" + valorCartelaAdi + ", cartelaAdi=" + cartelaAdi
 				+ ", comissaoAdi=" + comissaoAdi + ", tipoAdi=" + tipoAdi + ", salarioAdi=" + salarioAdi + "]";
-	}
+	}	
 }

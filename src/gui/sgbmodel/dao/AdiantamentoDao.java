@@ -14,5 +14,6 @@ public interface AdiantamentoDao {
  	List<Adiantamento> findMes(Integer mes, Integer Ano);
  	List<Adiantamento> findPesquisaFun(String str);
  	List<Adiantamento> findByCartela(Integer idCar);
+ 	List<Adiantamento> findAll();
 }
   
