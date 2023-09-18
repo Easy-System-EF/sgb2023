@@ -36,6 +36,10 @@ public class TipoConsumoService {
 		}
 	}
 
+	public void insertBackUp(TipoConsumo obj) {
+		dao.insertBackUp(obj);
+	}
+
 // removendo
 	public void remove(int tipo) {
 		dao.deleteById(tipo);

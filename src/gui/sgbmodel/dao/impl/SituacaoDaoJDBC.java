@@ -64,6 +64,33 @@ public class SituacaoDaoJDBC implements SituacaoDao {
 	}
  
 	@Override
+	public void insertBackUp(Situacao obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO login " +
+				      "(NumeroSit, NomeSit)" + 
+  				      "VALUES " +
+				      "(?, ?)",
+ 					 Statement.RETURN_GENERATED_KEYS); 
+ 
+ 			st.setInt(1, obj.getNumeroSit());
+ 			st.setString(2, obj.getNomeSit());
+			
+ 			st.executeUpdate();
+
+  		}
+ 		catch (SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
+	@Override
 	public void update(Situacao obj) {
 		PreparedStatement st = null;
    		try {

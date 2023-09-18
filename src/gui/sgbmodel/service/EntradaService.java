@@ -36,6 +36,10 @@ public class EntradaService {
 		}
 	}
 
+	public void insertBackUp(Entrada obj) {
+		dao.insertBackUp(obj);
+	}
+
 // removendo
 	public void remove(Entrada obj) {
 		dao.deleteById(obj.getNumeroEnt());

@@ -210,13 +210,13 @@ public class FolhaMesFormController implements Initializable {
 			List<Adiantamento> adianto = adService.findMes(mes, ano);
 			for (Adiantamento a : adianto) {
 				if (a.getNumeroAdi() != null) {
-					classe = "Funcionário Folha 0 Folha mes Form";
+					classe = "Funcionário Folha mes Form";
 					objFun = funService.findById(a.getCodigoFun());
 					if (a.getTipoAdi().equals("A")) {
-						objFun.somaAdiantamento(a.getValeAdi());
+						objFun.setAdiantamentoFun(adService.valeSumTotal(mes, ano, objFun.getCodigoFun()));
 					}
 					if (a.getTipoAdi().equals("C")) {
-						objFun.somaComissao(a.getComissaoAdi());
+						objFun.setComissaoFun(adService.comSumTotal(mes, ano, objFun.getCodigoFun()));
 					}	
 					objFun.setSalarioFun(a.getSalarioAdi());
 					funService.saveOrUpdate(objFun);

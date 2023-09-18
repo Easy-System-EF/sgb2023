@@ -87,6 +87,54 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 	}
  
 	@Override
+	public void insertBackUp(Funcionario obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO funcionario " +
+				      "(CodigoFun, NomeFun, EnderecoFun, BairroFun, CidadeFun, " +
+				       "UfFun, CepFun, DddFun, TelefoneFun, " +
+				       "CpfFun, PixFun, ComissaoFun, AdiantamentoFun," +
+				       "MesFun, AnoFun, CargoFun, SituacaoFun, SalarioFun, CargoId, SituacaoId )" + 
+  				    "VALUES " +
+				      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+ 					 Statement.RETURN_GENERATED_KEYS); 
+ 
+  			st.setInt(1, obj.getCodigoFun());
+  			st.setString(2, obj.getNomeFun());
+ 			st.setString(3, obj.getEnderecoFun());
+  			st.setString(4, obj.getBairroFun());
+ 			st.setString(5, obj.getCidadeFun());
+ 			st.setString(6, obj.getUfFun());
+  			st.setString(7,  obj.getCepFun());
+  			st.setInt(8, obj.getDddFun());
+   			st.setInt(9,  obj.getTelefoneFun());
+   			st.setString(10, obj.getCpfFun());
+   			st.setString(11, obj.getPixFun());
+   			st.setDouble(12, obj.getComissaoFun());
+   			st.setDouble(13, obj.getAdiantamentoFun());
+   			st.setInt(14, obj.getMesFun());
+   			st.setInt(15, obj.getAnoFun());
+   			st.setString(16, obj.getCargoFun());
+   			st.setString(17, obj.getSituacaoFun());
+   			st.setDouble(18, obj.getSalarioFun());
+   			st.setInt(19, obj.getCargo().getCodigoCargo());
+   			st.setInt(20,  obj.getSituacao().getNumeroSit());
+   			
+ 			st.executeUpdate();
+			
+  		}
+ 		catch (SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
+	@Override
 	public void update(Funcionario obj) {
 		PreparedStatement st = null;
   		try {

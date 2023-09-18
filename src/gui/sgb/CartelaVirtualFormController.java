@@ -351,7 +351,11 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 			exception.addErros("qtd", "Qtd é maior que estoque");
 		}
 
-		obj.setTotalProdVir(obj.getQuantidadeProdVir() * obj.getVendaProdVir());
+		if (obj.getNomeFunVir().equals("Consumo Próprio") || obj.getNomeFunVir().equals("Consumo Próprio")) {
+			obj.setTotalProdVir(-1 * (obj.getQuantidadeProdVir() * obj.getPrecoProdVir()));
+		} else {
+			obj.setTotalProdVir(obj.getQuantidadeProdVir() * obj.getVendaProdVir());
+		}	
 
 		if (obj.getTotalProdVir() != totAnt) {
 			totAnt = obj.getTotalProdVir();

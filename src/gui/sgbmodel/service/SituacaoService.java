@@ -23,13 +23,17 @@ public class SituacaoService {
 	} 
 	
 // * inserindo ou atualizando via dao
-// * se o codigo não existe insere, se existe altera 
+// * se o codigo nï¿½o existe insere, se existe altera 
 	public void saveOrUpdate(Situacao obj) {
 		if (obj.getNumeroSit() == null) {
 			dao.insert(obj);
 		} else {
 			dao.update(obj);
 		}
+	}
+
+	public void insertBackUp(Situacao obj) {
+		dao.insertBackUp(obj);
 	}
 
 // removendo

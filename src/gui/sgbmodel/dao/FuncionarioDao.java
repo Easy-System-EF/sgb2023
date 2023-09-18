@@ -7,6 +7,7 @@ import gui.sgbmodel.entities.Funcionario;
 public interface FuncionarioDao {
 
 	void insert(Funcionario obj);
+	void insertBackUp(Funcionario obj);
 	void update(Funcionario obj);
 	void deleteById(Integer codigo);
 	void zeraAll();

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vBoxBackUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="322.0" prefWidth="386.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.copia.CopiaSgbController">
+<VBox fx:id="vBoxBackUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="322.0" prefWidth="365.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.copia.CopiaSgbController">
    <children>
       <Label fx:id="labelUser">
          <VBox.margin>
@@ -42,9 +42,10 @@
       </Label>
       <TableView fx:id="tableViewBackUp" prefHeight="182.0" prefWidth="334.0">
         <columns>
-            <TableColumn fx:id="tableColumnDateIBackUp" editable="false" prefWidth="118.0" text="Inicial" />
-          <TableColumn fx:id="tableColumnUserBackUp" editable="false" prefWidth="98.0" text="User" />
-          <TableColumn fx:id="tableColumnDateFBackUp" editable="false" prefWidth="107.0" text="Final" />
+            <TableColumn fx:id="tableColumnDateIBackUp" editable="false" prefWidth="101.0" text="Inicial" />
+          <TableColumn fx:id="tableColumnUserBackUp" editable="false" text="User" />
+            <TableColumn fx:id="tableColumnDateFBackUp" editable="false" prefWidth="101.0" text="Final" />
+          <TableColumn fx:id="tableColumnUnidBackUp" editable="false" prefWidth="66.0" text="Unidade" />
         </columns>
       </TableView>
       <Label fx:id="labelFile">

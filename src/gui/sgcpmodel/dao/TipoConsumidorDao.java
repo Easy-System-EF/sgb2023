@@ -7,6 +7,7 @@ import gui.sgcpmodel.entites.TipoConsumo;
 public interface TipoConsumidorDao {
 
 	void insert(TipoConsumo obj);
+	void insertBackUp(TipoConsumo obj);
 	void update(TipoConsumo obj);
 	void deleteById(int codigo);
 	TipoConsumo findById(int codigo); 

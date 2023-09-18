@@ -1,22 +1,27 @@
 package gui.copia;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Copia {
+public class Copia implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private Integer IdBackUp;
 	private String dataIBackUp;
 	private String userBackUp;
 	private String dataFBackUp;
+	private String unidadeBackUp;
 	
 	public Copia() {		
 	}
 
-	public Copia(Integer IdBackUp, String dataIBackUp, String userBackUp, String dataFBackUp) {
+	public Copia(Integer IdBackUp, String dataIBackUp, String userBackUp, String dataFBackUp, String unidadeBackp) {
 		this.IdBackUp = IdBackUp;
 		this.dataIBackUp = dataIBackUp;
 		this.userBackUp = userBackUp;
 		this.dataFBackUp = dataFBackUp;
+		this.unidadeBackUp = unidadeBackp;
 	}
 
 	public Integer getIdBackUp() {
@@ -51,6 +56,14 @@ public class Copia {
 		this.dataFBackUp = dataFBackUp;
 	}
 	
+	public String getUnidadeBackUp() {
+		return unidadeBackUp;
+	}
+
+	public void setUnidadeBackUp(String unidadeBackUp) {
+		this.unidadeBackUp = unidadeBackUp;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(IdBackUp);
@@ -70,7 +83,7 @@ public class Copia {
 
 	@Override
 	public String toString() {
-		return "BackUp [IdBackUp=" + IdBackUp + ", dataIBackUp=" + dataIBackUp + ", userBackUp=" + userBackUp
-				+ ", dataFBackUp=" + dataFBackUp + "]";
+		return "Copia [IdBackUp=" + IdBackUp + ", dataIBackUp=" + dataIBackUp + ", userBackUp=" + userBackUp
+				+ ", dataFBackUp=" + dataFBackUp + ", unidadeBackUp=" + unidadeBackUp + "]";
 	}
 }

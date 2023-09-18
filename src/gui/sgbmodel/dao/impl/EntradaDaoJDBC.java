@@ -73,6 +73,41 @@ public class EntradaDaoJDBC implements EntradaDao {
 	}
  
 	@Override
+	public void insertBackUp(Entrada obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO entrada " 
+				      + "(NumeroEnt, NnfEnt, DataEnt, NomeFornEnt, NomeProdEnt, QuantidadeProdEnt, "
+				      + "ValorProdEnt, FornecedorIdEnt, ProdutoIdEnt)" 
+   				      + "VALUES " 
+				      + "(?, ?, ?, ?, ?, ?, ?, ?, ? )",
+ 					 Statement.RETURN_GENERATED_KEYS); 
+
+			st.setInt(1, obj.getNumeroEnt());
+			st.setInt(2, obj.getNnfEnt());
+			st.setDate(3, new java.sql.Date(obj.getDataEnt().getTime()));
+			st.setString(4, obj.getForn().getRazaoSocial());
+			st.setString(5, obj.getProd().getNomeProd());
+ 			st.setDouble(6, obj.getQuantidadeProdEnt());
+			st.setDouble(7, obj.getValorProdEnt());
+			st.setInt(8,  obj.getForn().getCodigo());
+			st.setInt(9, obj.getProd().getCodigoProd());
+						
+ 			st.executeUpdate();
+			
+  		}
+ 		catch (SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
+	@Override
 	public void update(Entrada obj) {
 		PreparedStatement st = null;
   		try {

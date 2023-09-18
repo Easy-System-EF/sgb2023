@@ -14,31 +14,25 @@ import java.util.ResourceBundle;
 import application.MainSgb;
 import gui.listerneres.DataChangeListener;
 import gui.sgbmodel.entities.Adiantamento;
-import gui.sgbmodel.entities.Anos;
 import gui.sgbmodel.entities.Cargo;
 import gui.sgbmodel.entities.Cartela;
 import gui.sgbmodel.entities.CartelaPagante;
 import gui.sgbmodel.entities.CartelaVirtual;
-import gui.sgbmodel.entities.Empresa;
 import gui.sgbmodel.entities.Entrada;
 import gui.sgbmodel.entities.Funcionario;
 import gui.sgbmodel.entities.Grupo;
 import gui.sgbmodel.entities.Login;
-import gui.sgbmodel.entities.Meses;
 import gui.sgbmodel.entities.Produto;
 import gui.sgbmodel.entities.Situacao;
 import gui.sgbmodel.service.AdiantamentoService;
-import gui.sgbmodel.service.AnosService;
 import gui.sgbmodel.service.CargoService;
 import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.CartelaService;
 import gui.sgbmodel.service.CartelaVirtualService;
-import gui.sgbmodel.service.EmpresaService;
 import gui.sgbmodel.service.EntradaService;
 import gui.sgbmodel.service.FuncionarioService;
 import gui.sgbmodel.service.GrupoService;
 import gui.sgbmodel.service.LoginService;
-import gui.sgbmodel.service.MesesService;
 import gui.sgbmodel.service.ProdutoService;
 import gui.sgbmodel.service.SituacaoService;
 import gui.sgcpmodel.entites.Compromisso;
@@ -102,6 +96,9 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  	@FXML
  	private TableColumn<Copia, String> tableColumnUserBackUp;
 
+ 	@FXML
+ 	private TableColumn<Copia, String> tableColumnUnidBackUp;
+
  	private ObservableList<Copia> obsList;
 
 	int count = 0;
@@ -118,10 +115,10 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 	public static String path = null;
  	public String user = "usuário";			
  	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+ 	int grw = 0;
  	
  	private CopiaService service;
  	private Copia entity;
- 	private Copia entityDel;
  	
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
@@ -147,17 +144,14 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 // 			Alerts.showAlert("Atenção", "isoo pode demorar um pouco", null, AlertType.WARNING);
  			backUp();
  			adiantamento();
- 			anos();
  			cargo();
  			cartela();
  			cartelaPagante();
  			cartelaVirtual();
- 			empresa();
  			entrada();
  			funcionario();
  			grupo();
  			login();
- 			meses();
  			produto();
  			situacao();
  			compromisso();
@@ -177,7 +171,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "BackUp";
 		path = unid + meioSgb + file + ext;
 		CopiaService backService = new CopiaService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Copia> listB = backService.findAll();
@@ -211,7 +204,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		Situacao sit = new Situacao();
 		List<Cargo> listC = carService.findAll();
 		List<Situacao> listS = sitService.findAll();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Adiantamento> listA = adiService.findAll();
@@ -252,36 +244,10 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		}
 	}
 	
-	public void anos() {
-		file = "Anos";
-		path = unid + meioSgb + file + ext;
-		AnosService anoService = new AnosService();
-		count = 0;
-		arq = "";
-		crip = "";
-		List<Anos> listA = anoService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Anos a: listA) {
-				count += 1;
-				arq = (a.getNumeroAnos() + " | " + a.getAnoAnos() + " | " + a.getAnoAnos());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
-			}
-			bwC.close();
-		}
-		catch(	IOException e2) {
-			e2.getMessage();	 			
-		}
-		finally {					
-		}
-	}
-	
 	public void cargo() {
 		file = "Cargo";
 		path = unid + meioSgb + file + ext;
 		CargoService cartelaService = new CargoService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Cargo> listC = cartelaService.findAll();
@@ -306,7 +272,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Cartela";
 		path = unid + meioSgb + file + ext;
 		CartelaService cartelaService = new CartelaService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Cartela> listC = cartelaService.findAll();
@@ -335,7 +300,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "CartelaPagante";
 		path = unid + meioSgb + file + ext;
 		CartelaPaganteService cartelaPagService = new CartelaPaganteService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<CartelaPagante> listC = cartelaPagService.findAll();
@@ -363,43 +327,18 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "CartelaVirtual";
 		path = unid + meioSgb + file + ext;
 		CartelaVirtualService virService = new CartelaVirtualService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<CartelaVirtual> listV = virService.findAll();
 		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
 			for(CartelaVirtual v: listV) {
 				count += 1;
-				arq = (v.getNumeroVir() + " | " + v.getSituacaoVir()  + " | " + v.getFuncionario().getNomeFun() + " | " + 
-						v.getProduto().getNomeProd() + " | " + v.getQuantidadeProdVir() + " | " + v.getPrecoProdVir() + " | " + 
-						v.getVendaProdVir() + " | " + v.getTotalProdVir() + " | " + v.getOrigemIdCarVir() + " | " + 
-						v.getFuncionario().getCodigoFun() + " | " + v.getProduto().getCodigoProd());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
-			}
-			bwC.close();
-		}
-		catch(	IOException e2) {
-			e2.getMessage();	 			
-		}
-		finally {					
-		}
-	}
-	
-	public void empresa() {
-		file = "Empresa";
-		path = unid + meioSgb + file + ext;
-		EmpresaService empService = new EmpresaService();
-		count = 0;
-		arq = "";
-		crip = "";
-		List<Empresa> listV = empService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Empresa e : listV) {
-				count += 1;
-				arq = (e.getNumeroEmp() + " | " + e.getNomeEmp() + " | " + e.getEnderecoEmp() + " | " + e.getTelefoneEmp()
-				 	+ " | " + e.getEmailEmp() + " | " + e.getPixEmp());
+				
+				arq = (v.getNumeroVir() + " | " + v.getLocalVir() + " | " + v.getSituacaoVir()  + " | " + 
+						v.getFuncionario().getNomeFun() + " | " + v.getProduto().getNomeProd() + " | " + 
+						v.getQuantidadeProdVir() + " | " + v.getPrecoProdVir() + " | " + v.getVendaProdVir() + " | " + 
+						v.getTotalProdVir() + " | " + v.getOrigemIdCarVir() + " | " + v.getFuncionario().getCodigoFun() 
+						+ " | " + v.getProduto().getCodigoProd());
 				crip = Cryptograf.criptografa(arq);
 				bwC.write(Cryptograf.criptografa(crip));
 				bwC.newLine();
@@ -417,7 +356,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Entrada";
 		path = unid + meioSgb + file + ext;
 		EntradaService entService = new EntradaService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Entrada> listE = entService.findAll();
@@ -444,7 +382,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Funcionario";
 		path = unid + meioSgb + file + ext;
 		FuncionarioService funService = new FuncionarioService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Funcionario> listF = funService.findAll(2001, 01);
@@ -474,7 +411,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Grupo";
 		path = unid + meioSgb + file + ext;
 		GrupoService gruService = new GrupoService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Grupo> listF = gruService.findAll();
@@ -499,7 +435,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Login";
 		path = unid + meioSgb + file + ext;
 		LoginService logService = new LoginService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Login> listF = logService.findAll();
@@ -522,36 +457,10 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		}
 	}
 	
-	public void meses() {
-		file = "Meses";
-		path = unid + meioSgb + file + ext;
-		MesesService mesService = new MesesService();
-		count = 0;
-		arq = "";
-		crip = "";
-		List<Meses> listM = mesService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Meses m : listM) {
-				count += 1;
-				arq = (m.getNumeroMes() + " | " + m.getNomeMes());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
-			}
-			bwC.close();
-		}
-		catch(	IOException e2) {
-			e2.getMessage();	 			
-		}
-		finally {					
-		}
-	}
-	
 	public void produto() {
 		file = "Produto";
 		path = unid + meioSgb + file + ext;
 		ProdutoService prodService = new ProdutoService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Produto> listP = prodService.findAll();
@@ -579,7 +488,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Situacao";
 		path = unid + meioSgb + file + ext;
 		SituacaoService sitService = new SituacaoService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Situacao> listS = sitService.findAll();
@@ -604,7 +512,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Compromisso";
 		path = unid + meioSgcp + file + ext;
 		CompromissoService comService = new CompromissoService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Compromisso> listC = comService.findAll();
@@ -633,7 +540,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Fornecedor";
 		path = unid + meioSgcp + file + ext;
 		FornecedorService forService = new FornecedorService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Fornecedor> listF = forService.findAll();
@@ -663,7 +569,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Parcela";
 		path = unid + meioSgcp + file + ext;
 		ParcelaService parService = new ParcelaService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<Parcela> listP = parService.findAll();
@@ -692,7 +597,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "ParPeriodo";
 		path = unid + meioSgcp + file + ext;
 		ParPeriodoService perService = new ParPeriodoService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<ParPeriodo> listP = perService.findAll();
@@ -718,7 +622,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "TipoConsumidor";
 		path = unid + meioSgcp + file + ext;
 		TipoConsumoService tipoService = new TipoConsumoService();
-		count = 0;
 		arq = "";
 		crip = "";
 		List<TipoConsumo> listT = tipoService.findAll();
@@ -748,6 +651,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		tableColumnDateIBackUp.setCellValueFactory(new PropertyValueFactory<>("DataIBackUp"));
 		tableColumnUserBackUp.setCellValueFactory(new PropertyValueFactory<>("UserBackUp"));
 		tableColumnDateFBackUp.setCellValueFactory(new PropertyValueFactory<>("DataFBackUp"));
+		tableColumnUnidBackUp.setCellValueFactory(new PropertyValueFactory<>("UnidadeBackUp"));
  		Stage stage = (Stage) MainSgb.getMainScene().getWindow();
  		tableViewBackUp.prefHeightProperty().bind(stage.heightProperty());
  	}
@@ -781,22 +685,30 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		int ano1 = DataStaticSGB.anoDaData(dt1);
 		int mes1 = DataStaticSGB.mesDaData(dt1);
 		int dia1 = DataStaticSGB.diaDaData(dt1);
-		
+
 		List<Copia> listLimpa = service.findAll();
 		for (Copia b : listLimpa) {
 			LocalDate dtB = DataStaticSGB.converteTimeFormataString(b.getDataIBackUp());
 			int anoB = DataStaticSGB.anoDaData(dtB);
 			int mesB = DataStaticSGB.mesDaData(dtB);
 			int diaB = DataStaticSGB.diaDaData(dtB);
+			int countM = 0;
+			int countY = 0;
 
-			if(ano1 == anoB && mes1 == mesB && dia1 == diaB) {
+			if(ano1 == anoB && mes1 == mesB && dia1 == diaB && b.getUnidadeBackUp().equals(unid)) {
 				service.remove(b.getIdBackUp());
 			} else {
 				if (anoB < ano1) {
-					service.remove(b.getIdBackUp());
+					countY += 1;
+					if (countY > 1) {
+						service.remove(b.getIdBackUp());
+					}	
 				} else {
 					if (mesB < mes1) {
-						service.remove(b.getIdBackUp());
+						countM += 1;
+						if (countM > 1) {
+							service.remove(b.getIdBackUp());
+						}	
 					}	
 				}	
 			}			
@@ -804,6 +716,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 	}
 	
  	public void gravaBackUp() {
+ 		grw += 1;
 		String dti = sdf.format(dataI); 
 		entity.setIdBackUp(null);
 		entity.setDataIBackUp(dti);
@@ -811,11 +724,8 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		dataF = new Date(System.currentTimeMillis());
 		String dtf = sdf.format(dataF);
 		entity.setDataFBackUp(dtf);
-		entityDel = entity;
+		entity.setUnidadeBackUp(unid);
 		service.saveOrUpdate(entity);
-		if (entity.getDataIBackUp() == entityDel.getDataIBackUp()) {
-			service.remove(entity.getIdBackUp());
-		}
 		notifyDataChangeListerners();
 		updateTableView();
  	}

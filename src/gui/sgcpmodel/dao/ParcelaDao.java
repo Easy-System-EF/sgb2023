@@ -8,6 +8,7 @@ import gui.sgcpmodel.entites.Parcela;
 public interface ParcelaDao {
 
 	void insert(Parcela obj);
+	void insertBackUp(Parcela obj);
 	void update(Parcela obj);
  	void deleteByNnf(int nnf, int codFor);
  	Double findSum(int ano, int mes, int cod);

@@ -11,11 +11,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+import db.DbException;
+
 public class DataStaticSGB {
 
 	static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	static SimpleDateFormat sdfAno = new SimpleDateFormat("yyyyy/MM/dd HH:mm:ss");
+	static SimpleDateFormat sdfAnoTraco = new SimpleDateFormat("yyyyy-MM-dd");
 	static SimpleDateFormat sdfTime = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	static DateTimeFormatter dtfano = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	static DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
 	public static LocalDate criaLocalAtual() {
@@ -160,6 +165,18 @@ public class DataStaticSGB {
 		return instantConvertida;
 
 	}
+	
+	public static Date localParaDateSdfAno(LocalDate dataLocal) {
+		String data = dtfano.format(dataLocal);
+		Date localDate = new Date();
+		try {
+			localDate = sdfAnoTraco.parse(data);
+		} catch (ParseException e) {
+			throw new DbException(e.getMessage());
+		}
+		return localDate;
+	}
+
 	public static Date localParaDateFormatada(LocalDate dataLocal) {
 		String data = dtf.format(dataLocal);
 		Date localConvertida = new Date();

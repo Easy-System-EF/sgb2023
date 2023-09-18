@@ -78,6 +78,49 @@ public class AdiantamentoDaoJDBC implements AdiantamentoDao {
 	}
 
 	@Override
+	public void insertBackUp(Adiantamento obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO adiantamento " +
+							"(NumeroAdi, DataAdi, ValeAdi, MesAdi, AnoAdi, ValorCartelaAdi, CartelaAdi, " +
+							"ComissaoAdi, TipoAdi, salarioAdi, codigoFun, NomeFun, mesFun, anoFun, " +
+							"cargoFun, situacaoFun, salarioFun, cargoId, situacaoId )" +
+								"VALUES " + 
+							"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+							Statement.RETURN_GENERATED_KEYS);
+
+			st.setInt(1, obj.getNumeroAdi());
+			st.setDate(2, new java.sql.Date(obj.getDataAdi().getTime()));
+			st.setDouble(3, obj.getValeAdi());
+			st.setInt(4, obj.getMesAdi());
+			st.setInt(5, obj.getAnoAdi());
+			st.setDouble(6,  obj.getValorCartelaAdi());
+			st.setInt(7, obj.getCartelaAdi());
+			st.setDouble(8, obj.getComissaoAdi());
+			st.setString(9, obj.getTipoAdi());
+			st.setDouble(10, obj.getSalarioAdi());
+			st.setInt(11, obj.getCodigoFun());
+			st.setString(12, obj.getNomeFun());
+			st.setInt(13, obj.getMesFun());
+			st.setInt(14, obj.getAnoFun());
+			st.setString(15, obj.getCargoFun());
+			st.setString(16, obj.getSituacaoFun());
+			st.setDouble(17, obj.getSalarioFun());
+   			st.setInt(18, obj.getCargo().getCodigoCargo());
+   			st.setInt(19,  obj.getSituacao().getNumeroSit());
+
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+
+	@Override
 	public void deleteById(Integer codigo) {
 		PreparedStatement st = null;
 		try {
@@ -91,6 +134,63 @@ public class AdiantamentoDaoJDBC implements AdiantamentoDao {
 		} finally {
 			DB.closeStatement(st);
 		}
+	}
+
+	@Override
+	public Double comSumTotal(int mes, int ano, int codFun) {
+		Double totCom = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+   		try {
+			st = conn.prepareStatement(
+					
+			"select SUM(ComissaoAdi) AS total from adiantamento " +
+					"WHERE adiantamento.MesAdi = ? AND adiantamento.AnoAdi = ? AND adiantamento.CodigoFun = ? "); 
+	
+			st.setInt(1, mes);
+			st.setInt(2, ano);
+			st.setInt(3, codFun);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				totCom = rs.getDouble("total");
+			}	
+   		}
+ 		catch (SQLException e) {
+			throw new DbException ( "Erro!!! " + classe + "não totalizado " + e.getMessage()); }
+ 		finally {
+ 			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+		return totCom;
+	}
+
+	@Override
+	public Double valeSumTotal(int mes, int ano, int codFun) {
+		Double totAdi = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+   		try {
+			st = conn.prepareStatement(
+			
+			"select SUM(ValeAdi) AS total from adiantamento " +
+				"WHERE adiantamento.MesAdi = ? AND adiantamento.AnoAdi = ? AND adiantamento.CodigoFun = ? "); 
+
+			st.setInt(1, mes);
+			st.setInt(2, ano);
+			st.setInt(3, codFun);
+			
+			rs = st.executeQuery();
+			while (rs.next()) {
+				totAdi = rs.getDouble("total");
+			}	
+   		}
+ 		catch (SQLException e) {
+			throw new DbException ( "Erro!!! " + classe + "não totalizado " + e.getMessage()); }
+ 		finally {
+ 			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+		return totAdi;
 	}
 
 	@Override
@@ -127,8 +227,7 @@ public class AdiantamentoDaoJDBC implements AdiantamentoDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT * " + 
-						"FROM adiantamento " + 
+					"SELECT * FROM adiantamento " + 
 						"WHERE CartelaAdi = ? ");
 
 			st.setInt(1, idCar);

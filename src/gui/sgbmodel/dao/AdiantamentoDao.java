@@ -7,6 +7,7 @@ import gui.sgbmodel.entities.Adiantamento;
 public interface AdiantamentoDao {
 
 	void insert(Adiantamento obj);
+	void insertBackUp(Adiantamento obj);
 	void deleteById(Integer codigo);
 	void zeraAll();
  	Adiantamento findMesIdFun(Integer cod, Integer mes, Integer Ano, String tipo);
@@ -15,5 +16,7 @@ public interface AdiantamentoDao {
  	List<Adiantamento> findPesquisaFun(String str);
  	List<Adiantamento> findByCartela(Integer idCar);
  	List<Adiantamento> findAll();
+ 	Double comSumTotal(int mm, int aa, int codFun);
+ 	Double valeSumTotal(int mm, int aa, int codFun);
 }
   

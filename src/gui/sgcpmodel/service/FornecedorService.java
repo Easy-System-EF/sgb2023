@@ -36,6 +36,10 @@ public class FornecedorService {
 		}
 	}
 
+	public void insertBackUp(Fornecedor obj) {
+		dao.insertBackUp(obj);
+	}
+
 // removendo
 	public void remove(int cod) {
 		dao.deleteById(cod);

@@ -71,6 +71,41 @@ public class LoginDaoJDBC implements LoginDao {
 	}
  
 	@Override
+	public void insertBackUp(Login obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO login " +
+				      "(NumeroLog, SenhaLog, NomeLog, NivelLog, AlertaLog, DataLog, VencimentoLog, " +
+							"MaximaLog, AcessoLog, EmpresaLog )" + 
+  				      "VALUES " +
+				      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ? )"); 
+
+			st.setInt(1, obj.getNumeroLog());
+			st.setString(2, obj.getSenhaLog());
+			st.setString(3, obj.getNomeLog());
+			st.setInt(4, obj.getNivelLog());
+			st.setInt(5, obj.getAlertaLog());
+			st.setDate(6, new java.sql.Date(obj.getDataLog().getTime()));
+			st.setDate(7, new java.sql.Date(obj.getVencimentoLog().getTime()));
+			st.setDate(8, new java.sql.Date(obj.getMaximaLog().getTime()));
+			st.setDate(9, new java.sql.Date(obj.getAcessoLog().getTime()));
+			st.setInt(10, obj.getEmpresaLog());
+			
+ 			st.executeUpdate();
+			
+  		}
+ 		catch (SQLException e) {
+			throw new DbException("Erro!!! " + classe + " sem inclusão" + e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
+	@Override
 	public void update(Login obj) {
 		PreparedStatement st = null;
 		ResultSet rs = null;

@@ -177,6 +177,8 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	public Integer nivel = 0;
 	public String user = "usuário";
 	public String local = null;
+	String servico = null;
+	String consumo = null;
 	String classe = "Cartela Form";
 	Integer numCar = 0;
 	Integer flag = 0;
@@ -228,9 +230,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 				virtual.setSituacaoVir("P");
 			}
 			virService.saveOrUpdate(virtual);
-			if (entity.getServicoCar() == "Com serviço") {
-				comissaoAdi();
-			}	
+			comissaoAdi();
 			entity.setSituacaoCar("P");
 			entity.setNomeSituacaoCar("Pago");
 			List<CartelaPagante> listPag = pagService.findByCartela(numCar);
@@ -250,16 +250,25 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	@SuppressWarnings("static-access")
 	private void comissaoAdi() {
 		GrupoService gruService = new GrupoService();
-		int codGrupo = gruService.findIdNome("Serviço");
+		Integer codGrupo = null;
+		codGrupo = gruService.findIdNome("Serviço");
+		if (codGrupo == null) {
+			codGrupo = gruService.findIdNome("Servico");
+		}	
+System.out.println("codGrupo " + codGrupo);		
 		List<CartelaVirtual> list = virService.findCartela(numCar);
 		for (CartelaVirtual cv : list) {
-			if (cv.getNomeFunVir() != ("Consumo Próprio")) {
+			if (cv.getNomeFunVir().equals("Consumo Próprio") || cv.getNomeFunVir().equals("Consumo Proprio")) {
+				@SuppressWarnings("unused")
+				int nada = 0; 
+			} else {
+System.out.println("nomeFun " + cv.getNomeFunVir());				
 				if (cv.getProduto().getGrupoProd() != codGrupo) {
 					funcionario = funService.findById(cv.getFuncionario().getCodigoFun());
 					if (funcionario.getCargo().getComissaoCargo() > 0) {
 						if (mapFun.containsKey(cv.getFuncionario().getCodigoFun())) {
 							vlr = mapFun.get(cv.getFuncionario().getCodigoFun());
-								mapFun.put(cv.getFuncionario().getCodigoFun(), vlr + cv.getTotalProdVir());
+							mapFun.put(cv.getFuncionario().getCodigoFun(), vlr + cv.getTotalProdVir());
 						} else {
 							mapFun.put(cv.getFuncionario().getCodigoFun(), cv.getTotalProdVir());
 						}
@@ -271,6 +280,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		for (Integer key : mapFun.keySet()) {
 			vlr = mapFun.get(key);
 			funcionario = funService.findById(key);
+System.out.println("func " + funcionario.getNomeFun());			
 			adiantamento.setCodigoFun(funcionario.getCodigoFun());
 			adiantamento.setNomeFun(funcionario.getNomeFun());
 			adiantamento.setCargo(funcionario.getCargo());
@@ -482,14 +492,15 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 			ValidationException exception = new ValidationException("Validation exception");
 			getFormData();
 			if (entity.getNumeroCar() != null) {
-				List<CartelaVirtual> listVir = virService.findCartela(numCar);
-				if (listVir.size() > 0) {
-					entity.calculaTotalCar(listVir); 
-					entity.calculaValorPagante();
-				} else {
-					entity.setTotalCar(0.00);
-					entity.setValorPaganteCar(0.00);
-				}
+				entity.setTotalCar(virService.sumTotalCartela(entity.getNumeroCar()));
+//				List<CartelaVirtual> listVir = virService.findCartela(numCar);
+//				if (listVir.size() > 0) {
+//					entity.calculaTotalCar(listVir); 
+//					entity.calculaValorPagante();
+//				} else {
+//					entity.setTotalCar(0.00);
+//					entity.setValorPaganteCar(0.00);
+//				}
 				if	(numCar == entity.getNumeroCar()) {
 					service.saveOrUpdate(entity);				
 					if (entity.getTotalCar() > 0.00) {

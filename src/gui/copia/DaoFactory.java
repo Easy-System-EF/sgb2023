@@ -10,7 +10,13 @@ public class DaoFactory {
  	public static CopiaDao createBackUpDao() {
 		return new CopiaDaoJDBC(DB.getConnection());
 	}
+ 	
  	public static UnidadeDao createUnidadeDao() {
 		return new UnidadeDaoJDBC(DB.getConnection());
 	}
+ 	
+ 	public static RestauraDao createRestauraDao() {
+		return new RestauraDaoJDBC(DB.getConnection());
+	}
+ 	
 }

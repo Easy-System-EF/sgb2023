@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="vBoxRestaura" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="386.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.copia.RestauraSgbController">
+   <children>
+      <Label fx:id="labelUser">
+         <VBox.margin>
+            <Insets left="300.0" />
+         </VBox.margin>
+      </Label>
+      <Label text="Restaura SGB">
+         <VBox.margin>
+            <Insets left="120.0" />
+         </VBox.margin>
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonOk" blendMode="DARKEN" mnemonicParsing="false" onAction="#onBtOkAdiAction" prefHeight="22.0" prefWidth="65.0" text="Unidade">
+         <VBox.margin>
+            <Insets left="40.0" />
+         </VBox.margin>
+         <effect>
+            <Blend />
+         </effect>
+         <font>
+            <Font name="System Bold Italic" size="11.0" />
+         </font>
+      </Button>
+      <Label prefHeight="12.0" prefWidth="305.0">
+         <VBox.margin>
+            <Insets left="10.0" />
+         </VBox.margin>
+      </Label>
+      <TableView fx:id="tableViewRestaura" prefHeight="182.0" prefWidth="334.0">
+        <columns>
+            <TableColumn fx:id="tableColumnFile" editable="false" prefWidth="229.0" text="Arquivo" />
+            <TableColumn fx:id="tableColumnStatus" prefWidth="52.0" text="Status" />
+            <TableColumn fx:id="tableColumnCount" prefWidth="93.0" text="Recuperados" />
+        </columns>
+      </TableView>
+      <Label fx:id="labelFile" textFill="#0f23ba">
+         <VBox.margin>
+            <Insets left="150.0" />
+         </VBox.margin>
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelCount">
+         <VBox.margin>
+            <Insets left="200.0" />
+         </VBox.margin>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+   </children>
+</VBox>

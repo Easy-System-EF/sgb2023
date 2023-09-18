@@ -22,6 +22,10 @@ public class LoginService {
 		}
 	} 
 
+	public void insertBackUp(Login obj) {
+		dao.insertBackUp(obj);
+	} 
+
 	public Login findBySenha(String senha) {
    		return dao.findBySenha(senha);
 	}

@@ -99,7 +99,6 @@ public class CartelaListPagoController implements Initializable, DataChangeListe
 		contP.subscribeDataChangeListener(this);
 		contP.updateFormData();
   		});
-System.out.println("cart lst pg " + mm + " " + aa);  		
 		updateTableView();
   	}
   

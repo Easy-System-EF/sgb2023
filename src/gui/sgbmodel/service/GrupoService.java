@@ -36,6 +36,10 @@ public class GrupoService {
 		}
 	}
 
+	public void insertBackUp(Grupo obj) {
+		dao.insertBackUp(obj);
+	}
+
 // removendo
 	public void remove(Grupo obj) {
 		dao.deleteById(obj.getCodigoGru());

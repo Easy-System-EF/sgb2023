@@ -40,6 +40,10 @@ public class FuncionarioService {
 		}
 	}
 
+	public void insertBackUp(Funcionario obj) {
+		dao.insertBackUp(obj);
+	}
+
 // removendo
 	public void remove(Funcionario obj) {
 		dao.deleteById(obj.getCodigoFun());

@@ -22,6 +22,10 @@ public class CartelaVirtualService {
 			dao.update(obj);
 	}
 	
+	public void insertBackUp(CartelaVirtual obj) {
+		dao.insertBackUp(obj);
+	}
+	
 	public List<CartelaVirtual> findSituacao(String local, String situacao) {
    		return dao.findSituacao(local, situacao);
 	} 
@@ -44,6 +48,14 @@ public class CartelaVirtualService {
 	
 	public CartelaVirtual findByProduto(String str) {
    		return dao.findByProduto(str);
+	} 
+	
+	public Double sumTotalCartela(int numCar) {
+   		return dao.sumTotalCartela(numCar);
+	} 
+	
+	public Double sumTotalCusto(int numCar) {
+   		return dao.sumTotalCusto(numCar);
 	} 
 	
 // removendo

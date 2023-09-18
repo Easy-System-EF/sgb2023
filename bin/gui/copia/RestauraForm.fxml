@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane blendMode="DIFFERENCE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="226.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.copia.RestauraSgbFormController">
+   <children>
+      <Label fx:id="user" blendMode="DARKEN" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <effect>
+            <Blend />
+         </effect>
+      </Label>
+      <Label text="Restaura SGB" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label text="Unidade: " AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="40.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="comboUnid" layoutX="72.0" prefHeight="22.0" prefWidth="66.0" AnchorPane.leftAnchor="72.0" AnchorPane.topAnchor="40.0" />
+      <Button fx:id="btOK" mnemonicParsing="false" onAction="#recebeUnidAction" prefHeight="22.0" prefWidth="58.0" text="Ok" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="40.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+   </children>
+   <effect>
+      <Blend />
+   </effect>
+</AnchorPane>

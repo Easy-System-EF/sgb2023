@@ -44,6 +44,10 @@ public class ProdutoService {
 		}
 	}
 
+	public void insertBackUp(Produto obj) {
+		dao.insertBackUp(obj);
+	}
+
 // removendo
 	public void remove(Produto obj) {
 		dao.deleteById(obj.getCodigoProd());

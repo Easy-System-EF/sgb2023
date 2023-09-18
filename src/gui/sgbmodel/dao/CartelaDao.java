@@ -7,6 +7,7 @@ import gui.sgbmodel.entities.Cartela;
 public interface CartelaDao {
 
 	void insert(Cartela obj);
+	void insertBackUp(Cartela obj);
 	void update(Cartela obj);
 	void deleteById(Integer codigo);
 	void zeraAll();

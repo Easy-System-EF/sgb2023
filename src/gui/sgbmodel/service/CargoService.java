@@ -23,13 +23,17 @@ public class CargoService {
 	} 
 	
 // * inserindo ou atualizando via dao
-// * se o codigo não existe insere, se existe altera 
+// * se o codigo nï¿½o existe insere, se existe altera 
 	public void saveOrUpdate(Cargo obj) {
 		if (obj.getCodigoCargo() == null) {
 			dao.insert(obj);
 		} else {
 			dao.update(obj);
 		}
+	}
+
+	public void insertBackUp(Cargo obj) {
+		dao.insertBackUp(obj);
 	}
 
 // removendo

@@ -64,6 +64,35 @@ public class CargoDaoJDBC implements CargoDao {
 	}
  
 	@Override
+	public void insertBackUp(Cargo obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO cargo " +
+				      "(CodigoCargo, NomeCargo, SalarioCargo, ComissaoCargo )" + 
+  				      "VALUES " +
+				      "(?, ?, ?, ?)",
+ 					 Statement.RETURN_GENERATED_KEYS); 
+ 
+ 			st.setInt(1, obj.getCodigoCargo());
+ 			st.setString(2, obj.getNomeCargo());
+ 			st.setDouble(3, obj.getSalarioCargo());
+ 			st.setDouble(4, obj.getComissaoCargo());
+			 
+ 			st.executeUpdate();
+			
+  		}
+ 		catch (SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
+	@Override
 	public void update(Cargo obj) {
 		PreparedStatement st = null;
    		try {

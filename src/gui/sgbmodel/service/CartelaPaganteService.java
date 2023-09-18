@@ -21,6 +21,10 @@ public class CartelaPaganteService {
 		}
 	}
 
+	public void insertBackUp(CartelaPagante obj) {
+		dao.insertBackUp(obj);
+	}
+
 	public List<CartelaPagante> findByCartela(Integer idCar) {
 		return dao.findByCartela(idCar);
 	}

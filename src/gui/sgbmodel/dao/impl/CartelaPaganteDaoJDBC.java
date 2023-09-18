@@ -74,6 +74,44 @@ public class CartelaPaganteDaoJDBC implements CartelaPaganteDao {
 	}
  
 	@Override
+	public void insertBackUp(CartelaPagante obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO cartelaPagante " +
+				      "(NumeroCartelaPag, paganteCartelaPag, dataCartelaPag, localCartelaPag, valorCartelaPag, " +
+					  "formaCartelaPag, situacaoCartelaPag, cartelaIdOrigemPag, mesCartelaPag, " +
+				      "anoCartelaPag, mesPagamentoPag, anoPagamentoPag )" +		
+  				      "VALUES " +
+				      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+ 					 Statement.RETURN_GENERATED_KEYS); 
+ 
+			st.setInt(1, obj.getNumeroCartelaPag());
+			st.setInt(2, obj.getPaganteCartelaPag());
+			st.setDate(3, new java.sql.Date(obj.getDataCartelaPag().getTime()));
+			st.setString(4, obj.getLocalCartelaPag());
+			st.setDouble(5, obj.getValorCartelaPag());
+			st.setString(6, obj.getFormaCartelaPag());
+			st.setString(7, obj.getSituacaoCartelaPag());
+			st.setInt(8, obj.getCartelaIdOrigemPag());
+			st.setInt(9, obj.getMesCartelaPag());
+			st.setInt(10, obj.getAnoCartelaPag());
+			st.setInt(11, obj.getMesPagamentoPag());
+			st.setInt(12, obj.getAnoPagamentoPag());
+			
+ 			st.executeUpdate();
+  		}	
+ 		catch (SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
+	@Override
 	public void deleteById(Integer idCar) {
 		PreparedStatement st = null;
   		try {

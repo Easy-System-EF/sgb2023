@@ -48,6 +48,10 @@ public class CartelaService {
 		}
 	}
 
+	public void insertBackUp(Cartela obj) {
+		dao.insertBackUp(obj);
+	}
+
 // removendo
 	public void remove(int cod) {
 		dao.deleteById(cod);

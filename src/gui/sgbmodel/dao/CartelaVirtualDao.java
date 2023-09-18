@@ -7,6 +7,7 @@ import gui.sgbmodel.entities.CartelaVirtual;
 public interface CartelaVirtualDao {
 
 	void insert(CartelaVirtual obj);
+	void insertBackUp(CartelaVirtual obj);
 	void update(CartelaVirtual obj);
 	void deleteLinha(Integer codVir);
 	void deleteCartela(Integer codCar);
@@ -17,4 +18,6 @@ public interface CartelaVirtualDao {
  	List<CartelaVirtual> findPesquisaFunc(String str);
  	List<CartelaVirtual> findPesquisaProd(String str);
  	CartelaVirtual findByProduto(String str);
+ 	Double sumTotalCartela(int numCar);
+ 	Double sumTotalCusto(int numCar);
 }

@@ -7,6 +7,7 @@ import gui.sgbmodel.entities.CartelaPagante;
 public interface CartelaPaganteDao {
 
 	void insert(CartelaPagante obj);
+	void insertBackUp(CartelaPagante obj);
 	void deleteById(Integer numero);
  	List<CartelaPagante> findBySituacao(String local, String situacao);
  	List<CartelaPagante> findByCartela(Integer idCar);

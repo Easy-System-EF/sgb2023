@@ -2,7 +2,6 @@ package gui.sgbmodel.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import gui.sgbmodel.service.FuncionarioService;
 import gui.sgbmodel.service.ProdutoService;
@@ -28,14 +27,6 @@ public class Cartela implements Serializable {
 	private String nomeSituacaoCar;
 	private Integer mesPagCar;
 	private Integer anoPagCar;
-
-	private CartelaVirtual virtual;
-	private CartelaPagante pagantes;
-	
-	private ProdutoService service = new ProdutoService();
-	private Produto prod = new Produto();
-	private FuncionarioService funService = new FuncionarioService();
-	private Funcionario fun = new Funcionario();
 
 	public Cartela() {
 	}
@@ -219,29 +210,6 @@ public class Cartela implements Serializable {
 		valorPaganteCar = totalCar / numeroPaganteCar;
 	}
 	
-	public Double calculaTotalCar(List<CartelaVirtual> vir) {
-		subTotalCar = 0.00;
-		totalCar = 0.00;
-		valorServicoCar = 0.00;
-
-		for (CartelaVirtual v : vir) {
-			if (v.getOrigemIdCarVir().equals(numeroCar)) {
-				prod = service.findById(v.getProduto().getCodigoProd());
-				subTotalCar += v.getTotalProdVir();
-				if (servicoCar.charAt(0) == 'C') {
-					if (! prod.getGrupo().getNomeGru().contains("Serviços")) {
-						fun = funService.findById(v.getFuncionario().getCodigoFun());
-						if (! fun.getNomeFun().equals("Consumo Próprio")) {
-							valorServicoCar += (v.getTotalProdVir() * fun.getCargo().getComissaoCargo()) / 100;
-						}	
-					}	
-				}	
-			}
-			totalCar = subTotalCar + valorServicoCar;
-		}	
-		return totalCar -= descontoCar;
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -280,7 +248,6 @@ public class Cartela implements Serializable {
 				+ numeroPaganteCar + ", valorPaganteCar=" + valorPaganteCar + ", mesCar=" + mesCar + ", anoCar="
 				+ anoCar + ", obsCar=" + obsCar + ", servicoCar=" + servicoCar + ", valorServicoCar=" + valorServicoCar
 				+ ", subTotalCar=" + subTotalCar + ", nomeSituacaoCar=" + nomeSituacaoCar + ", mesPagCar=" + mesPagCar
-				+ ", anoPagCar=" + anoPagCar + ", virtual=" + virtual + ", pagantes=" + pagantes + ", service="
-				+ service + ", prod=" + prod + ", funService=" + funService + ", fun=" + fun + "]";
+				+ ", anoPagCar=" + anoPagCar + "]";
 	}
 }

@@ -75,6 +75,43 @@ public class CartelaVirtualDaoJDBC implements CartelaVirtualDao {
 	}
 
 	@Override
+	public void insertBackUp(CartelaVirtual obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"INSERT INTO CartelaVirtual "
+					+ "(NumeroVir, localVir, situacaoVir, nomeFunVir, nomeProdVir, quantidadeProdVir, "
+					+ "precoProdVir, vendaProdVir, totalProdVir, origemIdCarVir, FuncionarioIdVir, "
+					+ "ProdutoIdVir )" 
+					+ "VALUES "
+					+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", 
+						Statement.RETURN_GENERATED_KEYS);
+
+			st.setInt(1, obj.getNumeroVir());
+			st.setString(2, obj.getLocalVir());
+			st.setString(3, obj.getSituacaoVir());
+			st.setString(4, obj.getFuncionario().getNomeFun());
+			st.setString(5, obj.getProduto().getNomeProd());
+			st.setDouble(6, obj.getQuantidadeProdVir());
+			st.setDouble(7, obj.getPrecoProdVir());
+			st.setDouble(8, obj.getVendaProdVir());
+			st.setDouble(9, obj.getTotalProdVir());
+			st.setInt(10, obj.getOrigemIdCarVir());
+			st.setInt(11, obj.getFuncionario().getCodigoFun());
+			st.setInt(12, obj.getProduto().getCodigoProd());
+
+			st.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+
+	@Override
 	public void update(CartelaVirtual obj) {
 		PreparedStatement st = null;
 		try {
@@ -141,6 +178,56 @@ public class CartelaVirtualDaoJDBC implements CartelaVirtualDao {
 		}
 	}
 
+	@Override
+	public Double sumTotalCartela(int numCar) {
+		Double totCar = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+   		try {
+			st = conn.prepareStatement(
+					"SELECT SUM(TotalProdVir) AS 'totCar' FROM cartelaVirtual WHERE OrigemIdCarVir = ? "); 
+			
+			st.setInt(1, numCar);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				totCar = rs.getDouble("totCar");
+			}	
+   		}
+ 		catch (SQLException e) {
+			throw new DbException ( "Erro!!! " + classe + "não totalizado " + e.getMessage()); }
+ 		finally {
+ 			DB.closeStatement(st);
+ 			DB.closeResultSet(rs);
+		}
+		return totCar;
+	}
+
+	
+	@Override
+	public Double sumTotalCusto(int numCar) {
+		Double totCst = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+   		try {
+			st = conn.prepareStatement(
+					"SELECT SUM(QuantidadeProdVir * PrecoProdVir) AS 'totCst' FROM cartelaVirtual WHERE OrigemIdCarVir = ? "); 
+		
+			st.setInt(1, numCar);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				totCst = rs.getDouble("totCst");
+			}	
+   		}
+ 		catch (SQLException e) {
+			throw new DbException ( "Erro!!! " + classe + "não totalizado " + e.getMessage()); }
+ 		finally {
+ 			DB.closeStatement(st);
+ 			DB.closeResultSet(rs);
+		}
+		return totCst;
+	}
+
+	
 	@Override
 	public List<CartelaVirtual> findCartela(Integer idCar) {
 		PreparedStatement st = null;

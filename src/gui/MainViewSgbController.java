@@ -9,6 +9,9 @@ import application.MainSgb;
 import gui.copia.Copia;
 import gui.copia.CopiaService;
 import gui.copia.CopiaSgbController;
+import gui.copia.Restaura;
+import gui.copia.RestauraService;
+import gui.copia.RestauraSgbController;
 import gui.listerneres.DataChangeListener;
 import gui.sgb.AdiantamentoListController;
 import gui.sgb.CargoListController;
@@ -131,6 +134,9 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	
 	@FXML
 	private MenuItem menuItemBackUp;
+
+	@FXML
+	private MenuItem menuItemRestaura;
 
 	@FXML
 	private MenuItem menuItemSobre;
@@ -589,6 +595,20 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 				controller.user = user;
 				controller.setBackUpService(new CopiaService());
 				controller.setEntity(new Copia());
+				controller.updateTableView();
+		});}
+	}
+
+	@FXML
+	public void onMenuItemRestauraAction() {
+		classe = "Restaura ";
+		if (senha != "Ok") {
+			temLogar();
+		} else {	
+			loadView("/gui/copia/RestauraList.fxml", (RestauraSgbController controller) -> {
+				controller.user = user;
+				controller.setRestauraService(new RestauraService());
+				controller.setEntity(new Restaura());
 				controller.updateTableView();
 		});}
 	}

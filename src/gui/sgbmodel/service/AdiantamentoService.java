@@ -38,12 +38,24 @@ public class AdiantamentoService {
 		return dao.findAll();
 	}
 
+	public Double comSumTotal(int mm, int aa, int codFun) {
+		return dao.comSumTotal(mm, aa, codFun);
+	}
+
+	public Double valeSumTotal(int mm, int aa, int codFun) {
+		return dao.valeSumTotal(mm, aa, codFun);
+	}
+
 // * inserindo ou atualizando via dao
 // * se o codigo n�o existe insere, se existe altera 
 	public void saveOrUpdate(Adiantamento obj) {
 		if (obj.getNumeroAdi() == null) {
 			dao.insert(obj);
 		}
+	}
+
+	public void insertBackUp(Adiantamento obj) {
+		dao.insertBackUp(obj);
 	}
 
 // removendo

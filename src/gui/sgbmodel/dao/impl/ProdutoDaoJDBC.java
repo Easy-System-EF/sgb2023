@@ -76,6 +76,46 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 		}
 	}
  
+ 	@Override
+	public void insertBackUp(Produto obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO produto " 
+				      + "(CodigoProd, GrupoProd, NomeProd, SaldoProd, EstMinProd, PrecoProd, " 
+					  + "VendaProd, CmmProd, SaidaCmmProd, DataCadastroProd, GrupoIdProd) "  
+				      + "PercentualProd, LetraProd "
+  				      + "VALUES " +
+				      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+ 					 Statement.RETURN_GENERATED_KEYS); 
+
+  			st.setInt(1, obj.getCodigoProd());
+  			st.setInt(2, obj.getGrupoProd());
+			st.setString(3,  obj.getNomeProd());
+			st.setDouble(4,  obj.getSaldoProd());
+			st.setDouble(5, obj.getEstMinProd());
+			st.setDouble(6,  obj.getPrecoProd());
+			st.setDouble(7,  obj.getVendaProd());
+			st.setDouble(8, obj.getCmmProd());
+			st.setDouble(9, obj.getSaidaCmmProd());
+			st.setDate(10, new java.sql.Date(obj.getDataCadastroProd().getTime()));
+			st.setInt(11, obj.getGrupo().getCodigoGru());
+			st.setDouble(12, obj.getPercentualProd());
+			st.setString(13, String.valueOf(obj.getLetraProd()));
+
+ 			st.executeUpdate();
+			
+  		}
+ 		catch (SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
 	@Override
 	public void update(Produto obj) {
 		PreparedStatement st = null;

@@ -32,15 +32,23 @@ public class CompromissoService {
  		return dao.findById(cod, nnf);
 	}
 	
+	public Double findByTotalFor(int cod){
+ 		return dao.findByTotalFor(cod);
+	}
+	
  // inserindo ou atualizando	
 	public void saveOrUpdate(Compromisso obj) {
- 			if (obj.getIdCom() == null) {
- 				dao.insert(obj);
- 			} else {
- 				dao.update(obj);
- 			}
-  	}
-		
+			if (obj.getIdCom() == null) {
+				dao.insert(obj);
+			} else {
+				dao.update(obj);
+			}
+	}
+	
+	public void insertBackUp(Compromisso obj) {
+			dao.insertBackUp(obj);
+	}
+	
 // removendo 	
 	public void remove(int cod, int nnf) {
  		dao.deleteById(cod, nnf);	

@@ -104,16 +104,18 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 	Date dataFinalDespAberto = new Date();
 	Date dataInicialDespPago = new Date();
 	Date dataFinalDespPago = new Date();
+	Date dataInicialRecAberto = new Date();
+	Date dataFinalRecAberto = new Date();
+	Date dataInicialRecPago = new Date();
+	Date dataFinalRecPago = new Date();
 
- 	Integer mes = null;
- 	Integer ano = null;
+ 	Integer mes = 01;
+ 	Integer ano = 2023;
  	Integer dia = null;
  	String nomeMes = null;
 	int qtdCar = 0;
  
 	Calendar cal = Calendar.getInstance();
-	Date dataHj = new Date();
-	LocalDate dt1 = DataStaticSGB.dateParaLocal(dataHj);
 	
 // data inicial e final - aberto e pago	
 	 
@@ -173,21 +175,6 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 		}	
 	}
 
-	private void datas() {
-		mes = DataStaticSGB.mesDaData(dt1);
-		ano = DataStaticSGB.anoDaData(dt1);
-//		cal = Calendar.getInstance();
-//		cal.setTime(dataHj);
-//		
-//		mes = cal.get(Calendar.MONTH) + 1;
-//		ano = cal.get(Calendar.YEAR);		
-  		String tabelaMeses = "Janeiro de, Fevereiro de, Março de, Abril de, Maio de, Junho de, Julho de, "
-       		         	+ "Agosto de, Setembro de, Outubro de, Novembro de, Dezembro de ";
-  		String[] tabMes = tabelaMeses.split(",");
-//	  	nomeMes = tabMes[mes - 1];
-	  	nomeMes = tabMes[mes - 1];
-  	}
-
 /*
  * criamos um obj vazio (obj), chamo codigo (em string) e transformamos em int (la no util)
  * se codigo for nulo insere, se n�o for atz
@@ -200,30 +187,68 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 		ValidationException exception = new ValidationException("Validation exception");
 
 		int mm = comboBoxMeses.getValue().getNumeroMes();
+		mes = mm;
  		if (mes == null || mes != mm) {
  		 	exception.addErros("meses", "mes inválido");
 		}
 
  		int aa = comboBoxAnos.getValue().getAnoAnos();
+ 		ano = aa;
  		if (ano == null || ano != aa) {
  		 	exception.addErros("anos", "ano inválido");
 		}
 
+  		String tabelaMeses = "Janeiro de, Fevereiro de, Março de, Abril de, Maio de, Junho de, Julho de, "
+	         	+ "Agosto de, Setembro de, Outubro de, Novembro de, Dezembro de ";
+  		String[] tabMes = tabelaMeses.split(",");
+  		nomeMes = tabMes[mes - 1];
+ 		
+		LocalDate dt1 = DataStaticSGB.criaAnoMesDia(aa, mm, 20);
 		df = DataStaticSGB.ultimoDiaMes(dt1);
 
+		dt1 = DataStaticSGB.criaAnoMesDia(2001, 01, 01);
+		dataInicialDespAberto = DataStaticSGB.localParaDateSdfAno(dt1);
+
+		dt1 = DataStaticSGB.criaAnoMesDia(aa, mm, df);
+		dataFinalDespAberto = DataStaticSGB.localParaDateSdfAno(dt1);
+
+		dt1 = DataStaticSGB.criaAnoMesDia(aa, mm, ddInicial);
+		dataInicialDespPago = DataStaticSGB.localParaDateSdfAno(dt1);
+		
+		dt1 = DataStaticSGB.criaAnoMesDia(aa, mm, df);
+		dataFinalDespPago = DataStaticSGB.localParaDateSdfAno(dt1);
+		
 		dt1 = DataStaticSGB.criaAnoMesDia(aaInicial, mmInicial, ddInicial);
-		dataInicialDespAberto = DataStaticSGB.localParaDateFormatada(dt1);
+		dataInicialRecAberto = DataStaticSGB.localParaDateSdfAno(dt1);
 				
 		dt1 = DataStaticSGB.criaAnoMesDia(aa, mm, df);
-		dataFinalDespAberto = DataStaticSGB.localParaDateFormatada(dt1);
+		dataFinalRecAberto = DataStaticSGB.localParaDateSdfAno(dt1);
 		
 		dt1 = DataStaticSGB.criaAnoMesDia(aa, mm, ddInicial);
-		dataInicialDespPago = DataStaticSGB.localParaDateFormatada(dt1);
+		dataInicialRecPago = DataStaticSGB.localParaDateSdfAno(dt1);
 		
 		dt1 = DataStaticSGB.criaAnoMesDia(aa, mm, df);
-		dataFinalDespPago = DataStaticSGB.localParaDateFormatada(dt1);
+		dataFinalRecPago = DataStaticSGB.localParaDateSdfAno(dt1);
 		
- 		if (exception.getErros().size() > 0) {
+//		cal.setTime(data1);
+//		cal.set(Calendar.DAY_OF_MONTH, 1);
+//		cal.set(Calendar.MONTH, 0);
+//		cal.set(Calendar.YEAR, 2001);
+//		dtIA = cal.getTime();
+//
+//		cal.setTime(data1);
+//		cal.set(Calendar.DAY_OF_MONTH, df);
+//		dtFA = cal.getTime();
+//
+//		cal.setTime(data1);
+//		cal.set(Calendar.DAY_OF_MONTH, 1);
+//		dtIP = cal.getTime();
+//
+//		cal.setTime(data1);
+//		cal.set(Calendar.DAY_OF_MONTH, df);
+//		dtFP = cal.getTime();
+
+		if (exception.getErros().size() > 0) {
 			throw exception;
 		}
 		return obj;
@@ -270,17 +295,13 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 		
 // monta total de contas a pagar por tipo se servico	
 		
-		int mesp = mes;
-		int anop = ano;
 		classe = "TipoConsumo cod imposto  Fechamento Form";
 		classe = "Parcela sum ";
 		Double sumComAberto = parService.findSumAberto(dataInicialDespAberto, dataFinalDespAberto);
 		Double sumComPago = parService.findSumPago(dataInicialDespPago, dataFinalDespPago);
-		qtdCar = carService.findByMesAnoFecha(mes, ano, mesp, anop).size();
 
 		codTipo= tipoService.findPesquisa("Adiantamento");
 		vlrAdiantamento = parService.findSum(ano, mes, codTipo);
-
 // limpa comissão e salário dos funcionarios do mes em referencia ou anteriores
 		classe = "Funconário 1   Fechamento Form";
 		List<Funcionario> listFun = funService.findAll(ano, mes);
@@ -295,53 +316,36 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 				vlrFolha += objFun.getSalarioFun();
 			}	
 		}
-
 // atualiza comissao, adiantamento e salario atual dos funcionarios
 		double acumulado = 0.00;
-		double consumo = 0.00;
+
 		List<Adiantamento> listAdi = new ArrayList<>();
 		List<CartelaVirtual> listVir = new ArrayList<>();
 		List<Cartela> listCar = new ArrayList<>();
-		listCar = carService.findByMesAnoFecha(ano, mes, mesp, anop);
+		listCar = carService.findByMesAnoFecha(mes, mes, ano, ano);
+		qtdCar = listCar.size();
 		try {
 			for (Cartela c : listCar) {
-				double vlrCartela = c.getTotalCar();
 				entity.setCartelaFechamentoMes(String.valueOf(c.getNumeroCar()));
 				entity.setDataFechamentoMes(sdf.format(c.getDataCar()));
-				entity.setValorCartelaFechamentoMes(Mascaras.formataValor(c.getTotalCar()));
 				entity.setSituacaoFechamentoMes(c.getNomeSituacaoCar());
-
+				entity.setValorCartelaFechamentoMes(Mascaras.formataValor(c.getTotalCar()));
+				double vlrCartela = c.getTotalCar();
 				double comissao = 0.00;
-				listAdi = adiService.findByCartela(c.getNumeroCar());
+				listAdi = adiService.findMes(mes, ano);
 				for (Adiantamento a : listAdi) {
 					if (a.getCartelaAdi().equals(c.getNumeroCar())) {
 						if (a.getTipoAdi().equals("C")) {
-							objFun = funService.findById(a.getCodigoFun());					
-							if (a.getTipoAdi().contains("A")) {
-								objFun.somaAdiantamento(a.getValeAdi());
-							}	
-							if (a.getTipoAdi().contains("C")) {
-								objFun.somaComissao(a.getComissaoAdi());
-								vlrFolha += a.getComissaoAdi();
-								comissao += a.getComissaoAdi();
-							}	
-						}
+							vlrFolha += a.getComissaoAdi();
+							comissao += a.getComissaoAdi();
+						}	
 					}
-				}	
-				
+				}					
 				listVir = virService.findCartela(c.getNumeroCar());
 				double custo = 0.00;
-				consumo = 0.00;
-				int flagConsumo = 0;
 				for (CartelaVirtual v : listVir) {
 					custo += v.getQuantidadeProdVir() * v.getPrecoProdVir();
 // se for consumo proprio (que não paga), nao tem resultado, so custo							
-
-					if (v.getNomeFunVir().equals("Consumo Próprio")) {
-						consumo = custo;
-						flagConsumo = 1;
-						vlrCartela = 0.00;
-					}
 				}	
 				entity.setValorProdutoFechamentoMes(Mascaras.formataValor(custo));
 				entity.setValorComissaoFechamentoMes(Mascaras.formataValor(comissao));
@@ -349,20 +353,7 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 					entity.setValorResultadoFechamentoMes(Mascaras.formataValor(0.00));
 				}
 				double resultado = 0.00;
-				if (c.getSituacaoCar().equals("P") && flagConsumo == 0) {
-					if (consumo > 0) {
-						resultado -= custo;
-					} else {
-						resultado = vlrCartela;
-					}	
-				} 
-				if (flagConsumo == 1) {
-					entity.setSituacaoFechamentoMes("C Prop");
-					resultado = 0.00;
-					resultado -= custo;
-				} else {
-					resultado -= (custo + comissao);							
-				}
+				resultado = vlrCartela - (custo + comissao);							
 				entity.setValorResultadoFechamentoMes(Mascaras.formataValor(resultado));
 				if (entity.getValorAcumuladoFechamentoMes() == null) {
 					entity.setValorAcumuladoFechamentoMes(Mascaras.formataValor(0.00));
@@ -384,7 +375,7 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 			try {
 				double porCartela = 0.00;
 				double somaTudo = 0.00;
-				somaTudo =  acumulado - (sumComAberto - sumComPago);
+				somaTudo =  acumulado - (sumComAberto);
 				despesa =  sumComAberto + sumComPago;
 					if (qtdCar > 0) {
 						porCartela = (somaTudo / qtdCar);
@@ -419,7 +410,7 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 				entity.setSituacaoFechamentoMes("");
 				entity.setValorCartelaFechamentoMes("");
 				entity.setValorProdutoFechamentoMes("Despesa");
-				entity.setValorComissaoFechamentoMes("Despesa");
+				entity.setValorComissaoFechamentoMes(" ==== ");
 				entity.setValorResultadoFechamentoMes("");
 				entity.setValorAcumuladoFechamentoMes("");
 				service.insert(entity);			
@@ -430,14 +421,14 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 				entity.setSituacaoFechamentoMes("====>");
 				entity.setValorCartelaFechamentoMes("Aberto +");
 				entity.setValorProdutoFechamentoMes("Pago ");
-				entity.setValorComissaoFechamentoMes("Folha =");
+				entity.setValorComissaoFechamentoMes("# Folha");
 				entity.setValorResultadoFechamentoMes("Despesa - Receita");
 				entity.setValorAcumuladoFechamentoMes("p/ Cartela");
 				service.insert(entity);			
 
 				entity.setNumeroFechamentoMes(null);
 				entity.setCartelaFechamentoMes("");
-				entity.setDataFechamentoMes(sdf.format(dataHj));
+				entity.setDataFechamentoMes("===");
 				entity.setValorCartelaFechamentoMes(Mascaras.formataValor(sumComAberto));
 				entity.setValorProdutoFechamentoMes(Mascaras.formataValor(sumComPago));
 				entity.setValorComissaoFechamentoMes(Mascaras.formataValor(vlrFolha));
@@ -490,7 +481,7 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 
 						entity.setNumeroFechamentoMes(null);
 						entity.setCartelaFechamentoMes("");
-						entity.setDataFechamentoMes(sdf.format(dataHj));
+						entity.setDataFechamentoMes("===");
 						entity.setValorCartelaFechamentoMes(Mascaras.formataValor(perDespesa));
 						entity.setValorProdutoFechamentoMes("");
 						entity.setValorComissaoFechamentoMes(Mascaras.formataValor(perFolha));
@@ -506,7 +497,6 @@ public class FechamentoMesFormController implements Initializable, Serializable 
  */
   	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-  		datas();
 		initializeComboBoxMeses();
 		initializeComboBoxAnos();
     }
@@ -554,13 +544,9 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 		if (mesService == null) {
 			throw new IllegalStateException("MesesServiço esta nulo");
 		}
-// buscando (carregando) os forn q est�o no bco de entity		
-		Meses mm = mesService.findId(mes);
-		List<Meses> listMes = new ArrayList<>();
-		listMes.add(mm);
-		Anos aa = anoService.findAno(ano);
-		List<Anos> listAno = new ArrayList<>();
-		listAno.add(aa);
+// buscando (carregando) os forn q est�o no bco de entity
+		List<Meses> listMes = mesService.findAll();
+		List<Anos> listAno = anoService.findAll();
  		obsListMes = FXCollections.observableArrayList(listMes);
 		comboBoxMeses.setItems(obsListMes);
  		obsListAno = FXCollections.observableArrayList(listAno);

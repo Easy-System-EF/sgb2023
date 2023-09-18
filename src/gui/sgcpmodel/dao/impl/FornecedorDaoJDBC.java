@@ -23,6 +23,7 @@ public class FornecedorDaoJDBC implements FornecedorDao {
 	}
 
 	String classe = "Fornecedor JDBC ";
+
 	@Override
 	public void insert(Fornecedor obj) {
 		PreparedStatement st = null;
@@ -71,6 +72,54 @@ public class FornecedorDaoJDBC implements FornecedorDao {
 				{	throw new DbException("Erro!!! sem inclusão " + classe );
 				}
 			}	
+  		}
+ 		catch (SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
+	@Override
+	public void insertBackUp(Fornecedor obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO fornecedor " +
+				      "(Codigo, RazaoSocial, Rua, Numero, Complemento, Bairro, Cidade, UF, Cep, "
+				      + "Ddd01, Telefone01, Ddd02, Telefone02, Contato, DddContato, "
+				      + "TelefoneContato, Email, Pix, Observacao, Prazo, Parcela )" 
+  				      + "VALUES " +
+				      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+ 					 Statement.RETURN_GENERATED_KEYS); 
+ 
+   			st.setInt(1, obj.getCodigo());
+ 			st.setString(2, obj.getRazaoSocial());
+ 			st.setString(3, obj.getRua());
+   			st.setInt(4, obj.getNumero());
+ 			st.setString(5, obj.getComplemento());
+ 			st.setString(6, obj.getBairro());
+ 			st.setString(7, obj.getCidade());
+ 			st.setString(8, obj.getUf());
+  			st.setString(9,  (obj).getCep());
+ 			st.setInt(10, obj.getDdd01());
+  			st.setInt(11, obj.getTelefone01());
+ 			st.setInt(12, obj.getDdd02());
+  			st.setInt(13, obj.getTelefone02());
+ 			st.setString(14, obj.getContato());
+ 			st.setInt(15, obj.getDddContato());
+  			st.setInt(16, obj.getTelefoneContato());
+ 			st.setString(17, obj.getEmail());
+ 			st.setString(18, obj.getPix());
+  			st.setString(19, obj.getObservacao());
+  			st.setInt(20, obj.getPrazo());
+  			st.setInt(21, obj.getParcela());
+  			
+ 			st.executeUpdate();
+			
   		}
  		catch (SQLException e) {
 			throw new DbException (e.getMessage());

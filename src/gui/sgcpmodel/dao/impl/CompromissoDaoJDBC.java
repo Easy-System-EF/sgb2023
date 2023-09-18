@@ -28,6 +28,7 @@ public class CompromissoDaoJDBC implements CompromissoDao {
 	}
 
 	String classe = "Compromisso ";
+	
  	@Override
 	public void insert(Compromisso obj) {
   		PreparedStatement st = null;
@@ -67,6 +68,46 @@ public class CompromissoDaoJDBC implements CompromissoDao {
 					throw new DbException("Erro!!! sem inclusão " + classe );
 				}	
 	  		}
+   		}
+ 		catch (SQLException e) {
+			throw new DbException ("Erro compromisso !!! no insert " + classe + " " + e.getMessage());  
+		}
+		finally {
+ 			DB.closeStatement(st);
+ 			DB.closeResultSet(rs);
+		}
+	}
+
+ 	@Override
+	public void insertBackUp(Compromisso obj) {
+  		PreparedStatement st = null;
+		ResultSet rs = null;
+ 		try {
+			st = conn.prepareStatement(
+					"INSERT INTO compromisso "  
+					+ "(IdCom, CodigoFornecedorCom, NomeFornecedorCom, NnfCom, DataCom, "
+					+ "DataVencimentoCom, ValorCom, ParcelaCom, PrazoCom, "
+					+ "FornecedorIdCom, TipoIdCom, PeriodoIdCom ) " 
+					+ "VALUES " +  
+					"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+ 
+					Statement.RETURN_GENERATED_KEYS); 
+
+			st.setInt(1, obj.getIdCom()); 
+			st.setInt(2, obj.getFornecedor().getCodigo()); 
+			st.setString(3, obj.getFornecedor().getRazaoSocial()); 
+   			st.setInt(4, obj.getNnfCom());
+			st.setDate(5, new java.sql.Date(obj.getDataCom().getTime()));
+			st.setDate(6, new java.sql.Date(obj.getDataVencimentoCom().getTime()));
+ 			st.setDouble(7, obj.getValorCom());
+			st.setInt(8, obj.getParcelaCom());
+			st.setInt(9, obj.getPrazoCom());
+ 			st.setInt(10, obj.getFornecedor().getCodigo());
+ 			st.setInt(11, obj.getTipoFornecedor().getCodigoTipo());
+ 			st.setInt(12, obj.getParPeriodo().getIdPeriodo());
+  			
+ 			 st.executeUpdate();
+				
    		}
  		catch (SQLException e) {
 			throw new DbException ("Erro compromisso !!! no insert " + classe + " " + e.getMessage());  
@@ -131,6 +172,29 @@ public class CompromissoDaoJDBC implements CompromissoDao {
   			}
 		}
 
+	@Override
+	public Double findByTotalFor(int codTp) {
+		Double totTipo = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+   		try {
+			st = conn.prepareStatement(
+					"SELECT SUM(ValorCom) AS 'total' from compromisso WHERE TipoIdCom = ? "); 
+			
+			st.setInt(1, codTp);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				totTipo = rs.getDouble("total");
+			}	
+   		}
+ 		catch (SQLException e) {
+			throw new DbException ( "Erro!!! " + classe + "não totalizado " + e.getMessage()); }
+ 		finally {
+ 			DB.closeStatement(st);
+		}
+		return totTipo;
+	}
+ 	
 	@Override
 	public List<Compromisso> findPesquisa(String str) {
 		PreparedStatement st = null; 

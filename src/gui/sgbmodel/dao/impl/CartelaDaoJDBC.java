@@ -78,6 +78,50 @@ public class CartelaDaoJDBC implements CartelaDao {
 	}
  
 	@Override
+	public void insertBackUp(Cartela obj) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+  		try {
+			st = conn.prepareStatement(
+					"INSERT INTO cartela " +
+				      "(NumeroCar, DataCar, LocalCar, DescontoCar, TotalCar, SituacaoCar, " +
+				       "NumeroPaganteCar, ValorPaganteCar, MesCar, AnoCar, ObsCar, " +
+				       "ServicoCar, ValorServicoCar, SubTotalCar, NomeSituacaoCar, MesPagCar, AnoPagCar ) " +
+   				       "VALUES " +
+				       "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+ 					 Statement.RETURN_GENERATED_KEYS); 
+
+			st.setInt(1, obj.getNumeroCar());
+			st.setDate(2, new java.sql.Date(obj.getDataCar().getTime()));
+			st.setString(3, obj.getLocalCar());
+			st.setDouble(4, obj.getDescontoCar());
+			st.setDouble(5,  obj.getTotalCar());
+			st.setString(6, obj.getSituacaoCar());
+			st.setInt(7,  obj.getNumeroPaganteCar());
+			st.setDouble(8, obj.getValorPaganteCar());
+			st.setInt(9, obj.getMesCar());
+			st.setInt(10, obj.getAnoCar());
+			st.setString(11, obj.getObsCar());
+			st.setString(12, obj.getServicoCar());
+			st.setDouble(13, obj.getValorServicoCar());
+			st.setDouble(14, obj.getSubTotalCar());
+			st.setString(15, obj.getNomeSituacaoCar());
+			st.setInt(16, obj.getMesPagCar());
+			st.setInt(17, obj.getAnoPagCar());
+			
+ 			st.executeUpdate();
+			
+  		}
+ 		catch (SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
+		}
+	}
+ 
+	@Override
 	public void update(Cartela obj) {
 		PreparedStatement st = null;
   		try {
@@ -240,20 +284,19 @@ public class CartelaDaoJDBC implements CartelaDao {
 	} 
 
 	@Override
-	public List<Cartela> findByMesAnoFecha(Integer mm, Integer aa, Integer mmp, Integer aap) {
+	public List<Cartela> findByMesAnoFecha(Integer mm, Integer mmp, Integer aa, Integer aap) {
 		PreparedStatement st = null; 
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement( 
-					 "SELECT cartela.* " +
-							   "FROM cartela " +
-								 "WHERE MesCar = ? AND AnoCar = ? OR MesPagCar AND AnoPagCar " +
+					 "SELECT cartela.* FROM cartela " +
+						"WHERE (MesCar = ? OR MesPagCar = ?) AND (AnoCar = ? OR AnoPagCar = ? ) " +
 							   " ORDER BY NumeroCar" );
 			
 			st.setInt(1, mm);
-			st.setInt(2, aa);
-			st.setInt(1, mmp);
-			st.setInt(2, aap);
+			st.setInt(2, mmp);
+			st.setInt(3, aa);
+			st.setInt(4, aap);
 		
 			rs = st.executeQuery();
 			

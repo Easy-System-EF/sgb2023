@@ -193,11 +193,10 @@ public class CartelaImprimeController implements Initializable, Serializable {
 							bwC.newLine();
 						}
 					}	
-					cartela.calculaTotalCar(listVir);
+					cartela.setTotalCar(virService.sumTotalCartela(cartela.getNumeroCar()));
 					if (cartela.getDescontoCar() > 0.00 || 
-							cartela.getValorServicoCar() > 0.00) {
-						String subTotalFd = FormataGabarito.
-								formataDouble(cartela.getSubTotalCar());
+						cartela.getValorServicoCar() > 0.00) {
+						String subTotalFd = FormataGabarito.formataDouble(cartela.getSubTotalCar());
 						subTotalCar = cartela.getSubTotalCar();
 						linha07 = String.format("%-19s%s%s", 
 							"(=)SubTotal", subTotalFd, df.format(subTotalCar));
