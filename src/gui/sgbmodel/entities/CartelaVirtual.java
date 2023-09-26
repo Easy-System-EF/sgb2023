@@ -176,9 +176,9 @@ public class CartelaVirtual implements Serializable {
 	@Override
 	public String toString() {
 		return "CartelaVirtual [numeroVir=" + numeroVir + ", localVir=" + localVir + ", situacaoVir=" + situacaoVir
-				+ ", nomeFuncVir=" + nomeFunVir + ", nomeProdVir=" + nomeProdVir + ", quantidadeProdVir="
-				+ quantidadeProdVir + ", vendaProdVir=" + vendaProdVir + ", totalProdVir=" + totalProdVir
-				+ ", origemIdCarVir=" + origemIdCarVir + ", funcionario=" + funcionario + ", produto=" + produto + "]";
+				+ ", nomeFunVir=" + nomeFunVir + ", nomeProdVir=" + nomeProdVir + ", quantidadeProdVir="
+				+ quantidadeProdVir + ", precoProdVir=" + precoProdVir + ", vendaProdVir=" + vendaProdVir
+				+ ", totalProdVir=" + totalProdVir + ", origemIdCarVir=" + origemIdCarVir + ", funcionario="
+				+ funcionario + ", produto=" + produto + "]";
 	}
-
 }

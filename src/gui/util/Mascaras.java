@@ -16,7 +16,7 @@ public class Mascaras {
 	static String comMask = ("##,#");
 	static String mask = " ";
 
-	static DecimalFormat dfVlr = new DecimalFormat("##,##0.00");
+	static DecimalFormat dfVlr = new DecimalFormat("###,##0.00");
 	static DecimalFormat dfMil = new DecimalFormat("###,###");
 	static DecimalFormat dfCep = new DecimalFormat("#####-###");
 	static DecimalFormat dfCom = new DecimalFormat("#0.0");

@@ -185,7 +185,8 @@ public class CartelaVirtualDaoJDBC implements CartelaVirtualDao {
 		ResultSet rs = null;
    		try {
 			st = conn.prepareStatement(
-					"SELECT SUM(TotalProdVir) AS 'totCar' FROM cartelaVirtual WHERE OrigemIdCarVir = ? "); 
+					"SELECT SUM(TotalProdVir) AS 'totCar' FROM cartelaVirtual " +
+							"WHERE TotalProdVir > 0 AND OrigemIdCarVir = ? "); 
 			
 			st.setInt(1, numCar);
 			rs = st.executeQuery();

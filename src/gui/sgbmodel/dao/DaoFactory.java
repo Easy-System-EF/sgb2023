@@ -4,6 +4,7 @@ import db.DB;
 import gui.sgbmodel.dao.impl.AdiantamentoDaoJDBC;
 import gui.sgbmodel.dao.impl.AnosDaoJDBC;
 import gui.sgbmodel.dao.impl.CargoDaoJDBC;
+import gui.sgbmodel.dao.impl.CartelaCommitDaoJDBC;
 import gui.sgbmodel.dao.impl.CartelaDaoJDBC;
 import gui.sgbmodel.dao.impl.CartelaPaganteDaoJDBC;
 import gui.sgbmodel.dao.impl.CartelaVirtualDaoJDBC;
@@ -51,6 +52,10 @@ public class DaoFactory {
 		return new CartelaVirtualDaoJDBC(DB.getConnection());
 	}
 	
+  	public static CartelaCommitDao createCartelaCommitDao() {
+		return new CartelaCommitDaoJDBC(DB.getConnection());
+	}
+
   	public static CartelaDao createCartelaDao() {
 		return new CartelaDaoJDBC(DB.getConnection());
 	}

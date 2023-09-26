@@ -3,9 +3,6 @@ package gui.sgbmodel.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import gui.sgbmodel.service.FuncionarioService;
-import gui.sgbmodel.service.ProdutoService;
-
 public class Cartela implements Serializable {
 
 	private static final long serialVersionUID = 1L;

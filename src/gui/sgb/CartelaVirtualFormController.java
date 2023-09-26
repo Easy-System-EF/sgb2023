@@ -351,10 +351,10 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 			exception.addErros("qtd", "Qtd é maior que estoque");
 		}
 
-		if (obj.getNomeFunVir().equals("Consumo Próprio") || obj.getNomeFunVir().equals("Consumo Próprio")) {
-			obj.setTotalProdVir(-1 * (obj.getQuantidadeProdVir() * obj.getPrecoProdVir()));
-		} else {
-			obj.setTotalProdVir(obj.getQuantidadeProdVir() * obj.getVendaProdVir());
+		obj.setTotalProdVir(obj.getQuantidadeProdVir() * obj.getVendaProdVir());
+		if (obj.getNomeFunVir().equals("Consumo Proprio") || obj.getNomeFunVir().equals("Consumo Próprio")) {
+			double tot = -1 * (obj.getPrecoProdVir() * obj.getQuantidadeProdVir());
+			obj.setTotalProdVir(tot);
 		}	
 
 		if (obj.getTotalProdVir() != totAnt) {
@@ -591,7 +591,9 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 		}
 		labelUser.setText(user);
 		// buscando (carregando) os dados do bco de dados
-		List<Funcionario> listFun = funService.findAll(aa, mm); 
+		List<Funcionario> listFun = funService.findAll(aa, mm);
+		listFun.removeIf(x -> x.getCargoFun() == "Cozinheiro");
+		listFun.removeIf(x -> x.getCargoFun() == "Cozinheira");
 		List<Produto> listPro = prodService.findAll();
 // transf p/ obslist
 		obsListFun = FXCollections.observableArrayList(listFun);

@@ -108,7 +108,7 @@ public class RestauraDaoJDBC implements RestauraDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement( 
-					"TRUNCATE TABLE sgo.Restaura " );
+					"TRUNCATE TABLE Restaura " );
 
 			st.executeUpdate();
 

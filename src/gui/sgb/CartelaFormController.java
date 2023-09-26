@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +18,8 @@ import application.MainSgb;
 import db.DbException;
 import db.DbIntegrityException;
 import gui.listerneres.DataChangeListener;
+import gui.sgbmodel.dao.CartelaCommitDao;
+import gui.sgbmodel.dao.DaoFactory;
 import gui.sgbmodel.entities.Adiantamento;
 import gui.sgbmodel.entities.Cartela;
 import gui.sgbmodel.entities.CartelaPagante;
@@ -30,11 +31,9 @@ import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.CartelaService;
 import gui.sgbmodel.service.CartelaVirtualService;
 import gui.sgbmodel.service.FuncionarioService;
-import gui.sgbmodel.service.GrupoService;
 import gui.sgbmodel.service.ProdutoService;
 import gui.util.Alerts;
 import gui.util.Constraints;
-import gui.util.DataStaticSGB;
 import gui.util.Mascaras;
 import gui.util.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -71,8 +70,6 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	private Cartela entity;
 	private CartelaVirtual virtual;
 	private CartelaPagante pagante;
-	private Adiantamento adiantamento;
-	private Funcionario funcionario;
 
 	/*
 	 * dependencia service com metodo set
@@ -80,8 +77,6 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	private CartelaService service;
 	private CartelaVirtualService virService;
 	private CartelaPaganteService pagService;
-	private AdiantamentoService adiService;
-	private FuncionarioService funService; 
 
 // lista da classe subject (form) - guarda lista de obj p/ receber e emitir o evento
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -180,6 +175,8 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	String servico = null;
 	String consumo = null;
 	String classe = "Cartela Form";
+	String letraSit = null;
+	String nomeSit = null;
 	Integer numCar = 0;
 	Integer flag = 0;
 	int codFun = 0;
@@ -223,96 +220,26 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		}	
 
 		if (situacao == "P") {
-			classe = "CartelaVirtual Cart Form";
-			List<CartelaVirtual> listVir = virService.findCartela(numCar);
-			for (CartelaVirtual v : listVir) {
-				virtual = v;
-				virtual.setSituacaoVir("P");
-			}
-			virService.saveOrUpdate(virtual);
-			comissaoAdi();
-			entity.setSituacaoCar("P");
-			entity.setNomeSituacaoCar("Pago");
 			List<CartelaPagante> listPag = pagService.findByCartela(numCar);
 			for (CartelaPagante p : listPag) { 	
 				entity.setMesPagCar(p.getMesPagamentoPag());
 				entity.setAnoPagCar(p.getAnoPagamentoPag());
 			}	
-			classe = "Cartela Form";
-			service.saveOrUpdate(entity);
+			letraSit = "P";
+			nomeSit = "Pago";
+			commitForm();			
 			notifyDataChangeListerners();
 			Utils.currentStage(event).close();
 		}
 	}
 
-	Map<Integer, Double> mapFun = new HashMap<>();
-	
-	@SuppressWarnings("static-access")
-	private void comissaoAdi() {
-		GrupoService gruService = new GrupoService();
-		Integer codGrupo = null;
-		codGrupo = gruService.findIdNome("Serviço");
-		if (codGrupo == null) {
-			codGrupo = gruService.findIdNome("Servico");
-		}	
-System.out.println("codGrupo " + codGrupo);		
-		List<CartelaVirtual> list = virService.findCartela(numCar);
-		for (CartelaVirtual cv : list) {
-			if (cv.getNomeFunVir().equals("Consumo Próprio") || cv.getNomeFunVir().equals("Consumo Proprio")) {
-				@SuppressWarnings("unused")
-				int nada = 0; 
-			} else {
-System.out.println("nomeFun " + cv.getNomeFunVir());				
-				if (cv.getProduto().getGrupoProd() != codGrupo) {
-					funcionario = funService.findById(cv.getFuncionario().getCodigoFun());
-					if (funcionario.getCargo().getComissaoCargo() > 0) {
-						if (mapFun.containsKey(cv.getFuncionario().getCodigoFun())) {
-							vlr = mapFun.get(cv.getFuncionario().getCodigoFun());
-							mapFun.put(cv.getFuncionario().getCodigoFun(), vlr + cv.getTotalProdVir());
-						} else {
-							mapFun.put(cv.getFuncionario().getCodigoFun(), cv.getTotalProdVir());
-						}
-					}	
-				}	
-			}
-		}
-		
-		for (Integer key : mapFun.keySet()) {
-			vlr = mapFun.get(key);
-			funcionario = funService.findById(key);
-System.out.println("func " + funcionario.getNomeFun());			
-			adiantamento.setCodigoFun(funcionario.getCodigoFun());
-			adiantamento.setNomeFun(funcionario.getNomeFun());
-			adiantamento.setCargo(funcionario.getCargo());
-			adiantamento.setSituacao(funcionario.getSituacao());
-			adiantamento.setMesFun(funcionario.getMesFun());
-			adiantamento.setAnoFun(funcionario.getAnoFun());
-			adiantamento.setCargoFun(funcionario.getCargo().getNomeCargo());
-			adiantamento.setSituacaoFun(funcionario.getSituacao().getNomeSit());
-			adiantamento.setSalarioFun(funcionario.getCargo().getSalarioCargo());
-			adiantamento.setComissaoFun(0.00);
-			
-			adiantamento.setNumeroAdi(null);
-			adiantamento.setDataAdi(entity.getDataCar());
-/*
- * aqui, qdo saida (venda) oda atributo vale recebe o vlr do percentual p/ calculo d comissao
- */
-			LocalDate dt1 = DataStaticSGB.criaLocalAtual();
-
-			adiantamento.setValeAdi(0.00);
-			adiantamento.perComissao = funcionario.getCargo().getComissaoCargo();
-			adiantamento.setMesAdi(DataStaticSGB.mesDaData(dt1));
-			adiantamento.setAnoAdi(DataStaticSGB.anoDaData(dt1));
-			adiantamento.setValorCartelaAdi(vlr);
-			adiantamento.setCartelaAdi(numCar);
-			adiantamento.setTipoAdi("C");
-			adiantamento.setSalarioAdi(funcionario.getCargo().getSalarioCargo());
-			adiantamento.setComissaoAdi(0.00);
-			adiantamento.calculaComissao();
-			adiService.saveOrUpdate(adiantamento);
-		}
+	private void commitForm() {
+		CartelaCommitDao commitDao = DaoFactory.createCartelaCommitDao();
+		commitDao.gravaCartelaCommit(entity, letraSit, nomeSit);
 	}
 
+//	Map<Integer, Double> mapFun = new HashMap<>();
+	
 	@FXML
 	public void onBtCaloteAction(ActionEvent event) {
 		if (nivel > 1 && nivel < 9) {
@@ -330,8 +257,9 @@ System.out.println("func " + funcionario.getNomeFun());
 			}
 			entity.setSituacaoCar("C");
 			entity.setNomeSituacaoCar("Calote");
-			classe = "Cartela Form";
-			service.saveOrUpdate(entity);
+			letraSit = "C";
+			nomeSit = "Calote";
+			commitForm();			
 			notifyDataChangeListerners();
 			Utils.currentStage(event).close();
 		}
@@ -433,8 +361,8 @@ System.out.println("func " + funcionario.getNomeFun());
 		this.entity = entity;
 		this.virtual = virtual;
 		this.pagante = pagante;
-		this.funcionario = funcionario;
-		this.adiantamento = adiantamento;
+//		this.funcionario = funcionario;
+//		this.adiantamento = adiantamento;
 	}
 
 	// * metodo set /p service
@@ -444,8 +372,8 @@ System.out.println("func " + funcionario.getNomeFun());
 		this.service = service;
 		this.virService = virService;
 		this.pagService = pagService;
-		this.adiService = adiService;
-		this.funService = funService;
+//save		this.adiService = adiService;
+//save		this.funService = funService;
 	}
 
 	/*
@@ -493,16 +421,8 @@ System.out.println("func " + funcionario.getNomeFun());
 			getFormData();
 			if (entity.getNumeroCar() != null) {
 				entity.setTotalCar(virService.sumTotalCartela(entity.getNumeroCar()));
-//				List<CartelaVirtual> listVir = virService.findCartela(numCar);
-//				if (listVir.size() > 0) {
-//					entity.calculaTotalCar(listVir); 
-//					entity.calculaValorPagante();
-//				} else {
-//					entity.setTotalCar(0.00);
-//					entity.setValorPaganteCar(0.00);
-//				}
 				if	(numCar == entity.getNumeroCar()) {
-					service.saveOrUpdate(entity);				
+					entity.calculaValorPagante();
 					if (entity.getTotalCar() > 0.00) {
 						vlrTotMasc = Mascaras.formataValor(entity.getTotalCar());
 						labelTotalCar.setText(vlrTotMasc);						

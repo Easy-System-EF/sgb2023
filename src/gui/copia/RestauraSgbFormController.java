@@ -29,16 +29,16 @@ public class RestauraSgbFormController implements Initializable {
 	private ObservableList<Unidade> obsListUnid;
 
 	String unid = null;
-	static String meioSgb = ":\\Arqs\\Backup\\SGO\\";
-	public String meioSgcp= ":\\Arqs\\Backup\\SGOCP\\";
+	static String meioSgb = ":\\Arqs\\Backup\\SGB\\";
+	public String meioSgcp= ":\\Arqs\\Backup\\SGBCP\\";
 
  	public void recebeUnidAction(ActionEvent event) {
  		try {
 			unid = comboUnid.getValue().getLetraUnid();
 			RestauraSgbController.unid = unid;
-			File path = new File(unid + ":\\Arqs\\Backup\\SGO\\");
+			File path = new File(unid + ":\\Arqs\\Backup\\SGB\\");
 			File[] folders = path.listFiles(File::isDirectory);
-			File pathP = new File(unid + ":\\Arqs\\Backup\\SGOCP\\");
+			File pathP = new File(unid + ":\\Arqs\\Backup\\SGBCP\\");
 			File[] foldersP = pathP.listFiles(File::isDirectory);
 	 		if (folders == null) {
 				Alerts.showAlert(null, "local não existe " , "caminho: " + path, AlertType.ERROR);				

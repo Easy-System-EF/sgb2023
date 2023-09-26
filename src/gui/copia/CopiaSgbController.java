@@ -1,6 +1,5 @@
 package gui.copia;
 
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -102,7 +101,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  	private ObservableList<Copia> obsList;
 
 	int count = 0;
-	String arq = "";
 	String crip = "";
 	Date dataI = new Date(System.currentTimeMillis());
 	Date dataF = new Date();
@@ -115,6 +113,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 	public static String path = null;
  	public String user = "usuário";			
  	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+ 	SimpleDateFormat sdfAno = new SimpleDateFormat("yyyy-MM-dd HH:mm");
  	int grw = 0;
  	
  	private CopiaService service;
@@ -142,7 +141,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  	public void executaBack() {
  		if (unid != null) { 
 // 			Alerts.showAlert("Atenção", "isoo pode demorar um pouco", null, AlertType.WARNING);
- 			backUp();
  			adiantamento();
  			cargo();
  			cartela();
@@ -167,33 +165,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  		}	
  	}
 
-	public void backUp() {
-		file = "BackUp";
-		path = unid + meioSgb + file + ext;
-		CopiaService backService = new CopiaService();
-		arq = "";
-		crip = "";
-		List<Copia> listB = backService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Copia b: listB) {
-				count += 1;
-				arq = (b.getIdBackUp() + " | " + b.getDataIBackUp() + " | " + b.getUserBackUp() + " | " + b.getDataFBackUp());
-				crip = Cryptograf.criptografa(arq);
-//				System.out.println(crip);
-//				String bc = Cryptograf.desCriptografa(crip);
-//				System.out.println(crip);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
-			}
-			bwC.close();
-		}
-		catch(	IOException e2) {
-			e2.getMessage();	 			
-		}
-		finally {					
-		}
-	}
-	
 	public void adiantamento() {
 		file = "Adiantamento";
 		path = unid + meioSgb + file + ext;
@@ -204,10 +175,11 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		Situacao sit = new Situacao();
 		List<Cargo> listC = carService.findAll();
 		List<Situacao> listS = sitService.findAll();
-		arq = "";
+		String arqAdi = "";
 		crip = "";
+
 		List<Adiantamento> listA = adiService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
+		try {FileWriter fwA = new FileWriter(path);
 			for(Adiantamento a: listA) {
 				count += 1;
 				for (Cargo c : listC) {
@@ -222,20 +194,17 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 						a.setSituacao(sit);
 					}
 				}
-				arq = (a.getNumeroAdi() + " | " + a.getDataAdi() + " | " + a.getValeAdi() + " | " + a.getMesAdi()
-				 + " | " + a.getAnoAdi() + " | " + a.getValorCartelaAdi() + " | " + a.getCartelaAdi() + " | " + 
-						a.getComissaoAdi() + " | " + a.getTipoAdi() + " | " + a.getSalarioAdi() + " | " + 
-						a.getCodigoFun() + " | " + a.getNomeFun() + " | " + a.getMesFun() + " | " + a.getAnoFun() + " | " + 
-						a.getCargoFun() + " | " + a.getSituacaoFun() + " | " + a.getCargo().getCodigoCargo() + " | " + 
+				String data = sdfAno.format(a.getDataAdi());
+				arqAdi = (" ADI " + a.getNumeroAdi() + " , " + data + " , " + a.getValeAdi() + " , " + a.getMesAdi()
+				 + " , " + a.getAnoAdi() + " , " + a.getValorCartelaAdi() + " , " + a.getCartelaAdi() + " , " + 
+						a.getComissaoAdi() + " , " + a.getTipoAdi() + " , " + a.getSalarioAdi() + " , " + 
+						a.getCodigoFun() + " , " + a.getNomeFun() + " , " + a.getMesFun() + " , " + a.getAnoFun() + " , " + 
+						a.getCargoFun() + " , " + a.getSituacaoFun() + " , " + a.getCargo().getCodigoCargo() + " , " + 
 						a.getSituacao().getNumeroSit());
-				crip = Cryptograf.criptografa(arq);
-//				System.out.println(crip);
-//				String bc = Cryptograf.desCriptografa(crip);
-//				System.out.println(crip);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				crip = Cryptograf.criptografa(arqAdi);
+				fwA.write(crip);
 			}
-			bwC.close();
+			fwA.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -247,19 +216,21 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 	public void cargo() {
 		file = "Cargo";
 		path = unid + meioSgb + file + ext;
-		CargoService cartelaService = new CargoService();
-		arq = "";
+		CargoService cargoService = new CargoService();
+		String arqCargo = null;
 		crip = "";
-		List<Cargo> listC = cartelaService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Cargo c: listC) {
+		
+		List<Cargo> listCargo = cargoService.findAll();
+		try {FileWriter fwC = new FileWriter(path);
+			for(Cargo c: listCargo) {
 				count += 1;
-				arq = (c.getCodigoCargo() + " | " + c.getNomeCargo() + " | " + c.getSalarioCargo() + " | " + c.getComissaoCargo());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				arqCargo = (" CARGO " + c.getCodigoCargo() + " , " + c.getNomeCargo() + " , " + c.getSalarioCargo() + " , " + 
+						c.getComissaoCargo() + " ; ");
+				crip = Cryptograf.criptografa(arqCargo);
+				fwC.write(crip);
+				fwC.flush();
 			}
-			bwC.close();
+			fwC.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -272,22 +243,22 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Cartela";
 		path = unid + meioSgb + file + ext;
 		CartelaService cartelaService = new CartelaService();
-		arq = "";
+		String arqCart = "";
 		crip = "";
-		List<Cartela> listC = cartelaService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Cartela c: listC) {
+		List<Cartela> listCt = cartelaService.findAll();
+		try {FileWriter fwCt = new FileWriter(path);
+			for(Cartela c: listCt) {
 				count += 1;
-				arq = (c.getNumeroCar() + " | " + c.getDataCar() + " | " + c.getLocalCar() + " | " + c.getDescontoCar()
-				 	+ " | " + c.getTotalCar() + " | " + c.getSituacaoCar() + " | " + c.getNumeroPaganteCar() + " | " + 
-						c.getValorPaganteCar() + " | " + c.getMesCar() + " | " + c.getAnoCar() + " | " + c.getObsCar()
-						 + " | " + c.getServicoCar() + " | " + c.getValorServicoCar() + " | " + c.getSubTotalCar() + " | " + 
-						c.getNomeSituacaoCar() + " | " + c.getMesPagCar() + " | " + c.getAnoPagCar());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				String dataCar = sdfAno.format(c.getDataCar());
+				arqCart = (" CARTELA " + c.getNumeroCar() + " , " + dataCar + " , " + c.getLocalCar() + " , " + c.getDescontoCar()
+				 	+ " , " + c.getTotalCar() + " , " + c.getSituacaoCar() + " , " + c.getNumeroPaganteCar() + " , " + 
+						c.getValorPaganteCar() + " , " + c.getMesCar() + " , " + c.getAnoCar() + " , " + c.getObsCar()
+						 + " , " + c.getServicoCar() + " , " + c.getValorServicoCar() + " , " + c.getSubTotalCar() + " , " + 
+						c.getNomeSituacaoCar() + " , " + c.getMesPagCar() + " , " + c.getAnoPagCar());
+				crip = Cryptograf.criptografa(arqCart);
+				fwCt.write(crip);
 			}
-			bwC.close();
+			fwCt.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -300,21 +271,21 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "CartelaPagante";
 		path = unid + meioSgb + file + ext;
 		CartelaPaganteService cartelaPagService = new CartelaPaganteService();
-		arq = "";
+		String arqCarP = "";
 		crip = "";
-		List<CartelaPagante> listC = cartelaPagService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(CartelaPagante c: listC) {
+		List<CartelaPagante> listCp = cartelaPagService.findAll();
+		try {FileWriter fwCp = new FileWriter(path);
+			for(CartelaPagante cp: listCp) {
 				count += 1;
-				arq = (c.getNumeroCartelaPag() + " | " + c.getPaganteCartelaPag() + " | " + c.getDataCartelaPag() + " | " +
-						c.getLocalCartelaPag() + " | " + c.getValorCartelaPag() + " | " + c.getFormaCartelaPag() + " | " + 
-						c.getSituacaoCartelaPag() + " | " + c.getCartelaIdOrigemPag() + " | " + c.getMesCartelaPag() + " | " + 
-						c.getAnoCartelaPag() + " | " + c.getMesPagamentoPag() + " | " + c.getAnoPagamentoPag());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				String dataCarPag = sdfAno.format(cp.getDataCartelaPag());
+				arqCarP = (" CARTELAPAGANTE " + cp.getNumeroCartelaPag() + " , " + cp.getPaganteCartelaPag() + " , " + dataCarPag + " , " +
+						cp.getLocalCartelaPag() + " , " + cp.getValorCartelaPag() + " , " + cp.getFormaCartelaPag() + " , " + 
+						cp.getSituacaoCartelaPag() + " , " + cp.getCartelaIdOrigemPag() + " , " + cp.getMesCartelaPag() + " , " + 
+						cp.getAnoCartelaPag() + " , " + cp.getMesPagamentoPag() + " , " + cp.getAnoPagamentoPag());
+				crip = Cryptograf.criptografa(arqCarP);
+				fwCp.write(crip);
 			}
-			bwC.close();
+			fwCp.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -327,23 +298,22 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "CartelaVirtual";
 		path = unid + meioSgb + file + ext;
 		CartelaVirtualService virService = new CartelaVirtualService();
-		arq = "";
+		String arqVir = null;
 		crip = "";
 		List<CartelaVirtual> listV = virService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
+		try {FileWriter fwCv = new FileWriter(path);
 			for(CartelaVirtual v: listV) {
 				count += 1;
 				
-				arq = (v.getNumeroVir() + " | " + v.getLocalVir() + " | " + v.getSituacaoVir()  + " | " + 
-						v.getFuncionario().getNomeFun() + " | " + v.getProduto().getNomeProd() + " | " + 
-						v.getQuantidadeProdVir() + " | " + v.getPrecoProdVir() + " | " + v.getVendaProdVir() + " | " + 
-						v.getTotalProdVir() + " | " + v.getOrigemIdCarVir() + " | " + v.getFuncionario().getCodigoFun() 
-						+ " | " + v.getProduto().getCodigoProd());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				arqVir = (" CARTELAVIRTUAL " + v.getNumeroVir() + " , " + v.getLocalVir() + " , " + v.getSituacaoVir()  + " , " + 
+						v.getFuncionario().getNomeFun() + " , " + v.getProduto().getNomeProd() + " , " + 
+						v.getQuantidadeProdVir() + " , " + v.getPrecoProdVir() + " , " + v.getVendaProdVir() + " , " + 
+						v.getTotalProdVir() + " , " + v.getOrigemIdCarVir() + " , " + v.getFuncionario().getCodigoFun() 
+						+ " , " + v.getProduto().getCodigoProd());
+				crip = Cryptograf.criptografa(arqVir);
+				fwCv.write(crip);
 			}
-			bwC.close();
+			fwCv.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -356,20 +326,20 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Entrada";
 		path = unid + meioSgb + file + ext;
 		EntradaService entService = new EntradaService();
-		arq = "";
+		String arqEnt = null;
 		crip = "";
 		List<Entrada> listE = entService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
+		try {FileWriter fwE = new FileWriter(path);
 			for(Entrada e : listE) {
 				count += 1;
-				arq = (e.getNumeroEnt() + " | " + e.getDataEnt() + " | " + e.getForn().getRazaoSocial() + " | " + 
-						e.getProd().getNomeProd() + " | " + e.getQuantidadeProdEnt() + " | " + e.getValorProdEnt()
-						 + " | " + 	e.getForn().getCodigo() + " | " + e.getProd().getCodigoProd());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				String dataEnt = sdfAno.format(e.getDataEnt());
+				arqEnt = (" ENTRADA " + e.getNumeroEnt() + " , " + dataEnt + " , " + e.getForn().getRazaoSocial() + " , " + 
+						e.getProd().getNomeProd() + " , " + e.getQuantidadeProdEnt() + " , " + e.getValorProdEnt()
+						 + " , " + 	e.getForn().getCodigo() + " , " + e.getProd().getCodigoProd());
+				crip = Cryptograf.criptografa(arqEnt);
+				fwE.write(crip);
 			}
-			bwC.close();
+			fwE.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -379,26 +349,28 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 	}
 	
 	public void funcionario() {
+		LocalDate dataHj = LocalDate.now();
+		int ano = DataStaticSGB.anoDaData(dataHj);
+		int mes = DataStaticSGB.mesDaData(dataHj);
 		file = "Funcionario";
 		path = unid + meioSgb + file + ext;
 		FuncionarioService funService = new FuncionarioService();
-		arq = "";
+		String arqFun = null;
 		crip = "";
-		List<Funcionario> listF = funService.findAll(2001, 01);
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
+		List<Funcionario> listF = funService.findAll(ano, mes);
+		try {FileWriter fwF = new FileWriter(path);
 			for(Funcionario f : listF) {
 				count += 1;
-				arq = (f.getCodigoFun() + " | " + f.getNomeFun() + " | " + f.getEnderecoFun() + " | " + f.getBairroFun()
-				 	+ " | " + f.getCidadeFun() + " | " + f.getUfFun() + " | " + f.getCepFun() + " | " + f.getDddFun()
-				 	 + " | " + f.getTelefoneFun() + " | " + f.getCpfFun() + " | " + f.getPixFun() + " | "  + " | " +  
-				 	 f.getComissaoFun() + " | " + f.getAdiantamentoFun() + " | " + f.getMesFun() + " | " + f.getAnoFun() 
-				 	 + " | " + f.getCargoFun() + " | " + f.getSituacaoFun() + " | " + f.getSalarioFun() + " | " +  
-				 	 f.getCargo().getCodigoCargo() + " | " + f.getSituacao().getNumeroSit());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				arqFun = (" FUNCIONARIO " + f.getCodigoFun() + " , " + f.getNomeFun() + " , " + f.getEnderecoFun() 
+					+ " , " + f.getBairroFun() + " , " + f.getCidadeFun() + " , " + f.getUfFun() + " , " + f.getCepFun()
+					+ " , " + f.getDddFun() + " , " + f.getTelefoneFun() + " , " + f.getCpfFun() + " , " + f.getPixFun() 
+					+ " , " + f.getComissaoFun() + " , " + f.getAdiantamentoFun() + " , " + f.getMesFun() + " , " + f.getAnoFun() 
+				 	 + " , " + f.getCargoFun() + " , " + f.getSituacaoFun() + " , " + f.getSalarioFun() + " , " +  
+				 	 f.getCargo().getCodigoCargo() + " , " + f.getSituacao().getNumeroSit());
+				crip = Cryptograf.criptografa(arqFun);
+				fwF.write(crip);
 			}
-			bwC.close();
+			fwF.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -411,18 +383,17 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Grupo";
 		path = unid + meioSgb + file + ext;
 		GrupoService gruService = new GrupoService();
-		arq = "";
+		String arqGru = null;
 		crip = "";
-		List<Grupo> listF = gruService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Grupo g : listF) {
+		List<Grupo> listGrupo = gruService.findAll();
+		try {FileWriter fwG = new FileWriter(path);
+			for(Grupo g : listGrupo) {
 				count += 1;
-				arq = (g.getCodigoGru() + " | " + g.getNomeGru());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				arqGru = (" GRUPO " + g.getCodigoGru() + " , " + g.getNomeGru());
+				crip = Cryptograf.criptografa(arqGru);
+				fwG.write(crip);
 			}
-			bwC.close();
+			fwG.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -435,20 +406,24 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Login";
 		path = unid + meioSgb + file + ext;
 		LoginService logService = new LoginService();
-		arq = "";
+		String arqLog = null;
 		crip = "";
-		List<Login> listF = logService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Login l : listF) {
+		List<Login> listL = logService.findAll();
+		try {FileWriter fwL = new FileWriter(path);
+			for(Login l : listL) {
 				count += 1;
-				arq = (l.getNumeroLog() + " | " + l.getSenhaLog() + " | " + l.getNomeLog() + " | " + l.getNivelLog()
-				 + " | " + l.getAlertaLog() + " | " + l.getDataLog() + " | " + l.getVencimentoLog() + " | " + 
-						l.getMaximaLog() + " | " + l.getAcessoLog() + " | " + l.getEmpresaLog());
-//				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(arq));
-				bwC.newLine();
+				String dataLog = sdfAno.format(l.getDataLog());
+				String dataVen = sdfAno.format(l.getVencimentoLog());
+				String dataMax = sdfAno.format(l.getMaximaLog());
+				String dataAce = sdfAno.format(l.getAcessoLog());
+
+				arqLog = (" LOGIN " + l.getNumeroLog() + " , " + l.getSenhaLog() + " , " + l.getNomeLog() + " , " + l.getNivelLog()
+				 + " , " + l.getAlertaLog() + " , " + dataLog + " , " + dataVen + " , " + 
+						dataMax + " , " + dataAce + " , " + l.getEmpresaLog());
+				crip = Cryptograf.criptografa(arqLog);
+				fwL.write(crip);
 			}
-			bwC.close();
+			fwL.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -461,21 +436,21 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Produto";
 		path = unid + meioSgb + file + ext;
 		ProdutoService prodService = new ProdutoService();
-		arq = "";
+		String arqPro = null;
 		crip = "";
 		List<Produto> listP = prodService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
+		try {FileWriter fwP = new FileWriter(path);
 			for(Produto p : listP) {
 				count += 1;
-				arq = (p.getCodigoProd() + " | " + p.getGrupoProd() + " | " + p.getNomeProd() + " | " + p.getSaldoProd()
-				 	+ " | " + p.getEstMinProd() + " | " + p.getPrecoProd() + " | " + p.getVendaProd() + " | " + 
-						p.getCmmProd() + " | " + p.getSaidaCmmProd() + " | " + p.getDataCadastroProd() + " | " + 
-						p.getGrupo().getCodigoGru() + " | " + p.getPercentualProd() + " | " + p.getLetraProd());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				String dataCad = sdfAno.format(p.getDataCadastroProd());
+				arqPro = (" PRODUTO " + p.getCodigoProd() + " , " + p.getGrupoProd() + " , " + p.getNomeProd() + " , " + p.getSaldoProd()
+				 	+ " , " + p.getEstMinProd() + " , " + p.getPrecoProd() + " , " + p.getVendaProd() + " , " + 
+						p.getCmmProd() + " , " + p.getSaidaCmmProd() + " , " + dataCad + " , " + 
+						p.getGrupo().getCodigoGru() + " , " + p.getPercentualProd() + " , " + p.getLetraProd());
+				crip = Cryptograf.criptografa(arqPro);
+				fwP.write(crip);
 			}
-			bwC.close();
+			fwP.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -488,18 +463,19 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Situacao";
 		path = unid + meioSgb + file + ext;
 		SituacaoService sitService = new SituacaoService();
-		arq = "";
+		String arqSit = null;
 		crip = "";
+		FileWriter fwS = null;
 		List<Situacao> listS = sitService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
+		try {fwS = new FileWriter(path);
 			for(Situacao s : listS) {
 				count += 1;
-				arq = (s.getNumeroSit() + " | " + s.getNomeSit());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				arqSit = (" SIT " + s.getNumeroSit() + " , " + s.getNomeSit() + " ; ");
+				crip = Cryptograf.criptografa(arqSit);
+				fwS.write(crip);
+				fwS.flush();
 			}
-			bwC.close();
+			fwS.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -512,22 +488,23 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Compromisso";
 		path = unid + meioSgcp + file + ext;
 		CompromissoService comService = new CompromissoService();
-		arq = "";
+		String arqCom = null;
 		crip = "";
-		List<Compromisso> listC = comService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Compromisso c : listC) {
+		List<Compromisso> listCm = comService.findAll();
+		try {FileWriter fwCm = new FileWriter(path);
+			for(Compromisso cm : listCm) {
 				count += 1;
-				arq = (c.getIdCom() + " | " + c.getFornecedor().getCodigo() + " | " + c.getFornecedor().getRazaoSocial()
-						 + " | " + c.getNnfCom() + " | " + c.getDataCom() + " | " + c.getDataVencimentoCom() + " | " + 
-						c.getValorCom() + " | " + c.getParcelaCom() + " | " + c.getPrazoCom() + " | " + 
-						 c.getFornecedor().getCodigo() + " | " + c.getTipoFornecedor().getCodigoTipo() + " | " + 
-						c.getParPeriodo().getIdPeriodo());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				String dataCom = sdfAno.format(cm.getDataCom());
+				String dataVen = sdfAno.format(cm.getDataVencimentoCom());
+				arqCom = (" COMPROMISSO " + cm.getIdCom() + " , " + cm.getFornecedor().getCodigo() + " , " + cm.getFornecedor().getRazaoSocial()
+						 + " , " + cm.getNnfCom() + " , " + dataCom + " , " + dataVen + " , " + 
+						cm.getValorCom() + " , " + cm.getParcelaCom() + " , " + cm.getPrazoCom() + " , " + 
+						 cm.getFornecedor().getCodigo() + " , " + cm.getTipoFornecedor().getCodigoTipo() + " , " + 
+						cm.getParPeriodo().getIdPeriodo());
+				crip = Cryptograf.criptografa(arqCom);
+				fwCm.write(crip);
 			}
-			bwC.close();
+			fwCm.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -540,23 +517,22 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Fornecedor";
 		path = unid + meioSgcp + file + ext;
 		FornecedorService forService = new FornecedorService();
-		arq = "";
+		String arqFor = null;
 		crip = "";
-		List<Fornecedor> listF = forService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Fornecedor f : listF) {
+		List<Fornecedor> listFo = forService.findAll();
+		try {FileWriter fwFo = new FileWriter(path);
+			for(Fornecedor fo : listFo) {
 				count += 1;
-				arq = (f.getCodigo() + " | " + f.getRazaoSocial() + " | " + f.getRua() + " | " + 
-						f.getNumero() + " | " + f.getComplemento() + " | " + f.getBairro() + " | " + f.getCidade()
-						 + " | " + f.getUf() + " | " + f.getCep() + " | " + f.getDdd01() + " | " + f.getTelefone01()
-						 + " | " + f.getDdd02() + " | " + f.getTelefone02() + " | " + f.getContato() + " | " + 
-						 f.getDddContato() + " | " + f.getTelefoneContato() + " | " + f.getEmail() + " | " + f.getPix()
-						 + " | " + f.getObservacao() + " | " + f.getPrazo() + " | " + f.getParcela());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				arqFor = (" FORNECEDOR " + fo.getCodigo() + " , " + fo.getRazaoSocial() + " , " + fo.getRua() + " , " + 
+						fo.getNumero() + " , " + fo.getComplemento() + " , " + fo.getBairro() + " , " + fo.getCidade()
+						 + " , " + fo.getUf() + " , " + fo.getCep() + " , " + fo.getDdd01() + " , " + fo.getTelefone01()
+						 + " , " + fo.getDdd02() + " , " + fo.getTelefone02() + " , " + fo.getContato() + " , " + 
+						 fo.getDddContato() + " , " + fo.getTelefoneContato() + " , " + fo.getEmail() + " , " + fo.getPix()
+						 + " , " + fo.getObservacao() + " , " + fo.getPrazo() + " , " + fo.getParcela());
+				crip = Cryptograf.criptografa(arqFor);
+				fwFo.write(crip);
 			}
-			bwC.close();
+			fwFo.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -569,22 +545,23 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "Parcela";
 		path = unid + meioSgcp + file + ext;
 		ParcelaService parService = new ParcelaService();
-		arq = "";
+		String arqPar = "";
 		crip = "";
-		List<Parcela> listP = parService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(Parcela p : listP) {
+		List<Parcela> listPa = parService.findAll();
+		try {FileWriter fwPa = new FileWriter(path);
+			for(Parcela pa : listPa) {
 				count += 1;
-				arq = (p.getIdPar() + " | " + p.getCodigoFornecedorPar() + " | " + p.getNomeFornecedorPar() + " | " + 
-						p.getNnfPar() + " | " + p.getNumeroPar() + " | " + p.getDataVencimentoPar() + " | " + 
-						p.getValorPar() + " | " + p.getDescontoPar() + " | " + p.getJurosPar() + " | " + p.getTotalPar()
-						 + " | " + p.getPagoPar() + " | " + p.getDataPagamentoPar() + " | " + p.getFornecedor().getCodigo()
-						 + " | " + p.getTipoFornecedor().getCodigoTipo() + " | " + p.getPeriodo().getIdPeriodo());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				String dataVen = sdfAno.format(pa.getDataVencimentoPar());
+				String dataPag = sdfAno.format(pa.getDataPagamentoPar());
+				arqPar = (" PARCELA " + pa.getIdPar() + " , " + pa.getCodigoFornecedorPar() + " , " + pa.getNomeFornecedorPar() + " , " + 
+						pa.getNnfPar() + " , " + pa.getNumeroPar() + " , " + dataVen + " , " + 
+						pa.getValorPar() + " , " + pa.getDescontoPar() + " , " + pa.getJurosPar() + " , " + pa.getTotalPar()
+						 + " , " + pa.getPagoPar() + " , " + dataPag + " , " + pa.getFornecedor().getCodigo()
+						 + " , " + pa.getTipoFornecedor().getCodigoTipo() + " , " + pa.getPeriodo().getIdPeriodo());
+				crip = Cryptograf.criptografa(arqPar);
+				fwPa.write(crip);
 			}
-			bwC.close();
+			fwPa.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -597,19 +574,20 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "ParPeriodo";
 		path = unid + meioSgcp + file + ext;
 		ParPeriodoService perService = new ParPeriodoService();
-		arq = "";
+		String arqPer = null;
 		crip = "";
-		List<ParPeriodo> listP = perService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
-			for(ParPeriodo p : listP) {
+		List<ParPeriodo> listPe = perService.findAll();
+		try {FileWriter fwPe = new FileWriter(path);
+			for(ParPeriodo pe : listPe) {
 				count += 1;
-				arq = (p.getIdPeriodo() + " | " + p.getDtiPeriodo() + " | " + p.getDtfPeriodo() + " | " + 
-						p.getFornecedor().getCodigo() + " | " + p.getTipoConsumo().getCodigoTipo());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				String dataI = sdfAno.format(pe.getDtiPeriodo());
+				String dataF = sdfAno.format(pe.getDtfPeriodo());
+				arqPer = (" PERIODO " + pe.getIdPeriodo() + " , " + dataI + " , " + dataF + " , " + 
+						pe.getFornecedor().getCodigo() + " , " + pe.getTipoConsumo().getCodigoTipo());
+				crip = Cryptograf.criptografa(arqPer);
+				fwPe.write(crip);
 			}
-			bwC.close();
+			fwPe.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
@@ -622,18 +600,17 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		file = "TipoConsumidor";
 		path = unid + meioSgcp + file + ext;
 		TipoConsumoService tipoService = new TipoConsumoService();
-		arq = "";
+		String arqTipo = "";
 		crip = "";
 		List<TipoConsumo> listT = tipoService.findAll();
-		try {BufferedWriter bwC = new BufferedWriter(new FileWriter(path));
+		try {FileWriter fwT = new FileWriter(path);
 			for(TipoConsumo t : listT) {
 				count += 1;
-				arq = (t.getCodigoTipo() + " | " + t.getNomeTipo());
-				crip = Cryptograf.criptografa(arq);
-				bwC.write(Cryptograf.criptografa(crip));
-				bwC.newLine();
+				arqTipo = (" TIPO " + t.getCodigoTipo() + " , " + t.getNomeTipo());
+				crip = Cryptograf.criptografa(arqTipo);
+				fwT.write(crip);
 			}
-			bwC.close();
+			fwT.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			
