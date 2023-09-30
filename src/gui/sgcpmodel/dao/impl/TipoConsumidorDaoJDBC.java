@@ -72,7 +72,8 @@ public class TipoConsumidorDaoJDBC implements TipoConsumidorDao {
 				      "(?, ?)",
  					 Statement.RETURN_GENERATED_KEYS); 
  
- 			st.setString(1, obj.getNomeTipo());
+			st.setInt(1, obj.getCodigoTipo());
+ 			st.setString(2, obj.getNomeTipo());
 
  			st.executeUpdate();
 			

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.MainSgb;
@@ -39,6 +40,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -124,24 +126,26 @@ public class RestauraSgbController implements Initializable, DataChangeListener 
  	public void executaBack() throws ParseException {
  		if (unid != null) {
  			count = 0;
-////			Alerts.showAlert("Atenção", "isoo pode demorar um pouco", null, AlertType.WARNING);
-//// 			anCartela();
+ 			countAk = 0;
  			cargo();
  			grupo();
  			situacao();
  			tipoConsumo();
  			fornecedor();
- 			produto();
- 			funcionario();
- 			adiantamento();
- 			cartela();
- 			cartelaVirtual();
-			cartelaPagante();
 			periodo();
-			entrada();
-			compromisso();
-			parcela();
- 			login();
+			Optional<ButtonType> result = Alerts.showConfirmation("null", "Execute Scrypt II ");
+			if (result.get() == ButtonType.OK) {
+				produto();
+				funcionario();
+				adiantamento();
+				cartela();
+				cartelaVirtual();
+				cartelaPagante();
+				entrada();
+				compromisso();
+				parcela();
+				login();
+			}
 			labelFile.setText("Kbou!!!");
 			labelFile.viewOrderProperty();
 			labelCount.viewOrderProperty();
@@ -277,10 +281,8 @@ public class RestauraSgbController implements Initializable, DataChangeListener 
 		
 	public void periodo() throws ParseException {
 		status = "Ok";
-		file = "ParPeriodo";
-		path = unid + meioSgcp + file + ext;
 		countAk = 0;
-		countAk = RestauraPeriodo.restauraPeriodo(countAk, unid, meioSgcp, file, ext);
+		countAk = RestauraPeriodo.restauraPeriodo(countAk);
 		gravaRestaura();
 	}
 			

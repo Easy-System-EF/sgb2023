@@ -412,9 +412,9 @@ public class AdiantamentoDaoJDBC implements AdiantamentoDao {
 		adiantamento.setSalarioAdi(rs.getDouble("SalarioAdi"));
 		adiantamento.setCodigoFun(rs.getInt("CodigoFun"));
 		adiantamento.setNomeFun(rs.getString("NomeFun"));
-		adiantamento.setComissaoFun(rs.getDouble("ComissaoFun"));
 		adiantamento.setMesFun(rs.getInt("MesFun"));
 		adiantamento.setAnoFun(rs.getInt("AnoFun"));
+		adiantamento.setSalarioFun(rs.getDouble("SalarioFun"));
 		adiantamento.setCargoFun(rs.getNString("CargoFun"));
 		adiantamento.setSituacaoFun(rs.getString("SituacaoFun"));
 		adiantamento.setSalarioFun(rs.getDouble("SalarioFun"));

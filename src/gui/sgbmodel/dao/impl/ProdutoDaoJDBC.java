@@ -84,8 +84,8 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st = conn.prepareStatement(
 					"INSERT INTO produto " 
 				      + "(CodigoProd, GrupoProd, NomeProd, SaldoProd, EstMinProd, PrecoProd, " 
-					  + "VendaProd, CmmProd, SaidaCmmProd, DataCadastroProd, GrupoIdProd) "  
-				      + "PercentualProd, LetraProd "
+					  + "VendaProd, CmmProd, SaidaCmmProd, DataCadastroProd, GrupoIdProd, "  
+				      + "PercentualProd, LetraProd) "
   				      + "VALUES " +
 				      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
  					 Statement.RETURN_GENERATED_KEYS); 

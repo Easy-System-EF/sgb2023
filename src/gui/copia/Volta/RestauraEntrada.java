@@ -49,15 +49,16 @@ public class RestauraEntrada implements Serializable {
 					campoEnt = regEnt[i];
 					String[] campo = campoEnt.split(" , ");
 					ent.setNumeroEnt(Integer.parseInt(campo[0].replaceAll("\s", "")));
-					Date dataEnt = sdfAno.parse(campo[1]);
+					ent.setNnfEnt(Integer.parseInt(campo[1]));
+					Date dataEnt = sdfAno.parse(campo[2]);
 					cal.setTime(dataEnt);
 					ent.setDataEnt(cal.getTime());
-					ent.setNomeFornEnt(campo[2]);
-					ent.setNomeProdEnt(campo[3]);
-					ent.setQuantidadeProdEnt(Double.parseDouble(campo[4]));
-					ent.setValorProdEnt(Double.parseDouble(campo[5]));
-					ent.setForn(forService.findById(Integer.parseInt(campo[6])));
-					ent.setProd(proService.findById(Integer.parseInt(campo[7])));
+					ent.setNomeFornEnt(campo[3]);
+					ent.setNomeProdEnt(campo[4]);
+					ent.setQuantidadeProdEnt(Double.parseDouble(campo[5]));
+					ent.setValorProdEnt(Double.parseDouble(campo[6]));
+					ent.setForn(forService.findById(Integer.parseInt(campo[7])));
+					ent.setProd(proService.findById(Integer.parseInt(campo[8])));
 
 					entService.insertBackUp(ent);
 					count += 1;

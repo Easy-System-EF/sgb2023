@@ -60,7 +60,7 @@ public class RestauraCompromisso implements Serializable {
 					Date dtvem = sdfAno.parse(campo[5]);
 					cal.setTime(dtvem);
 					comp.setDataVencimentoCom(cal.getTime());
-					comp.setValorCom(Double.parseDouble(campo[6]));
+ 					comp.setValorCom(Double.parseDouble(campo[6]));
 					comp.setParcelaCom(Integer.parseInt(campo[7]));
 					comp.setPrazoCom(Integer.parseInt(campo[8]));
 					comp.setFornecedor(forService.findById(Integer.parseInt(campo[9])));

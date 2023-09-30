@@ -65,7 +65,7 @@ public class RestauraParcela implements Serializable {
 					par.setPagoPar(Double.parseDouble(campo[10]));
 					Date dtpag = sdfAno.parse(campo[11]);
 					cal.setTime(dtpag);
-					par.setDataVencimentoPar(cal.getTime());
+					par.setDataPagamentoPar(cal.getTime());
 					par.setFornecedor(forService.findById(Integer.parseInt(campo[12])));
 					par.setTipoFornecedor(tipoService.findById(Integer.parseInt(campo[13])));
 					par.setPeriodo(perService.findById(Integer.parseInt(campo[14])));

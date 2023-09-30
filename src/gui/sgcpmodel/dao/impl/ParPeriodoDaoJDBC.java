@@ -46,7 +46,7 @@ public class ParPeriodoDaoJDBC implements ParPeriodoDao {
 			st.executeUpdate();
    		} 
  		catch (SQLException e) {
- 		throw new DbException ( "Erro!!! sem atualiza��o " + e.getMessage()); }
+ 		throw new DbException ( "Erro!!! sem atualização " + e.getMessage()); }
 
   		finally {
  			DB.closeStatement(st);
@@ -134,7 +134,7 @@ public class ParPeriodoDaoJDBC implements ParPeriodoDao {
  			
    		}
  		catch (SQLException e) {
-			throw new DbException ( "Erro consulta !!! sem exclus�o " + e.getMessage()); }
+			throw new DbException ( "Erro consulta !!! sem exclusão " + e.getMessage()); }
  		finally {
  			DB.closeStatement(st);
 		}

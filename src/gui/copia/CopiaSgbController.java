@@ -38,10 +38,8 @@ import gui.sgcpmodel.entites.Compromisso;
 import gui.sgcpmodel.entites.Fornecedor;
 import gui.sgcpmodel.entites.Parcela;
 import gui.sgcpmodel.entites.TipoConsumo;
-import gui.sgcpmodel.entites.consulta.ParPeriodo;
 import gui.sgcpmodel.service.CompromissoService;
 import gui.sgcpmodel.service.FornecedorService;
-import gui.sgcpmodel.service.ParPeriodoService;
 import gui.sgcpmodel.service.ParcelaService;
 import gui.sgcpmodel.service.TipoConsumoService;
 import gui.util.Alerts;
@@ -141,6 +139,8 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  	public void executaBack() {
  		if (unid != null) { 
 // 			Alerts.showAlert("Atenção", "isoo pode demorar um pouco", null, AlertType.WARNING);
+ 			count = 0; 			
+ 			grw = 0;
  			adiantamento();
  			cargo();
  			cartela();
@@ -155,7 +155,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  			compromisso();
  			fornecedor();
  			parcela();
- 			periodo();
  			tipo();
  			limpaBackUp();
  			gravaBackUp();	
@@ -199,8 +198,8 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 				 + " , " + a.getAnoAdi() + " , " + a.getValorCartelaAdi() + " , " + a.getCartelaAdi() + " , " + 
 						a.getComissaoAdi() + " , " + a.getTipoAdi() + " , " + a.getSalarioAdi() + " , " + 
 						a.getCodigoFun() + " , " + a.getNomeFun() + " , " + a.getMesFun() + " , " + a.getAnoFun() + " , " + 
-						a.getCargoFun() + " , " + a.getSituacaoFun() + " , " + a.getCargo().getCodigoCargo() + " , " + 
-						a.getSituacao().getNumeroSit());
+						a.getCargoFun() + " , " + a.getSituacaoFun() + " , " + a.getSalarioFun()  + " , " +  
+						a.getCargo().getCodigoCargo() + " , " + a.getSituacao().getNumeroSit());
 				crip = Cryptograf.criptografa(arqAdi);
 				fwA.write(crip);
 			}
@@ -333,9 +332,10 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 			for(Entrada e : listE) {
 				count += 1;
 				String dataEnt = sdfAno.format(e.getDataEnt());
-				arqEnt = (" ENTRADA " + e.getNumeroEnt() + " , " + dataEnt + " , " + e.getForn().getRazaoSocial() + " , " + 
-						e.getProd().getNomeProd() + " , " + e.getQuantidadeProdEnt() + " , " + e.getValorProdEnt()
-						 + " , " + 	e.getForn().getCodigo() + " , " + e.getProd().getCodigoProd());
+				arqEnt = (" ENTRADA " + e.getNumeroEnt() + " , " + e.getNnfEnt() + " , " + dataEnt + " , " + 
+						e.getForn().getRazaoSocial() + " , " + e.getProd().getNomeProd() + " , " + e.getQuantidadeProdEnt() 
+						+ " , " + e.getValorProdEnt() + " , " + 	e.getForn().getCodigo() + " , " + e.getProd().getCodigoProd());
+
 				crip = Cryptograf.criptografa(arqEnt);
 				fwE.write(crip);
 			}
@@ -500,7 +500,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 						 + " , " + cm.getNnfCom() + " , " + dataCom + " , " + dataVen + " , " + 
 						cm.getValorCom() + " , " + cm.getParcelaCom() + " , " + cm.getPrazoCom() + " , " + 
 						 cm.getFornecedor().getCodigo() + " , " + cm.getTipoFornecedor().getCodigoTipo() + " , " + 
-						cm.getParPeriodo().getIdPeriodo());
+						cm.getParPeriodo().getIdPeriodo());				
 				crip = Cryptograf.criptografa(arqCom);
 				fwCm.write(crip);
 			}
@@ -562,32 +562,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 				fwPa.write(crip);
 			}
 			fwPa.close();
-		}
-		catch(	IOException e2) {
-			e2.getMessage();	 			
-		}
-		finally {					
-		}
-	}
-	
-	public void periodo() {
-		file = "ParPeriodo";
-		path = unid + meioSgcp + file + ext;
-		ParPeriodoService perService = new ParPeriodoService();
-		String arqPer = null;
-		crip = "";
-		List<ParPeriodo> listPe = perService.findAll();
-		try {FileWriter fwPe = new FileWriter(path);
-			for(ParPeriodo pe : listPe) {
-				count += 1;
-				String dataI = sdfAno.format(pe.getDtiPeriodo());
-				String dataF = sdfAno.format(pe.getDtfPeriodo());
-				arqPer = (" PERIODO " + pe.getIdPeriodo() + " , " + dataI + " , " + dataF + " , " + 
-						pe.getFornecedor().getCodigo() + " , " + pe.getTipoConsumo().getCodigoTipo());
-				crip = Cryptograf.criptografa(arqPer);
-				fwPe.write(crip);
-			}
-			fwPe.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			

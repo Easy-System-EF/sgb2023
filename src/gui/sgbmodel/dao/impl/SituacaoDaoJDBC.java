@@ -69,7 +69,7 @@ public class SituacaoDaoJDBC implements SituacaoDao {
 		ResultSet rs = null;
   		try {
 			st = conn.prepareStatement(
-					"INSERT INTO login " +
+					"INSERT INTO situacao " +
 				      "(NumeroSit, NomeSit)" + 
   				      "VALUES " +
 				      "(?, ?)",

@@ -1,6 +1,9 @@
 package gui.util;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class DataSGB {
@@ -10,7 +13,7 @@ public class DataSGB {
 //		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 //		SimpleDateFormat sdfT = new SimpleDateFormat("dd/MM/yyyy HH:MM:ss");
 ////		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//		DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 //		DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").withZone(ZoneId.systemDefault());
 ////		// withZone c/ default ou a qtd de hs de fuso horario;
 //		DateTimeFormatter dtf4 = DateTimeFormatter.ISO_DATE_TIME;
@@ -29,9 +32,9 @@ public class DataSGB {
 //		Instant d07 = Instant.parse("2023-07-14T11:30:30-03:00"); // hr londres
 //		
 //		LocalDate d08 = LocalDate.parse("14/07/2023", dtf);
-//		LocalDateTime d09 = LocalDateTime.parse("14/07/2023 11:30", dtf2);
+		LocalDateTime d09 = LocalDateTime.parse("14/07/2023 11:30", dtf2);
 //		LocalDate d10 = LocalDate.of(2023, 7, 14);
-//		LocalDateTime d11 = LocalDateTime.of(2023, 7, 14, 11, 30);
+		LocalDateTime d11 = LocalDateTime.of(2023, 7, 14, 11, 30);
 
 //		LocalDate dt1 = DataStaticSGB.criaLocalAtual();
 //		LocalDate dt2 = DataStaticSGB.converteString("2023-07-15");
@@ -71,9 +74,9 @@ public class DataSGB {
 //		System.out.println("d06 instant parse                   " + d06);
 //		System.out.println("d07 instant parse                   " + d07);
 //		System.out.println("d08 local date parse formatado      " + d08);
-//		System.out.println("d09 local date time parse formatado " + d09); 
+		System.out.println("d09 local date time parse formatado " + d09); 
 //		System.out.println("d10 local date of                   " + d10);
-//		System.out.println("d11 local date time of              " + d11);
+		System.out.println("d11 local date time of              " + d11);
 //		
 ////FORMATAÇÃO datas		
 //		// esse é o ........
@@ -128,6 +131,12 @@ public class DataSGB {
 //		System.out.println("intervalo +  datas d04 local date parse " + d2.toDays());
 //		System.out.println("intervalo -  datas d06 instant parse    " + d3.toDays());
 //		System.out.println("intervalo +  datas d06 instant parse    " + d4.toDays());
+		
+		LocalDate dtn = DataStaticSGB.criaLocalAtual();
+		LocalDate dta = DataStaticSGB.menosAnoLocal(dtn, 5);
+		LocalDate dtp = DataStaticSGB.maisAnoLocal(dtn, 2);
+System.out.println(dtn + " " + dta + " " + dtp );		
+
 		
 	}
 }

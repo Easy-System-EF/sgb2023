@@ -66,6 +66,7 @@ public class RestauraLogin  implements Serializable {
 					logService.insertBackUp(log);
 					count += 1;
 				}
+				System.out.println();
 			}	
 			return count;
 		}	

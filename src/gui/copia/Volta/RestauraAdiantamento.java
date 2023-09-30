@@ -66,8 +66,9 @@ public class RestauraAdiantamento  implements Serializable {
 					adi.setAnoFun(Integer.parseInt(campo[13]));
 					adi.setCargoFun(campo[14]);
 					adi.setSituacaoFun(campo[15]);
-					adi.setCargo(carService.findById(Integer.parseInt(campo[16])));
-					adi.setSituacao(sitService.findById(Integer.parseInt(campo[17])));
+					adi.setSalarioFun(Double.parseDouble(campo[16]));
+					adi.setCargo(carService.findById(Integer.parseInt(campo[17])));
+					adi.setSituacao(sitService.findById(Integer.parseInt(campo[18])));
 					adiService.insertBackUp(adi);
 					count += 1;
 				}
