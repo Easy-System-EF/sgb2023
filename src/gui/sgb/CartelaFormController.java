@@ -24,12 +24,14 @@ import gui.sgbmodel.entities.Adiantamento;
 import gui.sgbmodel.entities.Cartela;
 import gui.sgbmodel.entities.CartelaPagante;
 import gui.sgbmodel.entities.CartelaVirtual;
+import gui.sgbmodel.entities.Cliente;
 import gui.sgbmodel.entities.Funcionario;
 import gui.sgbmodel.entities.Produto;
 import gui.sgbmodel.service.AdiantamentoService;
 import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.CartelaService;
 import gui.sgbmodel.service.CartelaVirtualService;
+import gui.sgbmodel.service.ClienteService;
 import gui.sgbmodel.service.FuncionarioService;
 import gui.sgbmodel.service.ProdutoService;
 import gui.util.Alerts;
@@ -47,8 +49,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -59,6 +64,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.exception.ValidationException;
 
 /*
@@ -68,8 +74,10 @@ import model.exception.ValidationException;
 public class CartelaFormController implements Initializable, DataChangeListener {
 
 	private Cartela entity;
+	@SuppressWarnings("unused")
 	private CartelaVirtual virtual;
 	private CartelaPagante pagante;
+	private Cliente cliente;
 
 	/*
 	 * dependencia service com metodo set
@@ -77,6 +85,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	private CartelaService service;
 	private CartelaVirtualService virService;
 	private CartelaPaganteService pagService;
+	private ClienteService cliService;
 
 // lista da classe subject (form) - guarda lista de obj p/ receber e emitir o evento
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -92,6 +101,12 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 
 	@FXML
 	private TextField textLocalCar;
+
+	@FXML
+	private TextField textIniciais;
+
+	@FXML
+	private ComboBox<Cliente> comboBoxCli;
 
 	@FXML
 	private TextField textDescontoCar;
@@ -139,6 +154,9 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	private TableColumn<CartelaVirtual, CartelaVirtual> tableColumnRemoveVir;
 
 	@FXML
+	private Button btPesquisaCli;
+
+	@FXML
 	private Button btSaveCar;
 
 	@FXML
@@ -146,6 +164,9 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 
 	@FXML
 	private Button btFechaCar;
+
+	@FXML
+	private Button btConvenioCar;
 
 	@FXML
 	private Button btCaloteCar;
@@ -165,21 +186,25 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	@FXML
 	private Label labelUser;
 
-	// auxiliar
+// auxiliar
 	public static String situacao = null;
 	public static Integer numPag = 0;
 	public static Integer sair  = 0;
+	public static Integer numEmp = null;
 	public Integer nivel = 0;
 	public String user = "usuário";
 	public String local = null;
+	String pesquisa = "";
 	String servico = null;
 	String consumo = null;
 	String classe = "Cartela Form";
 	String letraSit = null;
 	String nomeSit = null;
+	String baixa = null;
 	Integer numCar = 0;
 	Integer flag = 0;
 	int codFun = 0;
+	int flagP = 0;
 	double totProd = 0.00;
 	Double vlr = null;
 
@@ -187,21 +212,19 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	String vlrTotMasc = "";
 	String vlrPagMasc = "";
 
+	List<Cliente> listCli = new ArrayList<>();
 	private ObservableList<CartelaVirtual> obsListVir;
+	private ObservableList<Cliente> obsListCli;
 
 	@FXML
 	public void onBtFechaAction(ActionEvent event) throws ParseException {
 		confereTotal();
 		String result = "sim";
-		if (entity.getTotalCar() == 0.00) {
-			Alerts.showAlert(null, "Atenção", "Cartela sem valor!!!", AlertType.ERROR);
-			result = "nao";
-		} else {
-			if (entity.getLocalCar() == null) {
-				Alerts.showAlert(null, "Atenção", "Não existe local!!!", AlertType.ERROR);
-				result = "nao";
-			}
-		}
+		confereValor(result);
+		if (result == "sim") {
+			confereLocal(result);
+		}	
+		service.saveOrUpdate(entity);
 		if (entity.getNumeroPaganteCar() == 0) {
 			Alerts.showAlert(null, "Atenção", "Informe número de pagante(s) e Ok", AlertType.INFORMATION);
 			result = "nao";
@@ -233,13 +256,27 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		}
 	}
 
-	private void commitForm() {
-		CartelaCommitDao commitDao = DaoFactory.createCartelaCommitDao();
-		commitDao.gravaCartelaCommit(entity, letraSit, nomeSit);
+	@FXML
+	public void onBtConvenioAction(ActionEvent event) throws ParseException {
+		if (!comboBoxCli.getValue().getConvenioCli().equals("S")) {
+			Alerts.showAlert(null, "Cliente não tem Convênio", null, AlertType.ERROR);
+		} else { 	
+			entity.setClienteCar(comboBoxCli.getValue().getNomeCli());
+			confereTotal();
+			String result = "sim";
+			confereValor(result);
+			if (result == "sim") {
+				confereLocal(result);
+			}
+			entity.setNumeroPaganteCar(1);
+			letraSit = "V";
+			nomeSit = "Convênio";
+			commitForm();			
+			notifyDataChangeListerners();
+			Utils.currentStage(event).close();
+		}	
 	}
 
-//	Map<Integer, Double> mapFun = new HashMap<>();
-	
 	@FXML
 	public void onBtCaloteAction(ActionEvent event) {
 		if (nivel > 1 && nivel < 9) {
@@ -248,21 +285,34 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 			if (entity != null) {
 				confereTotal();
 			}
-			classe = "CartelaVirtual Cart Form";
-			List<CartelaVirtual> listVir = virService.findCartela(numCar);
-			for (CartelaVirtual v : listVir) {
-				virtual = v;
-				virtual.setSituacaoVir("C");
-				virService.saveOrUpdate(virtual);
-			}
-			entity.setSituacaoCar("C");
-			entity.setNomeSituacaoCar("Calote");
 			letraSit = "C";
 			nomeSit = "Calote";
 			commitForm();			
 			notifyDataChangeListerners();
 			Utils.currentStage(event).close();
 		}
+	}
+
+	private String confereValor(String result) {	
+		if (entity.getTotalCar() == 0.00) {
+			Alerts.showAlert(null, "Atenção", "Cartela sem valor!!!", AlertType.ERROR);
+			result = "nao";
+		}	
+		return result;
+	}
+
+	private String confereLocal(String result) { 
+		if (entity.getLocalCar() == null) {
+			Alerts.showAlert(null, "Atenção", "Não existe local!!!", AlertType.ERROR);
+			result = "nao";
+		}
+		return result;
+	}
+		
+	private void commitForm() {
+		String forma = null;
+		CartelaCommitDao commitDao = DaoFactory.createCartelaCommitDao();
+		commitDao.gravaCartelaCommit(entity, letraSit, nomeSit, baixa, numEmp, forma);
 	}
 
 	@FXML
@@ -300,7 +350,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 				confereLocal();
 			}	
 			if (textLocalCar.getText() == null) {
-				Alerts.showAlert("Atenção!!! ", "Local em uso e/ou aberto ", null, AlertType.INFORMATION);
+				Alerts.showAlert("Atenção!!! ", "Local é obrigatório ", null, AlertType.INFORMATION);
 			} else {	
 				entity.setDescontoCar(0.00);
 				entity.setTotalCar(0.00);
@@ -313,10 +363,19 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 				entity.setServicoCar("Sem serviço");
 				entity.setValorServicoCar(0.00);
 				entity.setSubTotalCar(0.00);
+				if (comboBoxCli.getValue().getConvenioCli().equals("S")) {
+					entity.setClienteCar(comboBoxCli.getValue().getNomeCli());
+					flagP = 1;
+				} else {	
+					entity.setClienteCar(null);
+				}
 				classe = "Cartela Form";
 				service.saveOrUpdate(entity);
 				numCar = entity.getNumeroCar();
 				try {
+					if (entity.getClienteCar() != null) {
+						montacomboCli();
+					}
 					updateFormData();
 				} catch (ParseException e) {
 					e.printStackTrace();
@@ -361,19 +420,16 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		this.entity = entity;
 		this.virtual = virtual;
 		this.pagante = pagante;
-//		this.funcionario = funcionario;
-//		this.adiantamento = adiantamento;
 	}
 
 	// * metodo set /p service
 	public void setServices(CartelaService service, CartelaVirtualService virService,
 			CartelaPaganteService pagService, AdiantamentoService adiService,
-			FuncionarioService funService) {
+			FuncionarioService funService, ClienteService cliService) {
 		this.service = service;
 		this.virService = virService;
 		this.pagService = pagService;
-//save		this.adiService = adiService;
-//save		this.funService = funService;
+		this.cliService = cliService;
 	}
 
 	/*
@@ -394,7 +450,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		}
 		if (service == null) {
 			throw new IllegalStateException("Serviço cartela nulo");
-		}
+		} 
 		@SuppressWarnings("unused")
 		ValidationException exception = new ValidationException("Validation exception");
 		try {
@@ -424,6 +480,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 				if	(numCar == entity.getNumeroCar()) {
 					entity.calculaValorPagante();
 					if (entity.getTotalCar() > 0.00) {
+						entity.setValorPaganteCar(entity.getTotalCar() / entity.getNumeroPaganteCar());
 						vlrTotMasc = Mascaras.formataValor(entity.getTotalCar());
 						labelTotalCar.setText(vlrTotMasc);						
 						labelTotalCar.viewOrderProperty();
@@ -493,9 +550,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		if (textLocalCar.getText() == null || textLocalCar.getText().trim().contentEquals("")) {
 			exception.addErros("local", "Local é obrigatório");
 		} else {
-			if (textLocalCar.getText() != null || textLocalCar.getText().trim().contentEquals("")) {
-				obj.setLocalCar(textLocalCar.getText().toUpperCase());
-			}
+			obj.setLocalCar(textLocalCar.getText().toUpperCase());
 		}
 		confereLocal();
 		if (textLocalCar.getText() == null) {
@@ -512,7 +567,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		} else {
 			obj.setDescontoCar(Utils.tryParseToDouble(textDescontoCar.getText().replace(",", ".")));
 		}
-
+		
 		obj.setNumeroPaganteCar(Utils.tryParseToInt(textNumeroPaganteCar.getText()));
 
 		obj.setValorServicoCar(0.00);
@@ -541,6 +596,13 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 			obj.setMesCar(0);
 			obj.setAnoCar(0);
 		}
+		
+		if (comboBoxCli.getValue().getConvenioCli().equals("S")) {
+			obj.setClienteCar(comboBoxCli.getValue().getNomeCli());
+		} else {	
+			obj.setClienteCar(null);
+		}
+		
 		// tst se houve algum (erro com size > 0)
 		if (exception.getErros().size() > 0) {
 			throw exception;
@@ -578,6 +640,8 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		Constraints.setTextFieldDouble(textDescontoCar);
 		Constraints.setTextFieldMaxLength(textLocalCar, 10);
 		Constraints.setTextFieldMaxLength(textNumeroPaganteCar, 02);
+		Constraints.setTextFieldMaxLength(textIniciais, 07);
+		initializeComboBoxCliente();
 		initializeNodes();
 	}
 
@@ -757,6 +821,21 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 
 		textLocalCar.setText(entity.getLocalCar());
 
+		if (entity.getClienteCar() != null) {
+			flagP = 1;
+			montacomboCli();
+			comboBoxCli.setValue(entity.getCliente());
+		} else {
+			comboBoxCli.getSelectionModel().selectFirst();
+		}
+		
+		if  (comboBoxCli.getValue() != null) {
+			if (comboBoxCli.getValue().getConvenioCli().equals("N") ||
+					comboBoxCli.getValue().getConvenioCli().equals(null)) {
+				entity.setClienteCar(null);
+			}	
+		}
+			
 		String vlr = "0.00";
 		if (entity.getDescontoCar() == null) {
 			entity.setDescontoCar(0.00);
@@ -764,21 +843,21 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 		vlr = Mascaras.formataValor(entity.getDescontoCar());
 		textDescontoCar.setText(vlr);
 		
+		if (entity.getServicoCar() != null) {
+			if (entity.getServicoCar().equals("Com serviço")) {
+				rbServicoSimCar.setSelected(true);
+				rbServicoNaoCar.setSelected(false);
+			}	
+			if (entity.getServicoCar().equals("Sem serviço")) {
+				rbServicoSimCar.setSelected(false);
+				rbServicoNaoCar.setSelected(true);
+			}	
+		}	
 		if (entity.getServicoCar() == null) {
 			entity.setServicoCar("Sem serviço");
 			rbServicoNaoCar.setSelected(true);
 			rbServicoSimCar.setSelected(false);			
-		} else {
-			if (entity.getServicoCar().equals("Com serviço")) {
-				rbServicoSimCar.setSelected(true);
-				rbServicoNaoCar.setSelected(false);
-			} else {
-				rbServicoSimCar.setSelected(false);			
-				rbServicoNaoCar.setSelected(true);
-				entity.setServicoCar("Sem serviço");
-			}
-		}	
-
+		} 
 		textServicoCar.setText(entity.getServicoCar());
 
 		if (entity.getMesCar() == null) {
@@ -842,8 +921,24 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 // buscando (carregando) bco de dados
 		List<CartelaVirtual> listVir = new ArrayList<>();
 		listVir = virService.findCartela(numCar);
+		montacomboCli();
 // transf p/ obslist		
 		obsListVir = FXCollections.observableArrayList(listVir);
+	}
+	
+	private void montacomboCli() {
+		if (flagP == 0) {
+			listCli = cliService.findAll();
+		} else {	
+			List<Cliente> listCli = cliService.findPesquisa(entity.getClienteCar());
+			for (Cliente c : listCli) {
+				cliente = c;
+				entity.setCliente(cliente);
+			}	
+		}
+		obsListCli = FXCollections.observableArrayList(listCli);
+		comboBoxCli.setItems(obsListCli);
+
 	}
 
 // mandando a msg de erro para o labelErro correspondente 	
@@ -863,5 +958,87 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	@Override
 	public void onDataChanged() {
 		updateTableView();
+	}
+	@FXML
+	public void onBtPesquisaAction(ActionEvent event) {
+		classe = "Cartela Cliente Form";
+		flagP = 0;
+		try {
+			pesquisa = textIniciais.getText().toUpperCase().trim();
+			if (pesquisa != "") {
+				listCli = cliService.findPesquisa(pesquisa);
+				if (listCli.size() == 0) {
+					pesquisa = "";
+					Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
+					if (result.get() == ButtonType.OK) {
+						Stage parentStage = Utils.currentStage(event);
+						createDialogForm(cliente, "/gui/sgb/ClienteForm.fxml", parentStage);
+					}
+					listCli = cliService.findPesquisa(pesquisa);
+				}
+				else {
+					entity.setClienteCar(null);
+					flagP = 1;
+				}
+				obsListCli = FXCollections.observableArrayList(listCli);
+				comboBoxCli.setItems(obsListCli);
+				montacomboCli();
+				notifyDataChangeListerners();
+				updateFormData();
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+			Alerts.showAlert("Erro pesquisando objeto", classe, e.getMessage(), AlertType.ERROR);
+		} catch (DbException e) {
+			e.printStackTrace();
+			Alerts.showAlert("Erro pesquisando objeto", classe, e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	private void createDialogForm(Cliente cliente, String absoluteName, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+
+// referencia para o controlador = controlador da tela carregada fornListaForm			
+			ClienteFormController controller = loader.getController();
+			controller.user = user;
+			// injetando passando parametro obj
+			controller.setCliente(cliente);
+// injetando tb o forn service vindo da tela de formulario fornform
+			controller.setClienteService(new ClienteService());
+// inscrevendo p/ qdo o evento (esse) for disparado executa o metodo -> onDataChangeList...
+//			controller.subscribeDataChangeListener(this);
+//	carregando o obj no formulario (fornecedorFormControl)			
+			controller.updateFormData();
+
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Digite Cliente                                             ");
+			dialogStage.setScene(new Scene(pane));
+// pode redimencionar a janela: s/n?
+			dialogStage.setResizable(false);
+// quem e o stage pai da janela?
+			dialogStage.initOwner(parentStage);
+// travada enquanto n�o sair da tela
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Alerts.showAlert("IO Exception", classe + "Erro carregando tela", e.getMessage(), AlertType.ERROR);
+		}
+	}
+
+	private void initializeComboBoxCliente() {
+		Callback<ListView<Cliente>, ListCell<Cliente>> factory = lv -> new ListCell<Cliente>() {
+			@Override
+			protected void updateItem(Cliente item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(empty ? "" : item.getNomeCli());
+			}
+		};
+		comboBoxCli.setCellFactory(factory);
+		comboBoxCli.setButtonCell(factory.call(null));
 	}
 }

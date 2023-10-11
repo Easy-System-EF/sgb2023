@@ -414,7 +414,7 @@ public class AdiantamentoFormController implements Initializable, Serializable {
 			controller.updateFormData();
 
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Digite Adiantamento                                             ");
+			dialogStage.setTitle("Digite Funcionário                                             ");
 			dialogStage.setScene(new Scene(pane));
 // pode redimencionar a janela: s/n?
 			dialogStage.setResizable(false);

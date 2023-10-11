@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
@@ -17,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane blendMode="DIFFERENCE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="667.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.sgb.CartelaFormController">
+<AnchorPane blendMode="DIFFERENCE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="611.0" prefWidth="667.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.sgb.CartelaFormController">
    <children>
       <GridPane fx:id="gridPaneCar" blendMode="DARKEN" layoutY="11.0" prefHeight="177.0" prefWidth="655.0">
         <columnConstraints>
@@ -28,6 +29,7 @@
         <rowConstraints>
           <RowConstraints />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -49,7 +51,7 @@
                   </Label>
                   <TextField fx:id="textNumeroCar" editable="false" prefHeight="22.0" prefWidth="40.0">
                      <HBox.margin>
-                        <Insets bottom="2.0" left="19.0" top="2.0" />
+                        <Insets bottom="2.0" left="35.0" top="2.0" />
                      </HBox.margin>
                   </TextField>
                </children>
@@ -79,7 +81,44 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+            <Label text="Filtra Cliente" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets bottom="3.0" left="3.0" top="3.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="textIniciais" prefHeight="22.0" prefWidth="99.0" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="2.0" left="90.0" right="80.0" top="2.0" />
+               </GridPane.margin>
+            </TextField>
+            <Button fx:id="btPesquisaCli" mnemonicParsing="false" onAction="#onBtPesquisaAction" text="Pesquisa" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="2.0" left="160.0" top="2.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label text="Cliente" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="2.0" left="2.0" top="2.0" />
+               </GridPane.margin>
+               <padding>
+                  <Insets bottom="3.0" left="3.0" top="3.0" />
+               </padding>
+            </Label>
+            <ComboBox fx:id="comboBoxCli" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="2.0" left="80.0" top="2.0" />
+               </GridPane.margin>
+            </ComboBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
                <children>
                   <Label prefHeight="21.0" prefWidth="50.0" text="Local">
                      <HBox.margin>
@@ -99,7 +138,7 @@
                   </TextField>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
                   <Label prefHeight="21.0" prefWidth="76.0" text="Total">
                      <HBox.margin>
@@ -122,7 +161,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
                <children>
                   <Label prefHeight="21.0" prefWidth="69.0" text="Desconto">
                      <HBox.margin>
@@ -142,7 +181,7 @@
                   </TextField>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
                   <Label text="Obs">
                      <HBox.margin>
@@ -159,17 +198,17 @@
                   </TextField>
                </children>
             </HBox>
-            <Label fx:id="labelErrorPlacaOrc" textFill="#ee2c2c" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label fx:id="labelErrorPlacaOrc" textFill="#ee2c2c" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <font>
                   <Font size="12.0" />
                </font>
             </Label>
-            <Label fx:id="labelErrorKmFinalOrc" textFill="#e84040" GridPane.columnIndex="2" GridPane.rowIndex="3">
+            <Label fx:id="labelErrorKmFinalOrc" textFill="#e84040" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <font>
                   <Font size="12.0" />
                </font>
             </Label>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="4">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
                <children>
                   <Label text="Pagantes">
                      <HBox.margin>
@@ -189,7 +228,7 @@
                   </TextField>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
                   <Label prefHeight="21.0" prefWidth="77.0" text="Valor">
                      <HBox.margin>
@@ -212,7 +251,7 @@
                   </Label>
                </children>
             </HBox>
-            <Label fx:id="labelErrorLocalCar" text=" " textFill="#c30d0d" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label fx:id="labelErrorLocalCar" text=" " textFill="#c30d0d" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -225,7 +264,7 @@
                   <Font size="12.0" />
                </font>
             </Label>
-            <Label text="Serviço" GridPane.rowIndex="5">
+            <Label text="Serviço" GridPane.rowIndex="6">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -236,7 +275,7 @@
                   <Insets bottom="3.0" left="3.0" top="3.0" />
                </padding>
             </Label>
-            <RadioButton fx:id="rbServicoSimCar" mnemonicParsing="false" text="Sim" GridPane.rowIndex="5">
+            <RadioButton fx:id="rbServicoSimCar" mnemonicParsing="false" text="Sim" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="75.0" />
                </GridPane.margin>
@@ -244,7 +283,7 @@
                   <Font name="System Bold Italic" size="12.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="rbServicoNaoCar" mnemonicParsing="false" text="Não" GridPane.rowIndex="5">
+            <RadioButton fx:id="rbServicoNaoCar" mnemonicParsing="false" text="Não" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="120.0" />
                </GridPane.margin>
@@ -252,12 +291,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </RadioButton>
-            <Label fx:id="labelErrorServicoCar" prefHeight="15.0" prefWidth="7.0" textFill="#e82626" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Label fx:id="labelErrorServicoCar" prefHeight="15.0" prefWidth="7.0" textFill="#e82626" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <TextField fx:id="textServicoCar" editable="false" prefHeight="23.0" prefWidth="88.0" text=" " GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <TextField fx:id="textServicoCar" editable="false" prefHeight="23.0" prefWidth="88.0" text=" " GridPane.columnIndex="1" GridPane.rowIndex="6">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -270,22 +309,27 @@
             <Blend opacity="0.52" />
          </effect>
       </GridPane>
-      <Button fx:id="btNewVir" layoutY="195.0" mnemonicParsing="false" onAction="#onBtNewVirAction" text="Consumo" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="200.0">
+      <Button fx:id="btNewVir" layoutY="195.0" mnemonicParsing="false" onAction="#onBtNewVirAction" text="Consumo" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="215.0">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
-      <Button fx:id="btFechaCar" mnemonicParsing="false" onAction="#onBtFechaAction" text="Fecha Consumo" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="306.0" AnchorPane.topAnchor="200.0">
+      <Button fx:id="btFechaCar" mnemonicParsing="false" onAction="#onBtFechaAction" prefHeight="23.0" prefWidth="114.0" text="Fecha Consumo" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="353.0" AnchorPane.topAnchor="215.0">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="btCaloteCar" mnemonicParsing="false" onAction="#onBtCaloteAction" text="Calote" AnchorPane.leftAnchor="375.0" AnchorPane.topAnchor="200.0">
+      <Button fx:id="btConvenioCar" mnemonicParsing="false" onAction="#onBtConvenioAction" prefHeight="23.0" prefWidth="79.0" text="Convênio" AnchorPane.leftAnchor="330.0" AnchorPane.topAnchor="215.0">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <TableView fx:id="tableViewVir" blendMode="DARKEN" layoutY="230.0" prefHeight="280.0" prefWidth="506.0">
+      <Button fx:id="btCaloteCar" mnemonicParsing="false" onAction="#onBtCaloteAction" prefHeight="23.0" prefWidth="81.0" text="Calote" AnchorPane.leftAnchor="420.0" AnchorPane.topAnchor="215.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <TableView fx:id="tableViewVir" blendMode="DARKEN" layoutY="247.0" prefHeight="309.0" prefWidth="506.0">
         <columns>
           <TableColumn fx:id="tableColumnNomeProdVir" editable="false" prefWidth="176.0" text="Produto" />
           <TableColumn fx:id="tableColumnQtdProdVir" editable="false" prefWidth="86.0" text="Quantidade" />
@@ -298,12 +342,12 @@
             <Blend />
          </effect>
       </TableView>
-      <Button fx:id="btSaveCar" layoutX="226.0" mnemonicParsing="false" onAction="#onBtSaveCarAction" prefHeight="23.0" prefWidth="91.0" text="Ok Cartela" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="530.0">
+      <Button fx:id="btSaveCar" layoutX="226.0" mnemonicParsing="false" onAction="#onBtSaveCarAction" prefHeight="23.0" prefWidth="91.0" text="Ok Cartela" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="565.0">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="btCancelCar" mnemonicParsing="false" onAction="#onBtCancelCarAction" prefHeight="23.0" prefWidth="91.0" text="Cancela" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="530.0">
+      <Button fx:id="btCancelCar" mnemonicParsing="false" onAction="#onBtCancelCarAction" prefHeight="23.0" prefWidth="91.0" text="Cancela" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="565.0">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

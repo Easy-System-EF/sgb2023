@@ -64,11 +64,14 @@ public class CartelaListPagoController implements Initializable, DataChangeListe
 	@FXML
 	private Label labelUser;
 
+	@FXML
+	private Label labelMesPagto;
+
 	public String user = "";
  	
 // auxiliar 	
  	String classe = "Cartela List Pg";
- 	String nomeTitulo = "Cartela Paga";
+ 	String nomeTitulo = "Cartela Paga: ";
  	public static int mm = 0;
  	public static int aa = 0;
  	
@@ -87,7 +90,7 @@ public class CartelaListPagoController implements Initializable, DataChangeListe
 	@FXML
 	public void onBtMesAnoAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		nomeTitulo = "Cartela Paga ";
+		nomeTitulo = "Cartela Paga: ";
 		Meses objMes = new Meses();
 		Anos objAno = new Anos();
 		classe = "Mes e Ano Cart List Pg";
@@ -136,12 +139,16 @@ public class CartelaListPagoController implements Initializable, DataChangeListe
 			throw new IllegalStateException("Serviço  está vazio");
  		}
 		if (mm > 0) {
+	  		String tabelaMeses = "Janeiro de, Fevereiro de, Março de, Abril de, Maio de, Junho de, Julho de, "
+		         	+ "Agosto de, Setembro de, Outubro de, Novembro de, Dezembro de ";
+	  		String[] tabMes = tabelaMeses.split(",");
+	  		String nomeMes = tabMes[mm - 1];
 			List<CartelaPagante> list = new ArrayList<>();
 			list = service.findByMesAnoPago(mm, aa, "P");
 			if (list.size() == 0) {
 				Alerts.showAlert("Cartela Paga por período ", "Período ", "Não há Cartela Paga no período ", AlertType.INFORMATION);
 			} else  {	
-				labelTitulo.setText(String.format("%s ", nomeTitulo));
+				labelTitulo.setText(String.format("%s%s%s%d ", nomeTitulo, nomeMes, " ", aa));
 				obsList = FXCollections.observableArrayList(list);
 				tableViewCartelaPagante.setItems(obsList);
 			}	

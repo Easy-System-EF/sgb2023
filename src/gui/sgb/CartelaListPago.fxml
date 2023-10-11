@@ -19,12 +19,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Label fx:id="labelTitulo" prefHeight="22.0" prefWidth="218.0" text="Cartela Paga ">
+            <Label fx:id="labelTitulo" prefHeight="22.0" prefWidth="312.0" text="Cartela Paga ">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
                <padding>
-                  <Insets bottom="2.0" left="80.0" top="2.0" />
+                  <Insets bottom="2.0" left="50.0" top="2.0" />
                </padding>
             </Label>
          </items>

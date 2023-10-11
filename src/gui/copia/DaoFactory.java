@@ -18,5 +18,4 @@ public class DaoFactory {
  	public static RestauraDao createRestauraDao() {
 		return new RestauraDaoJDBC(DB.getConnection());
 	}
- 	
 }

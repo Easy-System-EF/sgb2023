@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane blendMode="DIFFERENCE" prefHeight="157.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.sgb.ConvenioFormController">
+   <children>
+      <Label text="Filtra(cliente)" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
+         <padding>
+            <Insets bottom="2.0" left="5.0" top="2.0" />
+         </padding>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <TextField fx:id="textPesquisa" prefHeight="22.0" prefWidth="67.0" text=" " AnchorPane.leftAnchor="115.0" AnchorPane.topAnchor="10.0" />
+      <Button fx:id="btPesquisa" mnemonicParsing="false" onAction="#onBtPesquisaAction" text="Pesquisa" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Label layoutX="17.0" layoutY="63.0" text="Cliente" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="45.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <padding>
+            <Insets bottom="2.0" left="5.0" top="2.0" />
+         </padding>
+      </Label>
+      <ComboBox fx:id="comboBoxCliente" layoutX="114.0" layoutY="19.0" prefWidth="150.0" promptText="Selecione" AnchorPane.leftAnchor="115.0" AnchorPane.topAnchor="45.0" />
+      <Label fx:id="labelErrorComboBoxCliente" prefHeight="15.0" prefWidth="269.0" text=" " textFill="#c930bf" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="45.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label text="Forma" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0">
+         <padding>
+            <Insets bottom="2.0" left="5.0" top="2.0" />
+         </padding>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <RadioButton fx:id="rbFormaDinheiroCartelaPag" mnemonicParsing="false" text="Dinheiro" AnchorPane.leftAnchor="115.0" AnchorPane.topAnchor="80.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="rbFormaPixCartelaPag" mnemonicParsing="false" text="Pix" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="80.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="rbFormaDebitoCartelaPag" mnemonicParsing="false" text="Débito" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="80.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="rbFormaCartaoCartelaPag" mnemonicParsing="false" text="Crédito" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="80.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </RadioButton>
+      <Label fx:id="labelErrorForma" prefHeight="14.0" prefWidth="269.0" text=" " textFill="#90168e" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="80.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Button fx:id="btOk" layoutX="141.0" layoutY="136.0" mnemonicParsing="false" onAction="#onBtOkAction" prefHeight="22.0" prefWidth="82.0" text="Ok" AnchorPane.leftAnchor="115.0" AnchorPane.topAnchor="115.0">
+         <padding>
+            <Insets bottom="2.0" left="5.0" top="2.0" />
+         </padding>
+         <font>
+            <Font name="System Bold Italic" size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="btCancel" layoutX="255.0" layoutY="136.0" mnemonicParsing="false" onAction="#onBtCancelAction" prefHeight="22.0" prefWidth="82.0" text="Cancela" AnchorPane.leftAnchor="210.0" AnchorPane.topAnchor="115.0">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <padding>
+            <Insets bottom="2.0" top="2.0" />
+         </padding>
+      </Button>
+   </children>
+   <effect>
+      <ColorAdjust hue="0.26" saturation="0.28" />
+   </effect>
+</AnchorPane>

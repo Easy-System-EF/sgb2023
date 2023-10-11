@@ -8,6 +8,7 @@ import gui.sgbmodel.dao.impl.CartelaCommitDaoJDBC;
 import gui.sgbmodel.dao.impl.CartelaDaoJDBC;
 import gui.sgbmodel.dao.impl.CartelaPaganteDaoJDBC;
 import gui.sgbmodel.dao.impl.CartelaVirtualDaoJDBC;
+import gui.sgbmodel.dao.impl.ClienteDaoJDBC;
 import gui.sgbmodel.dao.impl.EmpresaDaoJDBC;
 import gui.sgbmodel.dao.impl.EntradaDaoJDBC;
 import gui.sgbmodel.dao.impl.FechamentoMesDaoJDBC;
@@ -34,6 +35,10 @@ public class DaoFactory {
 	
   	public static CargoDao createCargoDao() {
 		return new CargoDaoJDBC(DB.getConnection());
+	}
+	
+  	public static ClienteDao createClienteDao() {
+		return new ClienteDaoJDBC(DB.getConnection());
 	}
 	
   	public static SituacaoDao createSituacaoDao() {

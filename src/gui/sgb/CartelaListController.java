@@ -24,6 +24,7 @@ import gui.sgbmodel.service.AdiantamentoService;
 import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.CartelaService;
 import gui.sgbmodel.service.CartelaVirtualService;
+import gui.sgbmodel.service.ClienteService;
 import gui.sgbmodel.service.EmpresaService;
 import gui.sgbmodel.service.FuncionarioService;
 import gui.sgbmodel.service.ProdutoService;
@@ -188,7 +189,8 @@ public class CartelaListController implements Initializable, DataChangeListener 
 									new CartelaVirtualService(),
 									new CartelaPaganteService(),
 									new AdiantamentoService(),
-									new FuncionarioService());
+									new FuncionarioService(),
+									new ClienteService());
 			controller.user = user;
 			controller.local = obj.getLocalCar();
 			controller.situacao = "A";
@@ -262,7 +264,7 @@ public class CartelaListController implements Initializable, DataChangeListener 
 		      setGraphic(button); 
 		      button.setOnAction( 
 					event -> createDialogForm(obj, objVir, objPag, objAdi, objFun, objCar, 
-							"/gui/sgb/CartelaForm.fxml", Utils.currentStage(event)));
+							"/gui/sgb/CartelaForm.fxml", Utils.currentStage(event)));		      
 		    }
 		  }); 
 		}

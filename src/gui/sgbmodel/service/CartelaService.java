@@ -34,9 +34,21 @@ public class CartelaService {
 		return dao.findByMesAnoFecha(mm, aa, mmp, aap);
 	} 
 
-	public List<Cartela> findSituacaoAberto(Integer mm, Integer aa, String strA, String strC) {
-		return dao.findSituacaoAberto(mm, aa, strA, strC);
+	public List<Cartela> findSituacaoAberto(Integer mm, Integer aa) {
+		return dao.findSituacaoAberto(mm, aa);
 	} 
+
+	public List<Cartela> findClienteAberto(String str) {
+   		return dao.findClienteAberto(str);
+	} 
+	
+	public List<Cartela> findClientePago(String str, Integer mm, Integer aa) {
+   		return dao.findClientePago(str, mm, aa);
+	} 
+	
+	public Double sumCliente(String str) {
+   		return dao.sumCliente(str);
+	} 	
 
 // * inserindo ou atualizando via dao
 // * se o codigo n�o existe insere, se existe altera 

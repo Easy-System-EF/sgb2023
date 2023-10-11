@@ -24,14 +24,21 @@ public class Cartela implements Serializable {
 	private String nomeSituacaoCar;
 	private Integer mesPagCar;
 	private Integer anoPagCar;
+	private String clienteCar;
 
+/*
+ * cliente só aqui n classe, não esta associado - não no mysql	
+ */
+	private Cliente cliente;
+	
 	public Cartela() {
 	}
 
 	public Cartela(Integer numeroCar, Date dataCar, String localCar, Double descontoCar, Double totalCar,
 			String situacaoCar, Integer numeroPaganteCar, Double valorPaganteCar, Integer mesCar, 
 			Integer anoCar, String obsCar, String servicoCar, Double valorServicoCar, 
-			Double subTotalCar, String nomeSituacaoCar,Integer mesPagCar, Integer anoPagCar) {
+			Double subTotalCar, String nomeSituacaoCar,Integer mesPagCar, Integer anoPagCar, String clienteCar,
+			Cliente cliente) {
 		this.numeroCar = numeroCar;
 		this.dataCar = dataCar;
 		this.localCar = localCar;
@@ -49,6 +56,8 @@ public class Cartela implements Serializable {
 		this.nomeSituacaoCar = nomeSituacaoCar;
 		this.mesPagCar = mesPagCar;
 		this.anoPagCar = anoPagCar;
+		this.clienteCar = clienteCar;
+		this.cliente = cliente;
 	}
 
 	public Integer getNumeroCar() {
@@ -198,6 +207,22 @@ public class Cartela implements Serializable {
 	public void setAnoPagCar(Integer anoPagCar) {
 		this.anoPagCar = anoPagCar;
 	}
+	
+	public String getClienteCar() {
+		return clienteCar;
+	}
+
+	public void setClienteCar(String clienteCar) {
+		this.clienteCar = clienteCar;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
 	public void calculaValorPagante() {
 		valorPaganteCar = 0.00;
@@ -245,6 +270,6 @@ public class Cartela implements Serializable {
 				+ numeroPaganteCar + ", valorPaganteCar=" + valorPaganteCar + ", mesCar=" + mesCar + ", anoCar="
 				+ anoCar + ", obsCar=" + obsCar + ", servicoCar=" + servicoCar + ", valorServicoCar=" + valorServicoCar
 				+ ", subTotalCar=" + subTotalCar + ", nomeSituacaoCar=" + nomeSituacaoCar + ", mesPagCar=" + mesPagCar
-				+ ", anoPagCar=" + anoPagCar + "]";
+				+ ", anoPagCar=" + anoPagCar + ", clienteCar=" + clienteCar + ", cliente=" + cliente + "]";
 	}
 }

@@ -15,6 +15,7 @@ import application.MainSgb;
 import gui.copia.Volta.RestauraAdiantamento;
 import gui.copia.Volta.RestauraCargo;
 import gui.copia.Volta.RestauraCartela;
+import gui.copia.Volta.RestauraCliente;
 import gui.copia.Volta.RestauraCompromisso;
 import gui.copia.Volta.RestauraEntrada;
 import gui.copia.Volta.RestauraFornecedor;
@@ -128,6 +129,7 @@ public class RestauraSgbController implements Initializable, DataChangeListener 
  			count = 0;
  			countAk = 0;
  			cargo();
+ 			cliente();
  			grupo();
  			situacao();
  			tipoConsumo();
@@ -176,6 +178,15 @@ public class RestauraSgbController implements Initializable, DataChangeListener 
 		file = "Cargo";
 		path = unid + meioSgb + file + ext;
 		countAk = RestauraCargo.restauraCargo(countAk, unid, meioSgb, file, ext);
+		gravaRestaura();
+	}
+	
+	public void cliente() {
+		status = "Ok";
+		countAk = 0;
+		file = "Cliente";
+		path = unid + meioSgb + file + ext;
+		countAk = RestauraCliente.restauraCliente(countAk, unid, meioSgb, file, ext);
 		gravaRestaura();
 	}
 	

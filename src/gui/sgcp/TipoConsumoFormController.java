@@ -54,7 +54,7 @@ public class TipoConsumoFormController implements Initializable {
 	private Label labelUser;
 
 	String classe = "Tipo Consumo ";
-	public String user = "usuário";	
+	public String user = "usuÃ¡rio";	
 	  
  	public void setTipoConsumo(TipoConsumo entity) {
 		this.entity = entity;
@@ -65,7 +65,7 @@ public class TipoConsumoFormController implements Initializable {
 		this.service = service;
 	}
 	
-//  * o controlador tem uma lista de eventos q permite distribuição via metodo abaixo
+//  * o controlador tem uma lista de eventos q permite distribuiï¿½ï¿½o via metodo abaixo
 // * recebe o evento e inscreve na lista
  	public void subscribeDataChangeListener(DataChangeListener listener) {
 		dataChangeListeners.add(listener);
@@ -73,15 +73,15 @@ public class TipoConsumoFormController implements Initializable {
 
 /* 
  * vamos instanciar um tipoforn e salvar no bco de dados
- * meu obj entity (lá em cima) vai receber uma chamada do getformdata
+ * meu obj entity (lï¿½ em cima) vai receber uma chamada do getformdata
  *  metodo q busca dados do formulario convertidos getForm (string p/ int ou string)		
  *  pegou no formulario e retornou (convertido) p/ jogar na variavel entity
  *  chamo o service na rotina saveupdate e mando entity
- *  vamos tst entity e service = null -> não foi injetado
+ *  vamos tst entity e service = null -> nï¿½o foi injetado
  *  para fechar a janela, pego a referencia para janela atual (event) e close
  *  DataChangeListner classe subjetc - q emite o evento q muda dados, vai guardar uma lista
- *  qdo ela salvar obj com sucesso, é só notificar (juntar)
- *  recebe lá no  listController    		 
+ *  qdo ela salvar obj com sucesso, ï¿½ sï¿½ notificar (juntar)
+ *  recebe lï¿½ no  listController    		 
  */
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
@@ -89,7 +89,7 @@ public class TipoConsumoFormController implements Initializable {
 		{	throw new IllegalStateException("Entidade nula");
 		}
 		if (service == null)
-		{	throw new IllegalStateException("Serviço nulo");
+		{	throw new IllegalStateException("ServiÃ§o nulo");
 		}
 		try {
     		 entity = getFormData();
@@ -114,24 +114,24 @@ public class TipoConsumoFormController implements Initializable {
 
 /*
  * criamos um obj vazio (obj), chamo codigo (em string) e transformamos em int (la no util)
- * se codigo for nulo insere, se não for atz
- * tb verificamos se cpos obrigatórios estão preenchidos, para informar erro(s)
- * para cpos string não precisa tryParse	
+ * se codigo for nulo insere, se nï¿½o for atz
+ * tb verificamos se cpos obrigatï¿½rios estï¿½o preenchidos, para informar erro(s)
+ * para cpos string nï¿½o precisa tryParse	
  */
 	private TipoConsumo getFormData() {
 		TipoConsumo obj = new TipoConsumo();
- // instanciando uma exceção, mas não lançado - validation exc....		
+ // instanciando uma exceï¿½ï¿½o, mas nï¿½o lanï¿½ado - validation exc....		
 		ValidationException exception = new ValidationException("Validation exception");
 // set CODIGO c/ utils p/ transf string em int \\ ou null		
 		obj.setCodigoTipo(Utils.tryParseToInt(textCodigoTipo.getText()));
 // tst name (trim elimina branco no principio ou final
-// lança Erros - nome do cpo e msg de erro
+// lanï¿½a Erros - nome do cpo e msg de erro
 		if (textNomeTipo.getText() == null || textNomeTipo.getText().trim().contentEquals("")) {
-			exception.addErros("descriçao", "Descrição é obrigatório");
+			exception.addErros("descriÃ§Ã£o", "DescriÃ§Ã£o Ã© obrigatÃ³rio");
 		}
 		else {
 			if (textNomeTipo.getText().length() < 5) {
-				exception.addErros("descriçao", "Descrição é inválida");
+				exception.addErros("descriÃ§Ã£o", "DescriÃ§Ã£o Ã© invÃ¡lida");
 			}
 		}
 			obj.setNomeTipo(textNomeTipo.getText());
@@ -173,7 +173,7 @@ public class TipoConsumoFormController implements Initializable {
  // mandando a msg de erro para o labelErro correspondente 	
  	private void setErrorMessages(Map<String, String> erros) {
  		Set<String> fields = erros.keySet();
- 		labelErrorNomeTipo.setText((fields.contains("descriçao") ? erros.get("descriçao") : ""));		
+ 		labelErrorNomeTipo.setText((fields.contains("descriÃ§Ã£o") ? erros.get("descriÃ§Ã£o") : ""));		
 	}
 }	
 

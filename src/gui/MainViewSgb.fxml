@@ -25,6 +25,7 @@
                         <MenuItem fx:id="menuItemFornecedor" mnemonicParsing="false" onAction="#onMenuItemFornecedorAction" text="Fornecedor" />
                         <MenuItem fx:id="menuItemTipoConsumo" mnemonicParsing="false" onAction="#onMenuItemTipoConsumoAction" text="Tipo de Consumo" />
                         <MenuItem fx:id="menuItemGrupo" mnemonicParsing="false" onAction="#onMenuItemGrupoAction" text="Grupo Produto" />
+                        <MenuItem fx:id="menuItemClientes" mnemonicParsing="false" onAction="#onMenuItemClienteAction" text="Cliente" />
                         <MenuItem fx:id="menuItemProduto" mnemonicParsing="false" onAction="#onMenuItemProdutoAction" text="Produto" />
                         <MenuItem fx:id="menuItemCargo" mnemonicParsing="false" onAction="#onMenuItemCargoAction" text="Cargo" />
                         <MenuItem fx:id="menuItemFuncionario" mnemonicParsing="false" onAction="#onMenuItemFuncionarioAction" text="Funcionário" />
@@ -43,6 +44,7 @@
                         <MenuItem fx:id="menuItemConsultaAberto" mnemonicParsing="false" onAction="#onMenuItemConsultaAbertoAction" text="Contas a Pagar" />
                         <MenuItem fx:id="menuItemConsultaPago" mnemonicParsing="false" onAction="#onMenuItemConsultaPagoAction" text="Contas Pagas" />
                         <MenuItem fx:id="menuItemConsultaCartelaAberto" mnemonicParsing="false" onAction="#onMenuItemConsultaCartelaAbertoAction" text="Cartela em Aberto" />
+                        <MenuItem fx:id="menuItemConsultaConvenioAberto" mnemonicParsing="false" onAction="#onMenuItemConsultaConvenioAbertoAction" text="Convênio em Aberto" />
                         <MenuItem fx:id="menuItemConsultaCartelaPago" mnemonicParsing="false" onAction="#onMenuItemConsultaCartelaPagoAction" text="Cartela Paga" />
                         <MenuItem fx:id="menuItemConsultaComissao" mnemonicParsing="false" onAction="#onMenuItemConsultaComissaoAction" text="Comissão" />
                         <MenuItem fx:id="menuItemConsultaFolhaMes" mnemonicParsing="false" onAction="#onMenuItemConsultaFolhaMesAction" text="Folha Mês" />

@@ -199,6 +199,7 @@ public class ProdutoFormController implements Initializable {
 			exception.addErros("venda", "Valor é obrigatório");
 			obj.setVendaProd(0.0);
 		}
+		
 		obj.setVendaProd(Utils.formatDecimalIn(textVendaProd.getText().replace(".", "")));
 		if (obj.getVendaProd() == 0.00) {
 			exception.addErros("venda", "Valor é obrigatório");

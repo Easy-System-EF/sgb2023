@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +36,8 @@ public class ProdutoDaoJDBC implements ProdutoDao {
 			st = conn.prepareStatement(
 					"INSERT INTO produto " 
 				      + "(GrupoProd, NomeProd, SaldoProd, EstMinProd, PrecoProd, " 
-					  + "VendaProd, CmmProd, SaidaCmmProd, DataCadastroProd, GrupoIdProd) "  
-				      + "PercentualProd, LetraProd "
+					  + "VendaProd, CmmProd, SaidaCmmProd, DataCadastroProd, GrupoIdProd, "  
+				      + "PercentualProd, LetraProd) "
   				      + "VALUES " +
 				      "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
  					 Statement.RETURN_GENERATED_KEYS); 

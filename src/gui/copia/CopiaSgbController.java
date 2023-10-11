@@ -17,6 +17,7 @@ import gui.sgbmodel.entities.Cargo;
 import gui.sgbmodel.entities.Cartela;
 import gui.sgbmodel.entities.CartelaPagante;
 import gui.sgbmodel.entities.CartelaVirtual;
+import gui.sgbmodel.entities.Cliente;
 import gui.sgbmodel.entities.Entrada;
 import gui.sgbmodel.entities.Funcionario;
 import gui.sgbmodel.entities.Grupo;
@@ -28,6 +29,7 @@ import gui.sgbmodel.service.CargoService;
 import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.CartelaService;
 import gui.sgbmodel.service.CartelaVirtualService;
+import gui.sgbmodel.service.ClienteService;
 import gui.sgbmodel.service.EntradaService;
 import gui.sgbmodel.service.FuncionarioService;
 import gui.sgbmodel.service.GrupoService;
@@ -143,6 +145,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  			grw = 0;
  			adiantamento();
  			cargo();
+ 			cliente();
  			cartela();
  			cartelaPagante();
  			cartelaVirtual();
@@ -230,6 +233,33 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 				fwC.flush();
 			}
 			fwC.close();
+		}
+		catch(	IOException e2) {
+			e2.getMessage();	 			
+		}
+		finally {					
+		}
+	}
+	
+	public void cliente() {
+		file = "Cliente";
+		path = unid + meioSgb + file + ext;
+		ClienteService cliService = new ClienteService();
+		String arqCliente = null;
+		crip = "";
+		
+		List<Cliente> listCliente = cliService.findAll();
+		try {FileWriter fwCl = new FileWriter(path);
+			for(Cliente cl: listCliente) {
+				count += 1;
+				arqCliente = (" CLIENTE " + cl.getCodigoCli() + " , " + cl.getNomeCli() + " , " + cl.getDddCli() + " , " + 
+						cl.getTelefoneCli() + " , " + cl.getConvenioCli() + " ; ");
+
+				crip = Cryptograf.criptografa(arqCliente);
+				fwCl.write(crip);
+				fwCl.flush();
+			}
+			fwCl.close();
 		}
 		catch(	IOException e2) {
 			e2.getMessage();	 			

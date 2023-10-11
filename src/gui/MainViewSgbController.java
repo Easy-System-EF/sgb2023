@@ -18,7 +18,9 @@ import gui.sgb.CargoListController;
 import gui.sgb.CartelaListAbertoController;
 import gui.sgb.CartelaListController;
 import gui.sgb.CartelaListPagoController;
+import gui.sgb.ClienteListController;
 import gui.sgb.ComissaoListController;
+import gui.sgb.ConvenioListAbertoController;
 import gui.sgb.EntradaListController;
 import gui.sgb.FechamentoMesListController;
 import gui.sgb.FolhaMesListController;
@@ -32,6 +34,7 @@ import gui.sgbmodel.service.AdiantamentoService;
 import gui.sgbmodel.service.CargoService;
 import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.CartelaService;
+import gui.sgbmodel.service.ClienteService;
 import gui.sgbmodel.service.EntradaService;
 import gui.sgbmodel.service.FechamentoMesService;
 import gui.sgbmodel.service.FolhaMesService;
@@ -88,6 +91,9 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	private MenuItem menuItemGrupo;
 
 	@FXML
+	private MenuItem menuItemClientes;
+
+	@FXML
 	private MenuItem menuItemProduto;
 
 	@FXML
@@ -116,6 +122,9 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	
 	@FXML
 	private MenuItem menuItemConsultaCartelaAberto;
+	
+	@FXML
+	private MenuItem menuItemConsultaConvenioAberto;
 	
 	@FXML
 	private MenuItem menuItemConsultaCartelaPago;
@@ -255,6 +264,19 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 			controller.user = user;
 			controller.setGrupoService(new GrupoService());
 			controller.updateTableView();
+		});}
+	}
+ 
+	@FXML
+	public void onMenuItemClienteAction() {
+		classe = "Cliente ";
+		if (senha != "Ok") {
+			temLogar();
+		} else {	
+ 		loadView("/gui/sgb/ClienteList.fxml", (ClienteListController controller) -> {
+			controller.user = user;
+  			controller.setClienteService(new ClienteService());
+   			controller.updateTableView();
 		});}
 	}
  
@@ -461,7 +483,33 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 					controller.user = user;
 					controller.mm = 0;
 					controller.aa = 0;
+					controller.numEmp = numEmp;
 					controller.setCartelaServices(new CartelaService(), new CargoService());
+					controller.updateTableView();
+		});
+			}
+		}	
+			}
+		}	
+	}
+  
+	@SuppressWarnings("static-access")
+	@FXML
+	public void onMenuItemConsultaConvenioAbertoAction() {
+		classe = "Con Convenio em Aberto ";
+		if (senha != "Ok") {
+			temLogar();
+		} 
+		if (senha == "Ok") {
+			if (nivel > 2 && nivel < 9) {
+				Alerts.showAlert("Nível de Acesso", "Atenção!!!", "nível sem Acesso", AlertType.ERROR);
+		} else {
+		if (senha == "Ok") {
+			if (nivel == 1 || nivel == 2 || nivel == 9) {
+				loadView("/gui/sgb/ConvenioListAberto.fxml", (ConvenioListAbertoController controller) -> {
+					controller.user = user;
+					controller.numEmp = numEmp;
+					controller.setCartelaServices(new CartelaService());
 					controller.updateTableView();
 		});
 			}

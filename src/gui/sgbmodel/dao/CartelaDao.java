@@ -16,7 +16,9 @@ public interface CartelaDao {
 	List<Cartela> findByMesAnoFecha(Integer mm, Integer aa, Integer mmp, Integer aap); 
  	List<Cartela> findAll();
  	List<Cartela> findSituacao(String sit);
-	List<Cartela> findSituacaoAberto(Integer mm, Integer aa, String strA, String strC); 
-	
+	List<Cartela> findSituacaoAberto(Integer mm, Integer aa); 
+	List<Cartela> findClienteAberto(String str); 	
+	List<Cartela> findClientePago(String str, Integer mm, Integer aa);
+	Double sumCliente(String str);
 }
   

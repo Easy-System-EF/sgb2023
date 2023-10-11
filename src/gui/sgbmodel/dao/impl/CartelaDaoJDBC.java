@@ -33,9 +33,10 @@ public class CartelaDaoJDBC implements CartelaDao {
 					"INSERT INTO cartela " +
 				      "(DataCar, LocalCar, DescontoCar, TotalCar, SituacaoCar, " +
 				       "NumeroPaganteCar, ValorPaganteCar, MesCar, AnoCar, ObsCar, " +
-				       "ServicoCar, ValorServicoCar, SubTotalCar, NomeSituacaoCar, MesPagCar, AnoPagCar ) " +
+				       "ServicoCar, ValorServicoCar, SubTotalCar, NomeSituacaoCar, MesPagCar, AnoPagCar, " +
+				       "ClienteCar ) " +
    				       "VALUES " +
-				       "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+				       "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
  					 Statement.RETURN_GENERATED_KEYS); 
 
 			st.setDate(1, new java.sql.Date(obj.getDataCar().getTime()));
@@ -54,6 +55,7 @@ public class CartelaDaoJDBC implements CartelaDao {
 			st.setString(14, obj.getNomeSituacaoCar());
 			st.setInt(15, obj.getMesPagCar());
 			st.setInt(16, obj.getAnoPagCar());
+			st.setString(17, obj.getClienteCar());
 			
  			int rowsaffectad = st.executeUpdate();
 			
@@ -86,9 +88,10 @@ public class CartelaDaoJDBC implements CartelaDao {
 					"INSERT INTO cartela " +
 				      "(NumeroCar, DataCar, LocalCar, DescontoCar, TotalCar, SituacaoCar, " +
 				       "NumeroPaganteCar, ValorPaganteCar, MesCar, AnoCar, ObsCar, " +
-				       "ServicoCar, ValorServicoCar, SubTotalCar, NomeSituacaoCar, MesPagCar, AnoPagCar ) " +
+				       "ServicoCar, ValorServicoCar, SubTotalCar, NomeSituacaoCar, MesPagCar, AnoPagCar, " +
+				       "ClienteCar ) " +
    				       "VALUES " +
-				       "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+				       "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
  					 Statement.RETURN_GENERATED_KEYS); 
 
 			st.setInt(1, obj.getNumeroCar());
@@ -108,6 +111,7 @@ public class CartelaDaoJDBC implements CartelaDao {
 			st.setString(15, obj.getNomeSituacaoCar());
 			st.setInt(16, obj.getMesPagCar());
 			st.setInt(17, obj.getAnoPagCar());
+			st.setString(18, obj.getClienteCar());
 			
  			st.executeUpdate();
 			
@@ -125,7 +129,6 @@ public class CartelaDaoJDBC implements CartelaDao {
 	public void update(Cartela obj) {
 		PreparedStatement st = null;
   		try {
-  			conn.setAutoCommit(false);
 			st = conn.prepareStatement(
 					"UPDATE cartela " +  
 							"SET DataCar = ?, " +
@@ -143,7 +146,8 @@ public class CartelaDaoJDBC implements CartelaDao {
 							 "SubTotalCar = ?, " +
 							 "NomeSituacaoCar = ?, " +
 							 "MesPagCar = ?, " +
-							 "AnoPagCar = ? " +
+							 "AnoPagCar = ?, " +
+							 "ClienteCar = ? " +
    					 "WHERE NumeroCar = ? ",
         			 Statement.RETURN_GENERATED_KEYS);
 			
@@ -163,10 +167,10 @@ public class CartelaDaoJDBC implements CartelaDao {
 			st.setString(14, obj.getNomeSituacaoCar());
 			st.setInt(15, obj.getMesPagCar());
 			st.setInt(16, obj.getAnoPagCar());
-			st.setInt(17, obj.getNumeroCar());
+			st.setString(17, obj.getClienteCar());
+			st.setInt(18, obj.getNumeroCar());
 			
  			st.executeUpdate();
- 			conn.commit();
    		} 
  		catch (SQLException e) {
  				throw new DbException (classe + "Erro!!! sem atualização " + e.getMessage()); }
@@ -318,20 +322,19 @@ public class CartelaDaoJDBC implements CartelaDao {
 	} 
 
 	@Override
-	public List<Cartela> findSituacaoAberto(Integer mm, Integer aa, String strA, String strC) {
+	public List<Cartela> findSituacaoAberto(Integer mm, Integer aa) {
 		PreparedStatement st = null; 
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement( 
 					 "SELECT cartela.* " +
-							   "FROM cartela " +
-			 "WHERE MesCar = ? AND AnoCar = ? AND (SituacaoCar = ? OR SituacaoCar = ?) " +
+						"FROM cartela " +
+						   "WHERE MesCar = ?  AND AnoCar = ?  AND " +
+						   		"(SituacaoCar = 'A' OR SituacaoCar = 'C' OR SituacaoCar = 'V' ) " +
 							   "ORDER BY NumeroCar ");
 			
 			st.setInt(1, mm);
 			st.setInt(2, aa);
-			st.setString(3, strA);
-			st.setString(4, strC);
 			rs = st.executeQuery();
 			
  			List<Cartela> list = new ArrayList<>();
@@ -402,6 +405,101 @@ public class CartelaDaoJDBC implements CartelaDao {
 		}
 	} 
 	
+	@Override
+	public List<Cartela> findClienteAberto(String str) {
+		PreparedStatement st = null; 
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement( 
+					"SELECT * " 
+						+ "FROM Cartela " 
+							+ "WHERE (ClienteCar like ? ) AND (SituacaoCar = 'V') "
+						+ "ORDER BY NumeroCar ");
+			
+			st.setString(1, str);
+
+			rs = st.executeQuery();
+			
+			List<Cartela> list = new ArrayList<>();
+			
+			while (rs.next()) {
+				Cartela obj = instantiateCartela(rs);
+ 				list.add(obj);
+ 			}
+			return list;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	} 	
+
+	@Override
+	public Double sumCliente(String str) {
+		Double totCli = null;
+		PreparedStatement st = null; 
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement( 
+					"SELECT SUM(TotalCar) AS total FROM Cartela " 
+						+ "WHERE (ClienteCar like ? ) AND (SituacaoCar = 'V') " );
+			
+			st.setString(1, str);
+
+			rs = st.executeQuery();
+			
+			while (rs.next()) {
+				totCli = rs.getDouble("total");
+ 			}
+			return totCli;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	} 	
+
+	@Override
+	public List<Cartela> findClientePago(String str, Integer mm, Integer aa) {
+		PreparedStatement st = null; 
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement( 
+					"SELECT * " 
+						+ "FROM Cliente " 
+							+ "WHERE (NomeCli like ? ) AND (SituacaoCar = 'P' ) " +
+								"AND (MesPagCar = ? ) AND (AnoPagcarPag = ?) "
+						+ "ORDER BY Nomecli ");
+			
+			st.setString(1, str + "%");
+			st.setInt(2, mm);
+			st.setInt(3, aa);
+			
+			rs = st.executeQuery();
+			
+			List<Cartela> list = new ArrayList<>();
+			
+			while (rs.next()) {
+				Cartela obj = instantiateCartela(rs);
+ 				list.add(obj);
+ 			}
+			return list;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	} 	
+	
 	private Cartela instantiateCartela(ResultSet rs) throws SQLException {
  		Cartela car = new Cartela();
  		car.setNumeroCar(rs.getInt("NumeroCar"));
@@ -420,7 +518,8 @@ public class CartelaDaoJDBC implements CartelaDao {
 		car.setSubTotalCar(rs.getDouble("SubTotalCar"));
 		car.setNomeSituacaoCar(rs.getString("NomeSituacaoCar"));
 		car.setMesPagCar(rs.getInt("MesPagCar"));
-		car.setAnoCar(rs.getInt("AnoPagCar"));
+		car.setAnoPagCar(rs.getInt("AnoPagCar"));
+		car.setClienteCar(rs.getString("ClienteCar"));
         return car;
-	}
+	}	
 }

@@ -233,14 +233,16 @@ public class EntradaFormController implements Initializable {
 			
  			if (flagN == 0) {
  				prodService.saveOrUpdate(prod);
- 				entity.setProd(prod);
-				service.saveOrUpdate(entity);
-				if (codigoFor[i] != entity.getForn().getCodigo()) {
-					if (codigoNnf[i] != entity.getNnfEnt()) {
-						i += 1;
-						codigoFor[i] = entity.getForn().getCodigo();
-						codigoNnf[i] = entity.getNnfEnt();
-						tam = i;
+ 				if (!entity.getNomeFornEnt().equals("Próprio")) {
+ 					entity.setProd(prod);
+ 					service.saveOrUpdate(entity);
+ 					if (codigoFor[i] != entity.getForn().getCodigo()) {
+ 						if (codigoNnf[i] != entity.getNnfEnt()) {
+ 							i += 1;
+ 							codigoFor[i] = entity.getForn().getCodigo();
+ 							codigoNnf[i] = entity.getNnfEnt();
+ 							tam = i;
+ 						}	
 					}	
 				}	
 			}
@@ -419,8 +421,9 @@ public class EntradaFormController implements Initializable {
 	public void onBtPesqProdAction(ActionEvent event) {
 		classe = "Produto Ent Form";
 		try {
-			if (pesquisaProd.length() > 0) {			
-				textIniciaisProd.setText(pesquisaProd);
+	  		pesquisaProd = textIniciaisProd.getText().toUpperCase().trim();
+			if (pesquisaProd != "") {			
+//				textIniciaisProd.setText(pesquisaProd);
 				List<Produto> listProd0 = prodService.findPesquisa(pesquisaProd);
 				listProd0 = prodService.findPesquisa(pesquisaProd);
 				obsListProd = FXCollections.observableArrayList(listProd0);

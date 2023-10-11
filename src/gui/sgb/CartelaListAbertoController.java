@@ -25,6 +25,7 @@ import gui.sgbmodel.service.CargoService;
 import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.CartelaService;
 import gui.sgbmodel.service.CartelaVirtualService;
+import gui.sgbmodel.service.ClienteService;
 import gui.sgbmodel.service.FuncionarioService;
 import gui.sgbmodel.service.MesesService;
 import gui.util.Alerts;
@@ -87,9 +88,10 @@ public class CartelaListAbertoController implements Initializable, DataChangeLis
 
 // auxiliar 	
 	String classe = "Cartela List Ab";
-	String nomeTitulo = "Cartela em  aberto";
+	String nomeTitulo = "Cartela em aberto";
 	public static int mm = 0;
 	public static int aa = 0;
+	public static Integer numEmp = null;
 
 // carrega aqui os dados Updatetableview (metodo)
 	private ObservableList<Cartela> obsList;
@@ -109,7 +111,7 @@ public class CartelaListAbertoController implements Initializable, DataChangeLis
 	@FXML
 	public void onBtMesAnoAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
-		nomeTitulo = "Cartela em Aberto ";
+		nomeTitulo = "Cartela em Aberto";
 		Meses objMes = new Meses();
 		Anos objAno = new Anos();
 		classe = "Mes e Ano Cart List Ab";
@@ -155,13 +157,21 @@ public class CartelaListAbertoController implements Initializable, DataChangeLis
 	public void updateTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Serviço  está vazio");
-		}
-		List<Cartela> list = new ArrayList<>();
-		list = service.findSituacaoAberto(mm, aa, "A", "C");
-		if (list.size() == 0 && mm > 0) {
-			Alerts.showAlert("Cartela por período ", "Período ", "Não há cartela em aberto ", AlertType.INFORMATION);
-		}
+		}			
+		String nomeMes = "";
 		labelTitulo.setText(String.format("%s ", nomeTitulo));
+  		if (mm > 0) {		
+  			String tabelaMeses = "Janeiro de, Fevereiro de, Março de, Abril de, Maio de, Junho de, Julho de, "
+	         	+ "Agosto de, Setembro de, Outubro de, Novembro de, Dezembro de ";
+  			String[] tabMes = tabelaMeses.split(",");
+  			nomeMes = tabMes[mm - 1];
+  	  		labelTitulo.setText(String.format("%s%s%s%s%d ", nomeTitulo, ": ", nomeMes, " ", aa));
+  		}	
+  		List<Cartela> list = new ArrayList<>();
+  		list = service.findSituacaoAberto(mm, aa);
+  		if (list.size() == 0 && mm > 0) {
+  			Alerts.showAlert("Cartela por período ", "Período ", "Não há cartela em aberto ", AlertType.INFORMATION);
+		}
 		obsList = FXCollections.observableArrayList(list);
 		tableViewCartela.setItems(obsList);
 		initEditButtons();
@@ -188,8 +198,9 @@ public class CartelaListAbertoController implements Initializable, DataChangeLis
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	private void createDialogForm(Cartela obj, CartelaVirtual objVir, CartelaPagante objPag, 
-				Funcionario objFun, Adiantamento objAdi, Cargo objCar, String absoluteName,
+				Funcionario objFun, Adiantamento objAdi, Cargo objCar, Integer numEmp, String absoluteName,
 			Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
@@ -198,6 +209,7 @@ public class CartelaListAbertoController implements Initializable, DataChangeLis
 			classe = "Cartela List Ab";
 //referencia para o controlador = controlador da tela carregada fornListaForm			
 			CartelaFormController controller = loader.getController();
+			controller.numEmp = numEmp;
 // injetando passando parametro obj
 			controller.setCartelas(obj, objVir, objPag, objAdi, objFun);
 			if (obj.getSituacaoCar() == "P") {
@@ -205,7 +217,7 @@ public class CartelaListAbertoController implements Initializable, DataChangeLis
 			} else {
 // injetando servi�os vindo da tela de formulario fornform
 				controller.setServices(new CartelaService(), new CartelaVirtualService(), 
-						new CartelaPaganteService(), new AdiantamentoService(), new FuncionarioService());
+						new CartelaPaganteService(), new AdiantamentoService(), new FuncionarioService(), new ClienteService());
 				controller.user = user;
 				controller.local = obj.getLocalCar();
 //				controller.nivel = nivel;
@@ -263,7 +275,7 @@ public class CartelaListAbertoController implements Initializable, DataChangeLis
 					return;
 				}
 
-				if (obj.getSituacaoCar().contains("C")) {
+				if (obj.getSituacaoCar().contains("C") || obj.getSituacaoCar().contains("V")) {
 					setGraphic(button);
 					CartelaVirtual objVir = new CartelaVirtual();
 					CartelaPagante objPag = new CartelaPagante();
@@ -271,7 +283,7 @@ public class CartelaListAbertoController implements Initializable, DataChangeLis
 					Adiantamento objAdi = new Adiantamento();
 					Cargo objCar = new Cargo();
 					button.setOnAction(event -> createDialogForm(obj, objVir, objPag, 
-							objFun, objAdi, objCar, "/gui/sgb/CartelaForm.fxml",
+							objFun, objAdi, objCar, numEmp, "/gui/sgb/CartelaForm.fxml",
 						Utils.currentStage(event)));
 				}
 			}	
