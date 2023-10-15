@@ -173,7 +173,6 @@ public class AdiantamentoFormController implements Initializable, Serializable {
 						pesquisa, cal.get(Calendar.YEAR), (data.getMonth() + 1));
 				listFun.removeIf(x -> x.getNomeFun().contains("Consumo Próprio"));
 				if (listFun.size() == 0) {
-					pesquisa = "";
 					Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
 					if (result.get() == ButtonType.OK) {
 						Stage parentStage = Utils.currentStage(event);
@@ -182,6 +181,7 @@ public class AdiantamentoFormController implements Initializable, Serializable {
 					listFun = funService.findPesquisa(pesquisa, cal.get(Calendar.YEAR), (data.getMonth() + 1));
 					listFun.removeIf(x -> x.getNomeFun().contains("Consumo Próprio"));
 				}
+				pesquisa = "";
 				obsListFun = FXCollections.observableArrayList(listFun);
 				comboBoxFun.setItems(obsListFun);
 				notifyDataChangeListerners();

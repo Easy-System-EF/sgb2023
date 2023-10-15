@@ -242,18 +242,11 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 			Alerts.showAlert(null, "não existe pagante!!!", null, AlertType.INFORMATION);
 		}	
 
-		if (situacao == "P") {
-			List<CartelaPagante> listPag = pagService.findByCartela(numCar);
-			for (CartelaPagante p : listPag) { 	
-				entity.setMesPagCar(p.getMesPagamentoPag());
-				entity.setAnoPagCar(p.getAnoPagamentoPag());
-			}	
-			letraSit = "P";
-			nomeSit = "Pago";
-			commitForm();			
-			notifyDataChangeListerners();
-			Utils.currentStage(event).close();
-		}
+		letraSit = "P";
+		nomeSit = "Pago";
+		commitForm();			
+		notifyDataChangeListerners();
+		Utils.currentStage(event).close();
 	}
 
 	@FXML
@@ -478,8 +471,8 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 			if (entity.getNumeroCar() != null) {
 				entity.setTotalCar(virService.sumTotalCartela(entity.getNumeroCar()));
 				if	(numCar == entity.getNumeroCar()) {
-					entity.calculaValorPagante();
-					if (entity.getTotalCar() > 0.00) {
+					 entity.calculaValorPagante();
+					 if (entity.getTotalCar() > 0.00) {
 						entity.setValorPaganteCar(entity.getTotalCar() / entity.getNumeroPaganteCar());
 						vlrTotMasc = Mascaras.formataValor(entity.getTotalCar());
 						labelTotalCar.setText(vlrTotMasc);						
@@ -487,8 +480,8 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 						vlrPagMasc = Mascaras.formataValor(entity.getValorPaganteCar());
 						labelValorPaganteCar.setText(vlrPagMasc);
 						labelValorPaganteCar.viewOrderProperty();
-						updateFormData();			
 						notifyDataChangeListerners();
+						updateFormData();			
 					}	
 				}
 			}
@@ -968,7 +961,6 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 			if (pesquisa != "") {
 				listCli = cliService.findPesquisa(pesquisa);
 				if (listCli.size() == 0) {
-					pesquisa = "";
 					Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
 					if (result.get() == ButtonType.OK) {
 						Stage parentStage = Utils.currentStage(event);
@@ -980,6 +972,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 					entity.setClienteCar(null);
 					flagP = 1;
 				}
+				pesquisa = "";
 				obsListCli = FXCollections.observableArrayList(listCli);
 				comboBoxCli.setItems(obsListCli);
 				montacomboCli();

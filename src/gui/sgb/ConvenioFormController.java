@@ -103,6 +103,7 @@ public class ConvenioFormController implements Initializable {
 					Alerts.showAlert("Cliente ", null, "Não encontrado ", AlertType.INFORMATION);
 					list = cliService.findAll();
 			 	}
+				pesquisa = "";
 	  			obsListCli = FXCollections.observableArrayList(list);
 				comboBoxCliente.setItems(obsListCli);
 				comboBoxCliente.getSelectionModel().selectFirst();

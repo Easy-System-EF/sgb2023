@@ -5,10 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.List;
-
-import gui.sgbmodel.entities.Cliente;
-import gui.sgbmodel.service.ClienteService;
 
 public class DataSGB {
 

@@ -192,7 +192,6 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 			if (pesquisaProd != "") {
 				List<Produto> listPro = prodService.findPesquisa(pesquisaProd);
 				if (listPro.size() == 0) {
-					pesquisaProd = "";
 					Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
 					if (result.get() == ButtonType.OK) {
 						Stage parentStage = Utils.currentStage(event);
@@ -201,6 +200,7 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 					}
 					listPro = prodService.findPesquisa(pesquisaProd);
 				}
+				pesquisaProd = "";
 				obsListProd = FXCollections.observableArrayList(listPro);
 				comboBoxProdVir.setItems(obsListProd);
 	  			notifyDataChangeListerners();
@@ -225,7 +225,6 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 				List<Funcionario> listFun = funService.findPesquisa(
 						pesquisaFun, aa, mm);
 				if (listFun.size() == 0) {
-					pesquisaFun = "";
 					Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
 					if (result.get() == ButtonType.OK) {
 						Stage parentStage = Utils.currentStage(event);
@@ -235,6 +234,7 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 					listFun = funService.findPesquisa(
 							pesquisaFun, aa, mm);
 				}
+				pesquisaFun = "";
 				obsListFun = FXCollections.observableArrayList(listFun);
 				comboBoxFunVir.setItems(obsListFun);
 	  			notifyDataChangeListerners();
@@ -282,10 +282,13 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 			}
 			notifyDataChangeListerners();
 			entity = new CartelaVirtual();
+			pesquisaFun = "";
+			pesquisaProd = "";
 			labelVendaProdVir.setText("0,00");
 			labelTotalProdVir.setText("0,00");
 			labelVendaProdVir.viewOrderProperty();
 			labelTotalProdVir.viewOrderProperty();
+			entity = new CartelaVirtual();
 			updateFormData();
 			if (sair == 1) {
 				Utils.currentStage(event).close();

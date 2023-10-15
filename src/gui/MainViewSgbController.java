@@ -531,7 +531,6 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 		} else {
 		if (senha == "Ok") {
 			if (nivel == 1 || nivel == 9) {
-//				CartelaPagante carPag = new CartelaPagante();
 				loadView("/gui/sgb/CartelaListPago.fxml", (CartelaListPagoController controller) -> {
 					controller.user = user;
 					controller.mm = 0;
@@ -679,7 +678,6 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	 * generica synchronized garante processo inteiro sem interrup��o
 	 */
 	private synchronized <T> void loadView(String absoluteName, Consumer<T> initializingAction) {
-//	private synchronized void loadView(String absoluteName) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			VBox newVBox = loader.load();

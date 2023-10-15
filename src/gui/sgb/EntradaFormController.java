@@ -247,8 +247,8 @@ public class EntradaFormController implements Initializable {
 				}	
 			}
  			entity = new Entrada();
- 			updateFormData();
  			notifyDataChangeListerners();
+ 			updateFormData();
  			if (sai == 1) {
  				if (tam > 0 && tam < 999999) {
  					compromissoCreate();
@@ -393,7 +393,6 @@ public class EntradaFormController implements Initializable {
 	  		if (pesquisaForn != "") {
 	  			List<Fornecedor> listFor = fornService.findPesquisa(pesquisaForn);
 				if (listFor.size() == 0) { 
-					pesquisaForn = "";
 					Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
 					if (result.get() == ButtonType.OK) {
 				 		 Stage parentStage = Utils.currentStage(event);
@@ -402,10 +401,11 @@ public class EntradaFormController implements Initializable {
 		 		  	}
 					listFor = fornService.findPesquisa(pesquisaForn);
 			 	}
+				pesquisaForn = "";
 	  			obsListForn = FXCollections.observableArrayList(listFor);
 	  			comboBoxFornEnt.setItems(obsListForn);
-	  			updateFormData();
 	  			notifyDataChangeListerners();
+	 			updateFormData();
 	  		}	
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -423,7 +423,6 @@ public class EntradaFormController implements Initializable {
 		try {
 	  		pesquisaProd = textIniciaisProd.getText().toUpperCase().trim();
 			if (pesquisaProd != "") {			
-//				textIniciaisProd.setText(pesquisaProd);
 				List<Produto> listProd0 = prodService.findPesquisa(pesquisaProd);
 				listProd0 = prodService.findPesquisa(pesquisaProd);
 				obsListProd = FXCollections.observableArrayList(listProd0);
@@ -443,10 +442,11 @@ public class EntradaFormController implements Initializable {
 					}
 				}		
 	  		}	
+			pesquisaProd = "";
   			comboBoxProdEnt.setItems(obsListProd);
 			pesquisaProd = "";
-  			updateFormData();
   			notifyDataChangeListerners();
+ 			updateFormData();
 		} catch (ParseException e) {
 			e.printStackTrace();
 			Alerts.showAlert("Erro pesquisando objeto", classe, e.getMessage(), AlertType.ERROR);
