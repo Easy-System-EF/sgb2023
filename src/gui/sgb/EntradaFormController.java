@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import db.DbException;
 import gui.listerneres.DataChangeListener;
@@ -23,18 +22,9 @@ import gui.sgbmodel.service.EntradaService;
 import gui.sgbmodel.service.GrupoService;
 import gui.sgbmodel.service.ProdutoService;
 import gui.sgcp.FornecedorFormController;
-import gui.sgcpmodel.entites.Compromisso;
 import gui.sgcpmodel.entites.Fornecedor;
-import gui.sgcpmodel.entites.Parcela;
-import gui.sgcpmodel.entites.TipoConsumo;
-import gui.sgcpmodel.entites.consulta.ParPeriodo;
-import gui.sgcpmodel.service.CompromissoService;
 import gui.sgcpmodel.service.FornecedorService;
-import gui.sgcpmodel.service.ParPeriodoService;
-import gui.sgcpmodel.service.ParcelaService;
-import gui.sgcpmodel.service.TipoConsumoService;
 import gui.util.Alerts;
-import gui.util.CalculaParcela;
 import gui.util.Constraints;
 import gui.util.Mascaras;
 import gui.util.Utils;
@@ -66,10 +56,6 @@ public class EntradaFormController implements Initializable {
 	private Entrada entityAnterior;
 	private Produto prod;
 	private Produto prodAnt;
-	private Compromisso entCom;
-	private ParPeriodo entPer;
-	private Fornecedor entFor;
-	private TipoConsumo entTip;
  
 	/*
 	 * dependencia service com metodo set
@@ -77,10 +63,6 @@ public class EntradaFormController implements Initializable {
 	private EntradaService service;
 	private FornecedorService fornService;
 	private ProdutoService prodService;
-	private CompromissoService comService;
-	private TipoConsumoService tipoService;
-	private ParPeriodoService perService;
-	private ParcelaService parService;
  
 // lista da classe subject (form) - guarda lista de obj p/ receber e emitir o evento
 	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
@@ -164,10 +146,6 @@ public class EntradaFormController implements Initializable {
 	int flagD = 0;
 	int flagAvisoII = 0;
  	int prz = 0;
- 	int tam = 999999;
- 	int i = 0;
- 	Integer codigoFor[] = new Integer[tam]; 
- 	Integer codigoNnf[] = new Integer[tam];
 	private ObservableList<Fornecedor> obsListForn;
 	private ObservableList<Produto> obsListProd;
 
@@ -175,26 +153,15 @@ public class EntradaFormController implements Initializable {
 		this.pesquisaProd = nome;
 	}
 	
-	public void setObjects(Entrada entity, Produto prod, Compromisso entCom, ParPeriodo entPer, Parcela entPar, 
-			Fornecedor entfor, TipoConsumo entTip) {
+	public void setObjects(Entrada entity, Produto prod) {
 		this.entity = entity;
 		this.prod = prod;
-		this.entCom = entCom;
-		this.entPer = entPer;
-		this.entFor = entfor;
-		this.entTip = entTip;
 	}
 	
-	public void setServices(EntradaService service, FornecedorService fornService, ProdutoService prodService, 
-			CompromissoService comService, TipoConsumoService tipoService, ParPeriodoService perService,
-			ParcelaService parService) {
+	public void setServices(EntradaService service, FornecedorService fornService, ProdutoService prodService) {
 		this.service = service;
 		this.fornService = fornService;
 		this.prodService = prodService;
-		this.comService = comService;
-		this.tipoService = tipoService;
-		this.perService = perService;
-		this.parService = parService;
 	}
 
 //  * o controlador tem uma lista de eventos q permite distribuiééo via metodo abaixo
@@ -236,23 +203,16 @@ public class EntradaFormController implements Initializable {
  				if (!entity.getNomeFornEnt().equals("Próprio")) {
  					entity.setProd(prod);
  					service.saveOrUpdate(entity);
- 					if (codigoFor[i] != entity.getForn().getCodigo()) {
- 						if (codigoNnf[i] != entity.getNnfEnt()) {
- 							i += 1;
- 							codigoFor[i] = entity.getForn().getCodigo();
- 							codigoNnf[i] = entity.getNnfEnt();
- 							tam = i;
- 						}	
-					}	
-				}	
+ 					EntradaCreate.compromissoCreate(entity);
+ 					if (flagAvisoII == 0) {
+ 						flagAvisoII = 1;
+ 					}
+ 				}	
 			}
  			entity = new Entrada();
  			notifyDataChangeListerners();
  			updateFormData();
  			if (sai == 1) {
- 				if (tam > 0 && tam < 999999) {
- 					compromissoCreate();
- 				}	
  				Utils.currentStage(event).close();
  			}
 		} catch (ValidationException e) {
@@ -373,8 +333,11 @@ public class EntradaFormController implements Initializable {
 		tot = obj.getQuantidadeProdEnt() * obj.getValorProdEnt();
 		if (tot != totAnt) {
 			totM = Mascaras.formataValor(tot);
+			totM = Mascaras.formataValor(tot);
+			labelTotVlrProdEnt.setText(totM);
+			labelTotVlrProdEnt.viewOrderProperty();
 			totAnt = tot;
-			exception.addErros("confirma", "confirma");
+			exception.addErros("vlr", "confirmando total - Ok");
 		}	
   				
 		// tst se houve algum (erro com size > 0)
@@ -402,10 +365,12 @@ public class EntradaFormController implements Initializable {
 					listFor = fornService.findPesquisa(pesquisaForn);
 			 	}
 				pesquisaForn = "";
-	  			obsListForn = FXCollections.observableArrayList(listFor);
-	  			comboBoxFornEnt.setItems(obsListForn);
-	  			notifyDataChangeListerners();
-	 			updateFormData();
+				if (listFor.size() > 0) {
+					obsListForn = FXCollections.observableArrayList(listFor);
+					comboBoxFornEnt.setItems(obsListForn);
+					notifyDataChangeListerners();
+					updateFormData();
+				}	
 	  		}	
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -423,30 +388,24 @@ public class EntradaFormController implements Initializable {
 		try {
 	  		pesquisaProd = textIniciaisProd.getText().toUpperCase().trim();
 			if (pesquisaProd != "") {			
-				List<Produto> listProd0 = prodService.findPesquisa(pesquisaProd);
-				listProd0 = prodService.findPesquisa(pesquisaProd);
-				obsListProd = FXCollections.observableArrayList(listProd0);
-			} else {	
-				pesquisaProd = textIniciaisProd.getText().toUpperCase().trim();
-				if (pesquisaProd != "") {
-					List<Produto> listProd = prodService.findPesquisa(pesquisaProd);
-					if (listProd.size() == 0) { 
-						Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
-						if (result.get() == ButtonType.OK) {
-							Stage parentStage = Utils.currentStage(event);
-							Produto obj = new Produto();
-							createDialogProd(obj, "/gui/sgb/ProdutoForm.fxml", parentStage);
-						}
-						listProd = prodService.findPesquisa(pesquisaProd);
-			  			obsListProd = FXCollections.observableArrayList(listProd);
+				List<Produto> listPro0 = prodService.findPesquisa(pesquisaProd);
+				if (listPro0.size() == 0) { 
+					Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
+					if (result.get() == ButtonType.OK) {
+						Stage parentStage = Utils.currentStage(event);
+						Produto obj = new Produto();
+						createDialogProd(obj, "/gui/sgb/ProdutoForm.fxml", parentStage);
 					}
-				}		
-	  		}	
+						listPro0 = prodService.findPesquisa(pesquisaProd);
+				} 
+				if (listPro0.size() > 0) {	
+					obsListProd = FXCollections.observableArrayList(listPro0);
+					comboBoxProdEnt.setItems(obsListProd);
+					notifyDataChangeListerners();
+					updateFormData();
+				}	
+			}	
 			pesquisaProd = "";
-  			comboBoxProdEnt.setItems(obsListProd);
-			pesquisaProd = "";
-  			notifyDataChangeListerners();
- 			updateFormData();
 		} catch (ParseException e) {
 			e.printStackTrace();
 			Alerts.showAlert("Erro pesquisando objeto", classe, e.getMessage(), AlertType.ERROR);
@@ -460,134 +419,13 @@ public class EntradaFormController implements Initializable {
 	// msm processo save p/ fechar
 	@FXML
 	public void onBtCancelEntAction(ActionEvent event) {
-		if (tam > 0 && tam < 999999) {
-			compromissoCreate();
-		}	
-		if (flagAvisoII == 1) {
-			Alerts.showAlert("Atenção", "Edite seu Contas a Pagar", "Para conferir: Tipo de Consumo, "
-					+ " data de vencimento e parcela(s)", AlertType.WARNING);
-			flagAvisoII += 1;
-		}
 		Utils.currentStage(event).close();
 	}
 
 	@FXML
 	public void onBtSaiEntAction(ActionEvent event) {
-		if (tam > 0 && tam < 999999) {
-			compromissoCreate();
-		}	
-		if (flagAvisoII == 1) {
-			Alerts.showAlert("Atenção", "Edite seu Contas a Pagar", "Para conferir: Tipo de Consumo, "
-					+ " data de vencimento e parcela(s)", AlertType.WARNING);
-			flagAvisoII += 1;
-		}
 		Utils.currentStage(event).close();
 	}
-
-	private void compromissoCreate() {
-		classe = "Entrada Form";
-		tam += 1;
-		Integer[] codent = new Integer[tam];
-		Double[] vlrent = new Double[tam];
-		Integer[] codcom = new Integer[tam];
-
-/*
- * cou conferir quais os regs para esse fornecedor e nf guardando o valor para comferir compromisso		
- */
-		for (i = 1 ; i < tam ; i++) {
-			if (codigoFor[i] != null) {
-				List<Entrada> listEntVlr = service.findByNnf(codigoNnf[i]);
-				double vlr = 0.00;
-				for (Entrada e1 : listEntVlr) {
-					if (e1.getNnfEnt().equals(codigoNnf[i])) {
-						if (e1.getForn().getCodigo().equals(codigoFor[i])) {
-							vlr += e1.getQuantidadeProdEnt() * e1.getValorProdEnt();
-							vlrent[i] = vlr;
-							codent[i] = e1.getNumeroEnt();
-						}
-					}	
-				}
-			}	
-/*
- * vou conferir se ja existe o compromisso incluido ou alterado			
- */
-			classe = "Compromisso Ent Form";
-			for (i = 1 ; i < tam ; i++) {
-				if (codigoFor[i] != null || codigoFor[i] > 0) {
-					entCom = comService.findById(codigoFor[i], codigoNnf[i]);
-					if (entCom != null) {
-						if (entCom.getNnfCom().equals(codigoNnf[i]) && entCom.getCodigoFornecedorCom().equals(codigoFor[i])) {
- 						    codcom[i] = 999999999;
-							if (!entCom.getValorCom().equals(vlrent[i])) {								
-/*
- * se o valor não for igual (houve alteração), vou conferir se não há parcela(s) paga(s)
- * se houver, ja setei o codcom com 999999999 (invalido) e mando aviso
- * se não houver, vou pegar o codigo do compromisso 								
- */
-			   					codcom[i] = entCom.getIdCom();						
-			   					flagD = conferePagamento(flagD, entCom);
-								if (flagD > 0 ) {
-									codcom[i] = 999999999;
-									Alerts.showAlert("Atenção!!!   Verifique Contas a Pagar", "Forn.: " + 
-										entCom.getFornecedor().getRazaoSocial() + " " + " - Nnf: " + 
-										entCom.getNnfCom(), "Valor não confere!!! ", AlertType.ERROR);
-				   				} 
-							}
-						} 
-					}	
-				}	
-			}
-		}	
-
-/*
- * se o nnf for maior que zero, 
- * cria ou atualiza compromisso		
- */
-		if (codigoNnf[1] != null) {
-			for (int ii = 1 ; ii < tam ; ii ++) {
-				if (codcom[ii] == null || codcom[ii] < 999999999) {
-					classe = "Tipo Consumo Ent Form";
-					List<TipoConsumo> listTipo = tipoService.findAll();
-					for (TipoConsumo tc : listTipo) {
-						if (tc.getNomeTipo().equals("Empresa")) {
-							entTip = tipoService.findById(tc.getCodigoTipo());
-						}
-					}	
-					classe = "Periodo Ent Form";
-					entPer = perService.findById(1);
-					classe = "Fornecedor Ent Form";
-					entFor = fornService.findById(codigoFor[ii]);
-					classe = "Entrada Form";
-					Entrada ent = new Entrada();
-					ent = service.findById(codent[ii]);
-					classe = "Compromisso Ent Form";
-					comService.remove(codigoFor[ii], codigoNnf[ii]);
-					parService.removeNnf(codigoNnf[ii], codigoFor[ii]);
-					entCom = new Compromisso(codcom[ii], codigoFor[ii], entFor.getRazaoSocial(), codigoNnf[ii], 
-							ent.getDataEnt(), ent.getDataEnt(), vlrent[ii], entFor.getParcela(), entFor.getPrazo(), 	
-							entFor, entTip, entPer);
-					comService.saveOrUpdate(entCom);
-					CalculaParcela.parcelaCreate(entCom);
-					flagAvisoII = 1;
-				}
-			}	
-		}
-	}
-		
-	private int conferePagamento(int flagD, Compromisso obj) {
-	flagD = 0;
-		List<Parcela> list = parService.findByIdFornecedorNnf(obj.getCodigoFornecedorCom(), obj.getNnfCom());
-		List<Parcela> st = list.stream()
-			.filter(p -> p.getNnfPar() == (obj.getNnfCom()))
-			.filter(p -> p.getFornecedor().getCodigo() == (obj.getCodigoFornecedorCom()))  
-			.filter(p -> p.getPagoPar() > 0)
-			.collect(Collectors.toList());	
-		if (st.size() > 0) {
-			Alerts.showAlert("Erro!!! ", "Parcela paga ", "Existe(m) parcela(s) paga(s) para o Compromisso!!!", AlertType.ERROR);
-			flagD = 1;
-		}	
-		return flagD;
-	}		
 
 	/*
 	 * o contrainsts (confere)	 impede alfa em cpo numerico e delimita tamanho
@@ -691,6 +529,8 @@ public class EntradaFormController implements Initializable {
 		totM = Mascaras.formataValor(totAnt);
 		labelTotVlrProdEnt.setText(totM);
 		labelTotVlrProdEnt.viewOrderProperty();
+		labelErrorVlrProdEnt.setText("");
+		labelErrorVlrProdEnt.viewOrderProperty();
 		textIniciaisForn.setText(pesquisaForn);
 		textIniciaisProd.setText(pesquisaProd);
 	}
@@ -722,16 +562,6 @@ public class EntradaFormController implements Initializable {
 		labelErrorDataEnt.setText((fields.contains("data") ? erros.get("data") : ""));
 		labelErrorQtdProdEnt.setText((fields.contains("qtd") ? erros.get("qtd") : ""));
 		labelErrorVlrProdEnt.setText((fields.contains("vlr") ? erros.get("vlr") : ""));
-		if (fields.contains("confirma")) {
-			Alerts.showAlert("Fechamento", null, "Conferindo total", AlertType.INFORMATION);
-				try {	totM = Mascaras.formataValor(tot);
-						labelTotVlrProdEnt.setText(totM);
-						labelTotVlrProdEnt.viewOrderProperty();
-					}
-				 	catch (ParseException e) {
-				 		e.printStackTrace();
-				 	}
-		}
 	}
 	
 	private synchronized void createDialogForn(Fornecedor obj, String absoluteName, Stage parentStage) {

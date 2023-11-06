@@ -47,7 +47,7 @@ public class GrupoDaoJDBC implements GrupoDao {
 				if (rs.next())
 				{	int codigo = rs.getInt(1);
 					obj.setCodigoGru(codigo);;
-					System.out.println("New key inserted: " + obj.getCodigoGru());
+//					System.out.println("New key inserted: " + obj.getCodigoGru());
 				}
 				else
 				{	throw new DbException(classe + "Erro!!! sem inclusão" );

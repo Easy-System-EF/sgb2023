@@ -88,11 +88,13 @@ public class ParFornecedorFormController implements Initializable {
 					Alerts.showAlert("Fornecedor ", null, "Não encontrado ", AlertType.INFORMATION);
 					list = forService.findAll();
 			 	}
-	  			obsListFor = FXCollections.observableArrayList(list);
-				comboBoxFornecedor.setItems(obsListFor);
-				comboBoxFornecedor.getSelectionModel().selectFirst();
-	  			notifyDataChangeListerners();
-	  			updateFormData();
+				if (list.size() > 0) {
+					obsListFor = FXCollections.observableArrayList(list);
+					comboBoxFornecedor.setItems(obsListFor);
+					comboBoxFornecedor.getSelectionModel().selectFirst();
+					notifyDataChangeListerners();
+					updateFormData();
+				}	
 	  		}	
 		}
 		catch (DbException e) {

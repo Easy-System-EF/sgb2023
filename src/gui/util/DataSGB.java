@@ -137,5 +137,25 @@ public class DataSGB {
 		LocalDate dtp = DataStaticSGB.maisAnoLocal(dtn, 2);
 System.out.println(dtn + " " + dta + " " + dtp );		
 
+//		Compromisso com = new Compromisso();
+//		ParcelaService parService = new ParcelaService();
+//		CompromissoService comService = new CompromissoService();
+//		
+//System.out.println();		
+//		int count = 0;
+//		List<Parcela> list = parService.findAllPago();
+//		for (Parcela p : list) {
+//System.out.println("parc " + p.getIdPar() + " " + p.getCodigoFornecedorPar()+ " " + p.getNnfPar() + " " +  p.getNumeroPar());			
+//			com = comService.findById(p.getCodigoFornecedorPar(), p.getNnfPar());
+//System.out.println("com " +com.getIdCom() + " " + com.getCodigoFornecedorCom() + " " + com.getNnfCom() + " " + com.getParcelaCom());			
+//			if (com.getParcelaCom().equals(p.getNumeroPar())) {
+//				com.setSituacaoCom(1);
+//				comService.saveOrUpdate(com);
+//				count += 1;
+//			}
+//		}
+//		System.out.println("kbou " + count);
+//		
+//
 	}
 }

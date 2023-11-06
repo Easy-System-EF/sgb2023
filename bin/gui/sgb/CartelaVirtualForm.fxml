@@ -62,7 +62,7 @@
       <TextField fx:id="textQtdProdVir" prefHeight="22.0" prefWidth="56.0" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="215.0" />
       <Label fx:id="labelErrorQtdProdVir" prefHeight="14.0" prefWidth="252.0" text=" " textFill="#e42a2a" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="215.0">
          <font>
-            <Font name="System Bold" size="11.0" />
+            <Font name="System Bold" size="12.0" />
          </font></Label>
       <Label text="Valor" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="245.0">
          <font>
@@ -80,9 +80,9 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="labelErrorTotProdVir" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="245.0">
+      <Label fx:id="labelErrorTotProdVir" textFill="#c90c0c" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="245.0">
          <font>
-            <Font name="System Bold" size="1.0" />
+            <Font name="System Bold" size="12.0" />
          </font>
       </Label>
       <Button fx:id="btSaveVir" mnemonicParsing="false" onAction="#onBtSaveVirAction" prefHeight="22.0" prefWidth="68.0" text="Ok" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="305.0">

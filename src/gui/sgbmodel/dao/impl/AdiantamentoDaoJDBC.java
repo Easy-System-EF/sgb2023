@@ -165,6 +165,33 @@ public class AdiantamentoDaoJDBC implements AdiantamentoDao {
 	}
 
 	@Override
+	public Double comSumTotalGeral(int mes, int ano) {
+		Double totCom = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+   		try {
+			st = conn.prepareStatement(
+					
+			"select SUM(ComissaoAdi) AS total from adiantamento " +
+					"WHERE adiantamento.MesAdi = ? AND adiantamento.AnoAdi = ? "); 
+	
+			st.setInt(1, mes);
+			st.setInt(2, ano);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				totCom = rs.getDouble("total");
+			}	
+   		}
+ 		catch (SQLException e) {
+			throw new DbException ( "Erro!!! " + classe + "não totalizado " + e.getMessage()); }
+ 		finally {
+ 			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+		return totCom;
+	}
+
+	@Override
 	public Double valeSumTotal(int mes, int ano, int codFun) {
 		Double totAdi = null;
 		PreparedStatement st = null;

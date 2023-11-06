@@ -15,5 +15,6 @@ public interface FuncionarioDao {
  	List<Funcionario> findAll(int aa, int mm);
  	List<Funcionario> findPesquisa(String str, int aa, int mm);
  	List<Funcionario> findByAtivo(String situacao, int aa, int mm);
+ 	Double sumSalary(int aa, int mm);
 }
   

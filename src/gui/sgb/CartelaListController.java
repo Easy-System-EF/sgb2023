@@ -3,6 +3,7 @@ package gui.sgb;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ import gui.sgbmodel.service.EmpresaService;
 import gui.sgbmodel.service.FuncionarioService;
 import gui.sgbmodel.service.ProdutoService;
 import gui.util.Alerts;
+import gui.util.DataStaticSGB;
 import gui.util.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -77,6 +79,9 @@ public class CartelaListController implements Initializable, DataChangeListener 
 
    	@FXML
  	private TableColumn<Cartela, Double> tableColumnTotalCar;
+ 	
+   	@FXML
+ 	private TableColumn<Cartela, Double> tableColumnNomeSituacaoCar;
  	
   	@FXML
  	private TableColumn<Cartela, Cartela> tableColumnEDITA;
@@ -137,6 +142,7 @@ public class CartelaListController implements Initializable, DataChangeListener 
    		tableColumnLocalCar.setCellValueFactory(new PropertyValueFactory<>("localCar"));
  		tableColumnTotalCar.setCellValueFactory(new PropertyValueFactory<>("totalCar"));
 		Utils.formatTableColumnDouble(tableColumnTotalCar, 2);
+   		tableColumnNomeSituacaoCar.setCellValueFactory(new PropertyValueFactory<>("NomeSituacaoCar"));
  		// para tableview preencher o espa�o da tela scroolpane, referencia do stage		
 		Stage stage = (Stage) MainSgb.getMainScene().getWindow();
 		tableViewCartela.prefHeightProperty().bind(stage.heightProperty());
@@ -153,8 +159,11 @@ public class CartelaListController implements Initializable, DataChangeListener 
  		if (service == null) {
 			throw new IllegalStateException("Serviço está vazio");
  		}
+ 		LocalDate dth = DataStaticSGB.criaLocalAtual();
+ 		int mm = DataStaticSGB.mesDaData(dth);
  		labelUser.setText(user);
-		List<Cartela> list = service.findSituacao("A");
+		List<Cartela> list = service.findAll();
+		list.removeIf(x -> x.getMesCar() != mm);
  		obsList = FXCollections.observableArrayList(list);
 		tableViewCartela.setItems(obsList);
 		notifyDataChangeListerners();
@@ -180,10 +189,6 @@ public class CartelaListController implements Initializable, DataChangeListener 
 			CartelaFormController controller = loader.getController();
  // injetando passando parametro obj
 			controller.setCartelas(obj, objVir, objPag, objAdi, objFun);
-			if (obj.getSituacaoCar() == "P") {
-				Alerts.showAlert("Cartela fechada ", "Concluído - Sem acesso ", null, AlertType.ERROR);
-			}
-			else {
  // injetando servi�os vindo da tela de formulario fornform
 			controller.setServices(new CartelaService(), 
 									new CartelaVirtualService(),
@@ -199,20 +204,19 @@ public class CartelaListController implements Initializable, DataChangeListener 
 // inscrevendo p/ qdo o evento (esse) for disparado executa o metodo -> onDataChangeList...
 			controller.subscribeDataChangeListener(this);
 //	carregando o obj no formulario (fornecedorFormControl)			
-				controller.updateTableView();
-				controller.updateFormData();
+			controller.updateTableView();
+			controller.updateFormData();
 			
-				Stage dialogStage = new Stage();
-				dialogStage.setTitle("Digite Cartela                                             ");
-				dialogStage.setScene(new Scene(pane));
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Digite Cartela                                             ");
+			dialogStage.setScene(new Scene(pane));
 // pode redimencionar a janela: s/n?
-				dialogStage.setResizable(false);
+			dialogStage.setResizable(false);
 // quem e o stage pai da janela?
-				dialogStage.initOwner(parentStage);
+			dialogStage.initOwner(parentStage);
 // travada enquanto n�o sair da tela
-				dialogStage.initModality(Modality.WINDOW_MODAL);
-				dialogStage.showAndWait();
-			}	
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -261,10 +265,16 @@ public class CartelaListController implements Initializable, DataChangeListener 
 				 return; 
 		      }
 		 
+			if (obj.getSituacaoCar().contains("P")) {
+				@SuppressWarnings("unused")
+				int nada = 0;
+			}
+			else {
 		      setGraphic(button); 
 		      button.setOnAction( 
 					event -> createDialogForm(obj, objVir, objPag, objAdi, objFun, objCar, 
-							"/gui/sgb/CartelaForm.fxml", Utils.currentStage(event)));		      
+							"/gui/sgb/CartelaForm.fxml", Utils.currentStage(event)));
+			}  
 		    }
 		  }); 
 		}

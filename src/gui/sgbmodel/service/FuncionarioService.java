@@ -53,4 +53,7 @@ public class FuncionarioService {
    		dao.zeraAll();
 	} 
 	
+	public Double sumSalary(int aa, int mm) {
+   		return dao.sumSalary(aa, mm);
+	} 
 }

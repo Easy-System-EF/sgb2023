@@ -17,6 +17,7 @@ import gui.sgcpmodel.entites.Fornecedor;
 import gui.sgcpmodel.entites.Parcela;
 import gui.sgcpmodel.entites.TipoConsumo;
 import gui.sgcpmodel.entites.consulta.ParPeriodo;
+import gui.sgcpmodel.service.CompromissoService;
 import gui.sgcpmodel.service.FornecedorService;
 import gui.sgcpmodel.service.ParPeriodoService;
 import gui.sgcpmodel.service.ParcelaService;
@@ -114,6 +115,7 @@ public class ParcelaListAbertoController implements Initializable, DataChangeLis
 // acoplamento forte - implementa via set
 
 	private ParcelaService parService;
+	CompromissoService comService = new CompromissoService();
 	Parcela parcela = new Parcela();
 
 	public void setParcela(Parcela parcela) {
@@ -390,7 +392,7 @@ public class ParcelaListAbertoController implements Initializable, DataChangeLis
 			ParcelaFormController controller = loader.getController();
 // injetando passando parametro obj 			
 			controller.setParcela(obj);
-			controller.setParcelaService(new ParcelaService());
+			controller.setParcelaService(new ParcelaService(), new CompromissoService());
 
 // injetando tb o forn service vindo da tela de formulario fornform
 			controller.loadAssociatedObjects();

@@ -6,19 +6,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox blendMode="DIFFERENCE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<VBox blendMode="DIFFERENCE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="388.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label prefHeight="20.0" prefWidth="392.0" text="Sistema Gerencial de Bar e Restaurante   v.23.05.01" textFill="#3a0fe8">
+      <Label prefHeight="20.0" prefWidth="392.0" text="Sistema Gerencial de Bar e Restaurante   v.23.010" textFill="#3a0fe8">
          <font>
             <Font size="16.0" />
          </font>
          <VBox.margin>
-            <Insets left="50.0" top="20.0" />
+            <Insets left="50.0" top="5.0" />
          </VBox.margin>
       </Label>
       <Label text="Sobre SGB" textFill="#1d1e1e">
          <VBox.margin>
-            <Insets left="200.0" top="20.0" />
+            <Insets left="200.0" top="10.0" />
          </VBox.margin>
          <font>
             <Font size="15.0" />
@@ -29,7 +29,7 @@
             <Font size="14.0" />
          </font>
          <VBox.margin>
-            <Insets left="75.0" top="10.0" />
+            <Insets left="75.0" top="5.0" />
          </VBox.margin>
       </Label>
       <Label text="- A receber">
@@ -40,7 +40,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label text="- Recebida">
+      <Label text="- Recebidas">
          <VBox.margin>
             <Insets left="100.0" top="3.0" />
          </VBox.margin>
@@ -48,13 +48,21 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label text="- Calote">
+      <Label text="- Calotes">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
          <VBox.margin>
             <Insets left="100.0" top="3.0" />
          </VBox.margin>
+      </Label>
+      <Label text="- Convênios">
+         <VBox.margin>
+            <Insets left="100.0" top="3.0" />
+         </VBox.margin>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
       </Label>
       <Label text="- A Pagar">
          <VBox.margin>
@@ -64,7 +72,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label text="- Paga">
+      <Label text="- Pagas">
          <VBox.margin>
             <Insets left="100.0" top="3.0" />
          </VBox.margin>
@@ -96,7 +104,7 @@
             <Insets left="75.0" top="5.0" />
          </VBox.margin>
       </Label>
-      <Label text="- Produto MVR">
+      <Label text="- Produtos MVR">
          <VBox.margin>
             <Insets left="100.0" top="3.0" />
          </VBox.margin>
@@ -104,7 +112,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label text="- Cartela">
+      <Label text="- Cartelas">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -112,7 +120,7 @@
             <Insets left="100.0" top="3.0" />
          </VBox.margin>
       </Label>
-      <Label text="- Comissão">
+      <Label text="- Comissões">
          <font>
             <Font name="System Bold Italic" size="12.0" />
          </font>
@@ -120,7 +128,7 @@
             <Insets left="100.0" top="3.0" />
          </VBox.margin>
       </Label>
-      <Label text="- Adiantamento">
+      <Label text="- Adiantamentos">
          <VBox.margin>
             <Insets left="100.0" top="3.0" />
          </VBox.margin>

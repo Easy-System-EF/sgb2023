@@ -91,7 +91,7 @@
             </Label>
             <TextField fx:id="textIniciais" prefHeight="22.0" prefWidth="99.0" GridPane.rowIndex="2">
                <GridPane.margin>
-                  <Insets bottom="2.0" left="90.0" right="80.0" top="2.0" />
+                  <Insets bottom="2.0" left="90.0" top="2.0" />
                </GridPane.margin>
             </TextField>
             <Button fx:id="btPesquisaCli" mnemonicParsing="false" onAction="#onBtPesquisaAction" text="Pesquisa" GridPane.rowIndex="2">
@@ -133,7 +133,7 @@
                   </Label>
                   <TextField fx:id="textLocalCar" prefHeight="22.0" prefWidth="70.0">
                      <HBox.margin>
-                        <Insets bottom="2.0" left="21.0" top="2.0" />
+                        <Insets bottom="2.0" left="35.0" top="2.0" />
                      </HBox.margin>
                   </TextField>
                </children>
@@ -176,7 +176,7 @@
                   </Label>
                   <TextField fx:id="textDescontoCar" prefHeight="22.0" prefWidth="65.0">
                      <HBox.margin>
-                        <Insets left="4.0" />
+                        <Insets left="17.0" />
                      </HBox.margin>
                   </TextField>
                </children>
@@ -210,7 +210,7 @@
             </Label>
             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
                <children>
-                  <Label text="Pagantes">
+                  <Label text="Pagante(s)">
                      <HBox.margin>
                         <Insets bottom="2.0" left="2.0" top="2.0" />
                      </HBox.margin>
@@ -223,7 +223,7 @@
                   </Label>
                   <TextField fx:id="textNumeroPaganteCar" prefHeight="22.0" prefWidth="30.0">
                      <HBox.margin>
-                        <Insets left="15.0" />
+                        <Insets left="18.0" />
                      </HBox.margin>
                   </TextField>
                </children>
@@ -277,7 +277,7 @@
             </Label>
             <RadioButton fx:id="rbServicoSimCar" mnemonicParsing="false" text="Sim" GridPane.rowIndex="6">
                <GridPane.margin>
-                  <Insets left="75.0" />
+                  <Insets left="90.0" />
                </GridPane.margin>
                <font>
                   <Font name="System Bold Italic" size="12.0" />
@@ -285,7 +285,7 @@
             </RadioButton>
             <RadioButton fx:id="rbServicoNaoCar" mnemonicParsing="false" text="Não" GridPane.rowIndex="6">
                <GridPane.margin>
-                  <Insets left="120.0" />
+                  <Insets left="150.0" />
                </GridPane.margin>
                <font>
                   <Font name="System Bold" size="12.0" />

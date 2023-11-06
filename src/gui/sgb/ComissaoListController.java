@@ -160,6 +160,7 @@ public class ComissaoListController implements Initializable, DataChangeListener
  		if (mesConsulta != null) {
  			list = service.findMesTipo(mesConsulta, anoConsulta, "C");
  		} 		
+ 		list.removeIf(x -> x.getComissaoAdi() == 0.0);
   		obsList = FXCollections.observableArrayList(list);
   		tableViewComissao.setItems(obsList);
 	}

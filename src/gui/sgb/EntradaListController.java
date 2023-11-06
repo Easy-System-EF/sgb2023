@@ -23,9 +23,7 @@ import gui.sgcpmodel.entites.TipoConsumo;
 import gui.sgcpmodel.entites.consulta.ParPeriodo;
 import gui.sgcpmodel.service.CompromissoService;
 import gui.sgcpmodel.service.FornecedorService;
-import gui.sgcpmodel.service.ParPeriodoService;
 import gui.sgcpmodel.service.ParcelaService;
-import gui.sgcpmodel.service.TipoConsumoService;
 import gui.util.Alerts;
 import gui.util.CalculaParcela;
 import gui.util.Utils;
@@ -187,10 +185,8 @@ public class EntradaListController implements Initializable, DataChangeListener 
 			EntradaFormController controller = loader.getController();
 			controller.user = user;
  // injetando passando parametro obj 			
-			controller.setObjects(obj, prod, objCom, objPer, objPar, objFor, objTipo);
-			controller.setServices(new EntradaService(), new FornecedorService(), new ProdutoService(), 
-					new CompromissoService(), new TipoConsumoService(), new ParPeriodoService(),
-					new ParcelaService());
+			controller.setObjects(obj, prod);
+			controller.setServices(new EntradaService(), new FornecedorService(), new ProdutoService());
  // injetando tb o forn service vindo da tela de formulario fornform
 			controller.loadAssociatedObjects();
 // inscrevendo p/ qdo o evento (esse) for disparado executa o metodo -> onDataChangeList...
@@ -307,10 +303,7 @@ public class EntradaListController implements Initializable, DataChangeListener 
 		ParcelaService parService = new ParcelaService();
 		List<Parcela> listPar = new ArrayList<>();
 		listPar = parService.findByIdFornecedorNnf(obj.getForn().getCodigo(), obj.getNnfEnt());	
-		if (listPar.size() == 0) {
-			Alerts.showAlert("Atenção", "Operação inválida", "não existe parcela(s) correspondente(s)", AlertType.ERROR);
-			simNao = "nao";
-		} else {
+		if (listPar.size() != 0) {
 			for (Parcela p : listPar) {
 				if (p.getFornecedor().getCodigo().equals(obj.getForn().getCodigo()) || 
 						p.getNnfPar().equals(obj.getNnfEnt())) {
@@ -368,11 +361,16 @@ public class EntradaListController implements Initializable, DataChangeListener 
 			if (com != null) {
 				vlrMat = (obj.getQuantidadeProdEnt() * obj.getValorProdEnt());
 				if (com.getValorCom() >= vlrMat) {
-					vlrFim = com.getValorCom() - (obj.getQuantidadeProdEnt() * obj.getValorProdEnt());
+					vlrFim = com.getValorCom() - vlrMat;
 					com.setValorCom(vlrFim);
 				}	
 			}	
-			if (com.getCodigoFornecedorCom() != null) {
+			if (com != null) {
+				if (com.getPrazoCom() == 1 && com.getParcelaCom() == 1) {
+					com.setSituacaoCom(1);
+				} else {
+					com.setSituacaoCom(0);
+				}
 				if (com.getValorCom() > 0.00) {
 					comService.saveOrUpdate(com);
 					CalculaParcela.parcelaCreate(com);

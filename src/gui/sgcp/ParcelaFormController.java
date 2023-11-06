@@ -16,7 +16,9 @@ import java.util.Set;
 
 import db.DbException;
 import gui.listerneres.DataChangeListener;
+import gui.sgcpmodel.entites.Compromisso;
 import gui.sgcpmodel.entites.Parcela;
+import gui.sgcpmodel.service.CompromissoService;
 import gui.sgcpmodel.service.ParcelaService;
 import gui.util.Alerts;
 import gui.util.Constraints;
@@ -98,9 +100,11 @@ public class ParcelaFormController implements Initializable {
   
 //	carrega os dados do formulario	
 	private Parcela entity;
+	private Compromisso com;
 		
 //	carrega dados do banco na cri��o do formulario - inje��o de dependencia
  	private ParcelaService parService;
+ 	private CompromissoService comService;
 	
 	  
 	public void setParcela(Parcela entity) {
@@ -108,8 +112,9 @@ public class ParcelaFormController implements Initializable {
 	}
   	
 //	busca os dados no bco de dados	
-	public void setParcelaService (ParcelaService parService) {
+	public void setParcelaService (ParcelaService parService, CompromissoService comService) {
  		this.parService = parService;
+ 		this.comService = comService;
  	}
 
 //	armazena dados a serem atz no bco de dados	
@@ -125,11 +130,17 @@ public class ParcelaFormController implements Initializable {
  		if (parService == null) {
 			throw new IllegalStateException("Serviço esta nulo");
  		} 
-		if (entity.getPagoPar() > 0) {
-			Alerts.showAlert("Aviso ", "Parcela quitada ", "sem acesso ", AlertType.INFORMATION);
-		} else { 		
-			try { entity = getFormData();
-  				parService.saveUpdate(entity);
+ 		if (comService == null) {
+			throw new IllegalStateException("Serviço com esta nulo");
+ 		} 
+		try { entity = getFormData();
+				parService.saveUpdate(entity);
+				com = comService.findById(entity.getCodigoFornecedorPar(), entity.getNnfPar());
+				if (com.getParcelaCom().equals(entity.getNumeroPar())) {
+					com.setSituacaoCom(1);
+					comService.saveOrUpdate(com);
+				}
+				
  				notifyDataChangeListeners();
  				updateFormData();
 				Utils.currentStage(event).close();
@@ -137,8 +148,7 @@ public class ParcelaFormController implements Initializable {
 				setErrorMessages(e.getErros());
 			} catch (DbException e) {
 				Alerts.showAlert("Erro salvando objeto ", classe , e.getMessage(), AlertType.ERROR);
-			}
-		}	
+		}
  	}
 
 //	p/ cada listener da lista, eu aciono o metodo onData...	
@@ -271,6 +281,7 @@ public class ParcelaFormController implements Initializable {
 			labelTotalPar.setText(vlrM);
 		}
  
+		entity.setPagoPar((entity.getValorPar() + entity.getJurosPar()) - entity.getDescontoPar());
 		if (entity.getPagoPar() != null) {
 			textPagoPar.setText(String.format("%.2f", entity.getPagoPar()));
 		}

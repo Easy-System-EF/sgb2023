@@ -393,6 +393,36 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 		}
 	} 
 	
+	@Override
+	public Double sumSalary(int aa, int mm) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+   		try {
+			st = conn.prepareStatement(
+					
+			"SELECT SUM(SalarioFun) AS 'total' FROM funcionario " +
+					"WHERE (SituacaoFun = 'Ativo') AND (AnoFun = ?) AND (MesFun = ?) "); 
+	
+			st.setInt(1, aa);
+			st.setInt(2, mm);
+			
+			rs = st.executeQuery();
+			
+			while (rs.next()) {
+				Double totSal = rs.getDouble("total");
+				return totSal;
+			}	
+			return null;
+   		}
+ 		catch (SQLException e) {
+			throw new DbException ( "Erro!!! " + classe + "não totalizado " + e.getMessage()); }
+ 		finally {
+ 			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
+
 	private Funcionario instantiateFuncionario(ResultSet rs, Cargo objCargo,
 							Situacao objSit) throws SQLException {
  		Funcionario fun = new Funcionario();

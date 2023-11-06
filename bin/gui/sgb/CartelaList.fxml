@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="345.0" prefWidth="583.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.sgb.CartelaListController">
+<VBox prefHeight="345.0" prefWidth="543.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.sgb.CartelaListController">
    <children>
       <ToolBar blendMode="DIFFERENCE" prefHeight="38.0" prefWidth="500.0">
         <items>
@@ -45,9 +45,10 @@
             <TableColumn fx:id="tableColumnDataCar" editable="false" prefWidth="73.0" text="Data" />
             <TableColumn fx:id="tableColumnLocalCar" editable="false" prefWidth="88.0" text="Local" />
             <TableColumn fx:id="tableColumnTotalCar" editable="false" prefWidth="84.0" text="Total" />
+            <TableColumn fx:id="tableColumnNomeSituacaoCar" editable="false" prefWidth="86.0" text="Situação" />
             <TableColumn fx:id="tableColumnEDITA" editable="false" prefWidth="48.0" text=" " />
-            <TableColumn fx:id="tableColumnREMOVE" editable="false" minWidth="0.0" prefWidth="51.0" text=" " />
-            <TableColumn fx:id="tableColumnList" editable="false" prefWidth="52.0" text=" " />
+            <TableColumn fx:id="tableColumnREMOVE" editable="false" minWidth="0.0" prefWidth="50.0" text=" " />
+            <TableColumn fx:id="tableColumnList" editable="false" prefWidth="51.0" text=" " />
         </columns>
          <effect>
             <Blend />

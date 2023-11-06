@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.MainSgb;
+import db.DbException;
 import db.DbIntegrityException;
 import gui.listerneres.DataChangeListener;
 import gui.sgbmodel.entities.Produto;
@@ -246,6 +247,9 @@ public class ProdutoListController implements Initializable, DataChangeListener 
 			try {
 				service.remove(obj);
 				updateTableView();
+			}
+			catch (DbException e) {
+				Alerts.showAlert("Erro removendo objeto", classe, e.getMessage(), AlertType.ERROR);
 			}
 			catch (DbIntegrityException e) {
 				Alerts.showAlert("Erro removendo objeto", classe, e.getMessage(), AlertType.ERROR);

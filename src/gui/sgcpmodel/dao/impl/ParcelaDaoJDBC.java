@@ -492,7 +492,7 @@ public class ParcelaDaoJDBC implements ParcelaDao {
 	  						"INNER JOIN TipoFornecedor " +
 	  							"ON parcela.TipoIdPar = tipoFornecedor.CodigoTipo " +
 	  								"WHERE PagoPar > 0 " +
- 									"ORDER BY DataVencimentoPar ");
+ 									"ORDER BY - DataPagamentoPar ");
 
  			rs = st.executeQuery();
  			 
@@ -607,7 +607,7 @@ public class ParcelaDaoJDBC implements ParcelaDao {
  		  							"WHERE  PagoPar > 0 AND " +
  		  							"parcela.DataVencimentoPar >= parPeriodo.DtiPeriodo AND " +
  		  							"parcela.DataVencimentoPar <= parPeriodo.DtfPeriodo " +
- 										"ORDER BY DataVencimentoPar, NumeroPar ");
+ 										"ORDER BY - DataPagamentoPar, NumeroPar ");
     
  			rs = st.executeQuery();
 			
@@ -759,7 +759,7 @@ public class ParcelaDaoJDBC implements ParcelaDao {
 	  						"INNER JOIN TipoFornecedor " +
 	  							"ON parcela.TipoIdPar = tipoFornecedor.CodigoTipo " +
 		  							"WHERE CodigoFornecedorPar = ? AND PagoPar > 0 " +
-										"ORDER BY DataVencimentoPar, Numeropar");
+										"ORDER BY - DataPagamentoPar, Numeropar");
  			
   			st.setInt(1, cod);
 			rs = st.executeQuery();
@@ -933,7 +933,7 @@ public class ParcelaDaoJDBC implements ParcelaDao {
 		  						"ON parcela.TipoIdPar = tipoFornecedor.CodigoTipo " +
 		  							"WHERE TipoIdPar = ? AND " +
 		  							"PagoPar > 0 " +
-										"ORDER BY DataVencimentoPar, Numeropar");
+										"ORDER BY DataPagamentoPar, Numeropar");
  			
   			st.setInt(1, cod);
 			rs = st.executeQuery();

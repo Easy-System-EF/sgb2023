@@ -165,7 +165,7 @@ public class Cartela implements Serializable {
 	}
 
 	public Double getSubTotalCar() {
-		return subTotalCar;
+		return subTotalCar = totalCar;
 	}
 
 	public void setSubTotalCar(Double subTotalCar) {
@@ -229,7 +229,7 @@ public class Cartela implements Serializable {
 		if (numeroPaganteCar == 0) {
 			numeroPaganteCar = 1;
 		}
-		valorPaganteCar = totalCar / numeroPaganteCar;
+		valorPaganteCar = (totalCar - descontoCar) / numeroPaganteCar;
 	}
 	
 	@Override

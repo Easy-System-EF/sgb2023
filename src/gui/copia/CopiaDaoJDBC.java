@@ -65,7 +65,7 @@ public class CopiaDaoJDBC implements CopiaDao {
 			st = conn.prepareStatement(
 					"SELECT * " + 
 						"FROM BackUp " +
-						"ORDER BY - dataIBackUp ");
+						"ORDER BY - IdBackUp ");
 
 			rs = st.executeQuery();
 

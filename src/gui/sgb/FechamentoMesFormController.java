@@ -51,6 +51,7 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 
 	private static final long serialVersionUID = 1L;
 	private FechamentoMes entity;
+	@SuppressWarnings("unused")
 	private Funcionario objFun;
 /*
  *  dependencia service com metodo set
@@ -306,16 +307,15 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 		classe = "Funconário 1   Fechamento Form";
 		List<Funcionario> listFun = funService.findAll(ano, mes);
 		listFun.removeIf(x -> x.getNomeFun().equals("Consumo Próprio"));
+		listFun.removeIf(x -> x.getNomeFun().equals("Consumo Proprio"));
 		for (Funcionario f : listFun) {
-			if (f.getNomeFun() != null) {
-				f.setComissaoFun(0.00);
-				f.setAdiantamentoFun(0.00);
-				f.setSalarioFun(f.getCargo().getSalarioCargo());
-				objFun = f;
-				funService.saveOrUpdate(objFun);
-				vlrFolha += objFun.getSalarioFun();
-			}	
+			f.setComissaoFun(0.00);
+			f.setAdiantamentoFun(0.00);
+			f.setSalarioFun(f.getCargo().getSalarioCargo());
+			vlrFolha += f.getSalarioFun();
+			funService.saveOrUpdate(f);			
 		}
+		
 // atualiza comissao, adiantamento e salario atual dos funcionarios
 		double acumulado = 0.00;
 
@@ -329,8 +329,8 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 				entity.setCartelaFechamentoMes(String.valueOf(c.getNumeroCar()));
 				entity.setDataFechamentoMes(sdf.format(c.getDataCar()));
 				entity.setSituacaoFechamentoMes(c.getNomeSituacaoCar());
-				entity.setValorCartelaFechamentoMes(Mascaras.formataValor(c.getTotalCar()));
-				double vlrCartela = c.getTotalCar();
+				entity.setValorCartelaFechamentoMes(Mascaras.formataValor(c.getTotalCar() - c.getDescontoCar()));
+				double vlrCartela = c.getTotalCar() - c.getDescontoCar();
 				double comissao = 0.00;
 				listAdi = adiService.findMes(mes, ano);
 				for (Adiantamento a : listAdi) {
@@ -361,7 +361,7 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 				acumulado += resultado;
 				entity.setValorAcumuladoFechamentoMes(Mascaras.formataValor(acumulado));
 				classe = "entity Fechamento Form";
-				funService.saveOrUpdate(objFun);
+////				funService.saveOrUpdate(objFun);
 				service.insert(entity);
 			}	
 		} 
@@ -369,6 +369,7 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 			p.getStackTrace();
 		}
 	
+		@SuppressWarnings("unused")
 		double despesa = 0.00;
 // monta tributos		
 		if (vlrFolha > 0) {
@@ -382,6 +383,7 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 					} else {
 						porCartela = somaTudo;
 					}
+
 				entity.setNumeroFechamentoMes(null);
 				entity.setCartelaFechamentoMes("");
 				entity.setDataFechamentoMes("");
@@ -454,8 +456,8 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 						entity.setValorAcumuladoFechamentoMes("");
 						service.insert(entity);			
 
-						double perDespesa = ((sumComAberto + sumComPago) * 100) / despesa;
-						double perFolha = (vlrFolha * 100) / despesa;
+						double perDespesa = ((acumulado - sumComAberto) * 100) / acumulado; 
+						double perFolha = ((acumulado - vlrFolha) * 100) / acumulado;
 
 						entity.setNumeroFechamentoMes(null);
 						entity.setCartelaFechamentoMes("");
@@ -470,8 +472,8 @@ public class FechamentoMesFormController implements Initializable, Serializable 
 
 						entity.setNumeroFechamentoMes(null);
 						entity.setCartelaFechamentoMes("");
-						entity.setDataFechamentoMes("Perc ====");
-						entity.setSituacaoFechamentoMes("====>");
+						entity.setDataFechamentoMes("Perc rec ");
+						entity.setSituacaoFechamentoMes(">< =>");
 						entity.setValorCartelaFechamentoMes("% Desp.. +");
 						entity.setValorProdutoFechamentoMes("");
 						entity.setValorComissaoFechamentoMes("% Folha =");

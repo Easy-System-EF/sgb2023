@@ -182,10 +182,12 @@ public class AdiantamentoFormController implements Initializable, Serializable {
 					listFun.removeIf(x -> x.getNomeFun().contains("Consumo Próprio"));
 				}
 				pesquisa = "";
-				obsListFun = FXCollections.observableArrayList(listFun);
-				comboBoxFun.setItems(obsListFun);
-				notifyDataChangeListerners();
-				updateFormData();
+				if (listFun.size() > 0) {
+					obsListFun = FXCollections.observableArrayList(listFun);
+					comboBoxFun.setItems(obsListFun);
+					notifyDataChangeListerners();
+					updateFormData();
+				}	
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -279,6 +281,7 @@ public class AdiantamentoFormController implements Initializable, Serializable {
 		entCom.setFornecedor(entFor);
 		entCom.setTipoFornecedor(entTip);
 		entCom.setParPeriodo(entPer);
+		entCom.setSituacaoCom(1);
 		comService.saveOrUpdate(entCom);
 		CalculaParcela.parcelaCreate(entCom);
 	}

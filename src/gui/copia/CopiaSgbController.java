@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.MainSgb;
@@ -57,6 +58,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -101,6 +103,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  	private ObservableList<Copia> obsList;
 
 	int count = 0;
+	String status = "";
 	String crip = "";
 	Date dataI = new Date(System.currentTimeMillis());
 	Date dataF = new Date();
@@ -131,16 +134,25 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  	
  	@FXML
   	public void onBtOkAdiAction(ActionEvent event) {
- 		 Stage parentStage = Utils.currentStage(event);
+ 		status = "<<<aguarde>>>";
+ 		count = 0;
+ 		labelFile.setText(status);
+ 		labelFile.viewOrderProperty();
+ 		labelCount.setText(String.valueOf(count));
+		Optional<ButtonType> result = Alerts.showConfirmation("Processo lento", "Confirma?");
+		if (result.get() == ButtonType.OK) {
+			Stage parentStage = Utils.currentStage(event);
 // instanciando novo obj depto e injetando via
- 		 createDialogForm("/gui/copia/CopiaForm.fxml", parentStage);
- 		 updateTableView();
- 		 executaBack();
+			createDialogForm("/gui/copia/CopiaForm.fxml", parentStage);
+			updateTableView();
+			executaBack();
+		} 	
    	}
  	
  	public void executaBack() {
  		if (unid != null) { 
 // 			Alerts.showAlert("Atenção", "isoo pode demorar um pouco", null, AlertType.WARNING);
+ 	 		labelCount.setText("");
  			count = 0; 			
  			grw = 0;
  			adiantamento();
@@ -161,7 +173,8 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  			tipo();
  			limpaBackUp();
  			gravaBackUp();	
- 	 		labelFile.setText("Kbou!!!");
+ 			status  = "       Kbou!!!";
+ 	 		labelFile.setText(status);
  	 		labelFile.viewOrderProperty();
  	 		labelCount.setText(String.valueOf(count));
  		}	
@@ -253,7 +266,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 			for(Cliente cl: listCliente) {
 				count += 1;
 				arqCliente = (" CLIENTE " + cl.getCodigoCli() + " , " + cl.getNomeCli() + " , " + cl.getDddCli() + " , " + 
-						cl.getTelefoneCli() + " , " + cl.getConvenioCli() + " ; ");
+						cl.getTelefoneCli() + " , " + cl.getConvenioCli());
 
 				crip = Cryptograf.criptografa(arqCliente);
 				fwCl.write(crip);
@@ -530,7 +543,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 						 + " , " + cm.getNnfCom() + " , " + dataCom + " , " + dataVen + " , " + 
 						cm.getValorCom() + " , " + cm.getParcelaCom() + " , " + cm.getPrazoCom() + " , " + 
 						 cm.getFornecedor().getCodigo() + " , " + cm.getTipoFornecedor().getCodigoTipo() + " , " + 
-						cm.getParPeriodo().getIdPeriodo());				
+						cm.getParPeriodo().getIdPeriodo() + " , " + cm.getSituacaoCom());				
 				crip = Cryptograf.criptografa(arqCom);
 				fwCm.write(crip);
 			}
@@ -642,8 +655,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 			throw new IllegalStateException("Serviço está vazio");
  		}
  		labelUser.setText(user);
- 		labelFile.setText("<<<aguarde>>>");
- 		labelCount.setText(String.valueOf(count));
  		List<Copia> list = new ArrayList<>();
 		list = service.findAll();
   		obsList = FXCollections.observableArrayList(list);
@@ -666,6 +677,8 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		int ano1 = DataStaticSGB.anoDaData(dt1);
 		int mes1 = DataStaticSGB.mesDaData(dt1);
 		int dia1 = DataStaticSGB.diaDaData(dt1);
+		int countM = 0;
+		int countY = 0;
 
 		List<Copia> listLimpa = service.findAll();
 		for (Copia b : listLimpa) {
@@ -673,8 +686,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 			int anoB = DataStaticSGB.anoDaData(dtB);
 			int mesB = DataStaticSGB.mesDaData(dtB);
 			int diaB = DataStaticSGB.diaDaData(dtB);
-			int countM = 0;
-			int countY = 0;
 
 			if(ano1 == anoB && mes1 == mesB && dia1 == diaB && b.getUnidadeBackUp().equals(unid)) {
 				service.remove(b.getIdBackUp());
@@ -684,12 +695,12 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 					if (countY > 1) {
 						service.remove(b.getIdBackUp());
 					}	
-				} else {
+				} else { 
 					if (mesB < mes1) {
 						countM += 1;
 						if (countM > 1) {
 							service.remove(b.getIdBackUp());
-						}	
+						}
 					}	
 				}	
 			}			
@@ -731,4 +742,3 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		}
  	} 
 }
-

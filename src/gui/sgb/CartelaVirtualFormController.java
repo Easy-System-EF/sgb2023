@@ -28,11 +28,7 @@ import gui.sgcpmodel.entites.Fornecedor;
 import gui.sgcpmodel.entites.Parcela;
 import gui.sgcpmodel.entites.TipoConsumo;
 import gui.sgcpmodel.entites.consulta.ParPeriodo;
-import gui.sgcpmodel.service.CompromissoService;
 import gui.sgcpmodel.service.FornecedorService;
-import gui.sgcpmodel.service.ParPeriodoService;
-import gui.sgcpmodel.service.ParcelaService;
-import gui.sgcpmodel.service.TipoConsumoService;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Mascaras;
@@ -199,12 +195,13 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 						createDialogPro(obj, "/gui/sgb/ProdutoForm.fxml", parentStage);
 					}
 					listPro = prodService.findPesquisa(pesquisaProd);
-				}
-				pesquisaProd = "";
-				obsListProd = FXCollections.observableArrayList(listPro);
-				comboBoxProdVir.setItems(obsListProd);
-	  			notifyDataChangeListerners();
-				updateFormData();
+				} 
+				if (listPro.size() > 0) {
+					obsListProd = FXCollections.observableArrayList(listPro);
+					comboBoxProdVir.setItems(obsListProd);
+					notifyDataChangeListerners();
+					updateFormData();
+				}	
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -222,8 +219,7 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 		try {
 			pesquisaFun = textPesquisaFun.getText().toUpperCase().trim();
 			if (pesquisaFun != "") {
-				List<Funcionario> listFun = funService.findPesquisa(
-						pesquisaFun, aa, mm);
+				List<Funcionario> listFun = funService.findPesquisa(pesquisaFun, aa, mm);
 				if (listFun.size() == 0) {
 					Optional<ButtonType> result = Alerts.showConfirmation("Pesquisa sem resultado ", "Deseja incluir?");
 					if (result.get() == ButtonType.OK) {
@@ -231,14 +227,14 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 						Funcionario obj = new Funcionario();
 						createDialogFun(obj, "/gui/sgb/FuncionarioForm.fxml", parentStage);
 					}
-					listFun = funService.findPesquisa(
-							pesquisaFun, aa, mm);
+					listFun = funService.findPesquisa(pesquisaFun, aa, mm);
 				}
-				pesquisaFun = "";
-				obsListFun = FXCollections.observableArrayList(listFun);
-				comboBoxFunVir.setItems(obsListFun);
-	  			notifyDataChangeListerners();
-				updateFormData();
+				if (listFun.size() > 0) {
+					obsListFun = FXCollections.observableArrayList(listFun);
+					comboBoxFunVir.setItems(obsListFun);
+					notifyDataChangeListerners();
+					updateFormData();
+				}	
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -280,15 +276,8 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 			if (gravaVir == 2) {
 				updateProduto(event);
 			}
+			entity = new CartelaVirtual();
 			notifyDataChangeListerners();
-			entity = new CartelaVirtual();
-			pesquisaFun = "";
-			pesquisaProd = "";
-			labelVendaProdVir.setText("0,00");
-			labelTotalProdVir.setText("0,00");
-			labelVendaProdVir.viewOrderProperty();
-			labelTotalProdVir.viewOrderProperty();
-			entity = new CartelaVirtual();
 			updateFormData();
 			if (sair == 1) {
 				Utils.currentStage(event).close();
@@ -367,7 +356,8 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 			vlr2 = Mascaras.formataValor(obj.getTotalProdVir());
 			labelTotalProdVir.setText(vlr2);
 			labelTotalProdVir.viewOrderProperty();
-			exception.addErros("tot", "");
+			exception.addErros("tot", "Confirmando total - Ok");
+			totAnt = obj.getTotalProdVir();
 		}	
 
 // tst se houve algum (erro com size > 0)
@@ -579,6 +569,8 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 		String vlr2 = Mascaras.formataValor(totAnt);
 		labelTotalProdVir.setText(vlr2);
 		labelTotalProdVir.viewOrderProperty();
+		labelErrorTotProdVir.setText("");
+		labelErrorTotProdVir.viewOrderProperty();
 	}
 
 //	carrega dados do bco cargo dentro obslist via
@@ -609,10 +601,10 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
 	private void setErrorMessages(Map<String, String> erros) {
 		Set<String> fields = erros.keySet();
 		labelErrorQtdProdVir.setText((fields.contains("qtd") ? erros.get("qtd") : ""));
-//		labelErrorTotProdVir.setText((fields.contains("tot") ? erros.get("tot") : ""));
-		if (fields.contains("tot")) {
-			Alerts.showAlert(null, "Confirmando total ", null, AlertType.INFORMATION);
-		}
+		labelErrorTotProdVir.setText((fields.contains("tot") ? erros.get("tot") : ""));
+//		if (fields.contains("tot")) {
+//			Alerts.showAlert(null, "Confirmando total ", null, AlertType.INFORMATION);
+//		}
 	}
 
 	private void createDialogPro(Produto obj, String absoluteName, Stage parentStage) {
@@ -682,10 +674,8 @@ public class CartelaVirtualFormController implements Initializable, DataChangeLi
  // injetando passando parametro obj
 			String nome = prod.getNomeProd();
 			controller.setPesquisa(nome);
-			controller.setObjects(obj, prod, objCom, objPer, objPar, objFor, objTipo);
-			controller.setServices(new EntradaService(), new FornecedorService(), new ProdutoService(), 
-					new CompromissoService(), new TipoConsumoService(), new ParPeriodoService(),
-					new ParcelaService());
+			controller.setObjects(obj, prod);
+			controller.setServices(new EntradaService(), new FornecedorService(), new ProdutoService());
  // injetando tb o forn service vindo da tela de formulario fornform
 			controller.loadAssociatedObjects();
 // inscrevendo p/ qdo o evento (esse) for disparado executa o metodo -> onDataChangeList...

@@ -42,6 +42,10 @@ public class AdiantamentoService {
 		return dao.comSumTotal(mm, aa, codFun);
 	}
 
+	public Double comSumTotalGeral(int mm, int aa) {
+		return dao.comSumTotalGeral(mm, aa);
+	}
+
 	public Double valeSumTotal(int mm, int aa, int codFun) {
 		return dao.valeSumTotal(mm, aa, codFun);
 	}

@@ -38,16 +38,31 @@ public class CopiaSgbFormController implements Initializable {
 			unid = comboUnid.getValue().getLetraUnid();
 			CopiaSgbController.unid = unid;
 			String pathA = unid + ":\\ARQS";
+			@SuppressWarnings("unused")
 			String pathB = unid + ":\\ARQS\\Backup";
+			@SuppressWarnings("unused")
 			String pathC = unid + ":\\ARQS\\Backup\\SGB";
+			@SuppressWarnings("unused")
 			String pathD = unid + ":\\ARQS\\Backup\\SGBCP";
 //			File pathf = new File(pathA);
 	 		@SuppressWarnings("unused")
 			boolean exist = false;
-			exist = new File (pathA).mkdir();
-			exist = new File (pathB).mkdir();
-			exist = new File (pathC).mkdir();
-			exist = new File (pathD).mkdir();
+	 		
+	 		switch (unid) {
+	 			case "A": new File (pathA).mkdir();
+	 			break;
+	 			case "B": new File (pathA).mkdir();
+	 			break;
+	 			case "C": new File (pathA).mkdir();
+	 			break;
+	 			case "D": new File (pathA).mkdir();
+	 			break;
+	 		}
+	 		
+/////			exist = new File (pathA).mkdir();
+////			exist = new File (pathB).mkdir();
+////			exist = new File (pathC).mkdir();
+////			exist = new File (pathD).mkdir();
 //			File[] folders = pathf.listFiles(File::isDirectory);
 //			for(File f : folders) {
 //				System.out.println(f);

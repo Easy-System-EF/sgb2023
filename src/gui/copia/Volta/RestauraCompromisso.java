@@ -66,6 +66,7 @@ public class RestauraCompromisso implements Serializable {
 					comp.setFornecedor(forService.findById(Integer.parseInt(campo[9])));
 					comp.setTipoFornecedor(tipoService.findById(Integer.parseInt(campo[10])));
 					comp.setParPeriodo(perService.findById(Integer.parseInt(campo[11])));
+					comp.setSituacaoCom(Integer.parseInt(campo[12]));
 					
 					comService.insertBackUp(comp);
 					count += 1;

@@ -38,9 +38,9 @@ public class CompromissoDaoJDBC implements CompromissoDao {
 					"INSERT INTO compromisso "  
 					+ "(CodigoFornecedorCom, NomeFornecedorCom, NnfCom, DataCom, "
 					+ "DataVencimentoCom, ValorCom, ParcelaCom, PrazoCom, "
-					+ "FornecedorIdCom, TipoIdCom, PeriodoIdCom ) " 
+					+ "FornecedorIdCom, TipoIdCom, PeriodoIdCom, situacaoCom ) " 
 					+ "VALUES " +  
-					"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+					"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
  
 					Statement.RETURN_GENERATED_KEYS); 
 
@@ -55,6 +55,7 @@ public class CompromissoDaoJDBC implements CompromissoDao {
  			st.setInt(9, obj.getFornecedor().getCodigo());
  			st.setInt(10, obj.getTipoFornecedor().getCodigoTipo());
  			st.setInt(11, obj.getParPeriodo().getIdPeriodo());
+ 			st.setInt(12, obj.getSituacaoCom());
   			
  			int rowsaffectad = st.executeUpdate();
 				
@@ -87,9 +88,9 @@ public class CompromissoDaoJDBC implements CompromissoDao {
 					"INSERT INTO compromisso "  
 					+ "(IdCom, CodigoFornecedorCom, NomeFornecedorCom, NnfCom, DataCom, "
 					+ "DataVencimentoCom, ValorCom, ParcelaCom, PrazoCom, "
-					+ "FornecedorIdCom, TipoIdCom, PeriodoIdCom ) " 
+					+ "FornecedorIdCom, TipoIdCom, PeriodoIdCom, SituacaoCom ) " 
 					+ "VALUES " +  
-					"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
+					"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )",
  
 					Statement.RETURN_GENERATED_KEYS); 
 
@@ -105,6 +106,7 @@ public class CompromissoDaoJDBC implements CompromissoDao {
  			st.setInt(10, obj.getFornecedor().getCodigo());
  			st.setInt(11, obj.getTipoFornecedor().getCodigoTipo());
  			st.setInt(12, obj.getParPeriodo().getIdPeriodo());
+ 			st.setInt(13, obj.getSituacaoCom());
   			
  			 st.executeUpdate();
 				
@@ -126,7 +128,7 @@ public class CompromissoDaoJDBC implements CompromissoDao {
 					"UPDATE compromisso "   
 							+ "SET CodigoFornecedorCom = ? , NomeFornecedorCom = ? , NnfCom = ? , DataCom = ? , " 
 							+ "DataVencimentoCom = ? , ValorCom = ? , ParcelaCom = ? , PrazoCom = ? , FornecedorIdCom = ?, "
-							  + "TipoIdCom = ? , PeriodoIdCom = ? " +
+							  + "TipoIdCom = ? , PeriodoIdCom = ?, SituacaoCom = ? " +
 						"WHERE (IdCom = ?)",
 				 				Statement.RETURN_GENERATED_KEYS);
 					
@@ -141,7 +143,8 @@ public class CompromissoDaoJDBC implements CompromissoDao {
 					st.setInt(9, obj.getFornecedor().getCodigo());
 					st.setInt(10, obj.getTipoFornecedor().getCodigoTipo());
 					st.setInt(11, obj.getParPeriodo().getIdPeriodo());
-		 			st.setInt(12, obj.getIdCom());
+		 			st.setInt(12, obj.getSituacaoCom());
+		 			st.setInt(13, obj.getIdCom());
 					st.executeUpdate();
  				
 		   		}
@@ -264,6 +267,7 @@ public class CompromissoDaoJDBC implements CompromissoDao {
 		obj.setFornecedor(forn);
 		obj.setTipoFornecedor(tipoForn);
 		obj.setParPeriodo(periodo);
+		obj.setSituacaoCom(rs.getInt("SituacaoCom"));
   		return obj;
 	}
 
@@ -326,7 +330,8 @@ public class CompromissoDaoJDBC implements CompromissoDao {
 					 			"on compromisso.TipoIdCom = tipoFornecedor.CodigoTipo " +
 					 		"INNER JOIN parPeriodo " +
 					 			"on compromisso.PeriodoIdCom = parPeriodo.IdPeriodo " +
-    								"ORDER BY DataCom ");
+					 		"WHERE situacaoCom = 0 " +
+    								"ORDER BY DataVencimentoCom ");
  			
  			rs = st.executeQuery();
  

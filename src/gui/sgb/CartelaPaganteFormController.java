@@ -239,10 +239,10 @@ public class CartelaPaganteFormController implements Initializable {
 
 // msm processo save p/ fechar	
 	@FXML
-	public void onBtCancelCartelaPaganteAction(ActionEvent event) {
+	public void onBtCancelCartelaPaganteAction(ActionEvent event1) {
 		CartelaFormController.numPag = 99;
-		CartelaFormController.situacao = "N";
-		Utils.currentStage(event).close();
+		CartelaFormController.situacao = "A";
+		Utils.currentStage(event1).close();
 	}
 
 	/*
@@ -264,7 +264,8 @@ public class CartelaPaganteFormController implements Initializable {
 		cartela = carService.findById(numCar);
 		entity.setNumeroCartelaPag(null);
 		entity.setPaganteCartelaPag(numPagante);
-		parcela = cartela.getTotalCar() / cartela.getNumeroPaganteCar();
+		cartela.calculaValorPagante();
+		parcela = cartela.getValorPaganteCar();
 		if (cartela.getNumeroPaganteCar() > 1) { 
 			if (numPagante == cartela.getNumeroPaganteCar()) {
 				diference();
@@ -333,7 +334,7 @@ public class CartelaPaganteFormController implements Initializable {
 				CartelaPagante carPag = service.findById(cp.getNumeroCartelaPag());
 				valorPago += carPag.getValorCartelaPag();
 			}
-	 		diferenca = cartela.getTotalCar() - (valorPago);
+	 		diferenca = cartela.getTotalCar() - (cartela.getDescontoCar() + valorPago);
 	 		parcela = diferenca;
 			diferenca = parcela;;
     	 }
@@ -347,7 +348,7 @@ public class CartelaPaganteFormController implements Initializable {
 				CartelaPagante carPag = service.findById(cp.getNumeroCartelaPag());
 				valorPago += carPag.getValorCartelaPag();
 			}
-	 		diferenca = valorPago - cartela.getTotalCar();
+	 		diferenca = valorPago - (cartela.getTotalCar() + cartela.getDescontoCar());
     	 }
 	}
 

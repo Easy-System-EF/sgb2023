@@ -95,6 +95,7 @@ public class ConvenioFormController implements Initializable {
 	@FXML
 	public void onBtPesquisaAction(ActionEvent event) {
 		try {
+			pesquisa = "";
 	  		pesquisa = textPesquisa.getText().toUpperCase().trim();
 	  		if (pesquisa != "") {
 	  			List<Cliente> list = cliService.findPesquisa(pesquisa);
@@ -103,12 +104,13 @@ public class ConvenioFormController implements Initializable {
 					Alerts.showAlert("Cliente ", null, "Não encontrado ", AlertType.INFORMATION);
 					list = cliService.findAll();
 			 	}
-				pesquisa = "";
-	  			obsListCli = FXCollections.observableArrayList(list);
-				comboBoxCliente.setItems(obsListCli);
-				comboBoxCliente.getSelectionModel().selectFirst();
-	  			notifyDataChangeListerners();
-	  			updateFormData();
+				if (list.size() > 0) {
+					obsListCli = FXCollections.observableArrayList(list);
+					comboBoxCliente.setItems(obsListCli);
+					comboBoxCliente.getSelectionModel().selectFirst();
+					notifyDataChangeListerners();
+					updateFormData();
+				}	
 	  		}	
 		}
 		catch (DbException e) {

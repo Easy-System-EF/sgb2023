@@ -243,10 +243,12 @@ public class CompromissoFormController implements Initializable {
 		 		  	}
 					listFor = fornecedorService.findPesquisa(pesquisa);
 			 	}
-	  			obsList = FXCollections.observableArrayList(listFor);
-	  			comboBoxFornecedor.setItems(obsList);
-	  			notifyDataChangeListeners();
-	  			updateFormData();
+				if (listFor.size() > 0) {
+					obsList = FXCollections.observableArrayList(listFor);
+					comboBoxFornecedor.setItems(obsList);
+					notifyDataChangeListeners();
+					updateFormData();
+				}	
 	  		}	
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -373,6 +375,12 @@ public class CompromissoFormController implements Initializable {
 		}
   		
   		obj.setParPeriodo(entOld.getParPeriodo());
+  		
+  		if (obj.getPrazoCom() == 1 && obj.getParcelaCom() == 1) {
+  			obj.setSituacaoCom(1);
+  		} else {
+  			obj.setSituacaoCom(0);
+  		}
   		return obj;
 	}
 	 

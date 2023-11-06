@@ -14,10 +14,13 @@ public class CalculaParcela {
 	String classe = "Parcela Create";
 
 	public static Date CalculaVencimentoDia(Date data, int parcela, int dia) {
-   		Calendar cal = Calendar.getInstance(); 
-		cal.setTime(data);
-		cal.add(Calendar.DAY_OF_MONTH, (dia * parcela));
- 		Date dataVen = cal.getTime();
+		Date dataVen = data;
+		if (dia > 1) {
+			Calendar cal = Calendar.getInstance(); 
+			cal.setTime(data);
+			cal.add(Calendar.DAY_OF_MONTH, (dia * parcela));
+			dataVen = cal.getTime();
+		}	
 		return dataVen;
 	}
 	

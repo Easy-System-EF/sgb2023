@@ -188,22 +188,34 @@ public class FolhaMesFormController implements Initializable {
 			classe = "FolhaMes 1 Form";
 			zeraMes();
 			
-// aqui pego os func's que não tem vale ou comissão			
-			int cod = 0;
-			while (cod < 999999) {
-				cod += 1;
-				objFun = funService.findById(cod);
-				if (objFun == null) {
-					cod = 999999;
-				} else {
-					if (objFun.getNomeFun() != "Consumo Próprio") {
-						objFun.setSalarioFun(objFun.getCargo().getSalarioCargo());
-						objFun.setComissaoFun(0.00);
-						objFun.setAdiantamentoFun(0.00);
-						funService.saveOrUpdate(objFun);
-					}	
-				}	
-			}	
+// aqui pego os func's que não tem vale ou comissão
+			
+			List<Funcionario> fun = funService.findAll(ano, mes);
+			fun.removeIf(f -> f.getNomeFun().equals("Consumo Proprio"));
+			fun.removeIf(f -> f.getNomeFun().equals("Consumo Próprio"));
+			fun.forEach(f -> {
+				f.setSalarioFun(f.getCargo().getSalarioCargo());
+				f.setComissaoFun(0.00);
+				f.setAdiantamentoFun(0.00);
+				funService.saveOrUpdate(f);
+			});
+			
+			
+//			int cod = 0;
+//			while (cod < 999999) {
+//				cod += 1;
+//				objFun = funService.findById(cod);
+//				if (objFun == null) {
+//					cod = 999999;
+//				} else {
+//					if (objFun.getNomeFun() != "Consumo Próprio") {
+//						objFun.setSalarioFun(objFun.getCargo().getSalarioCargo());
+//						objFun.setComissaoFun(0.00);
+//						objFun.setAdiantamentoFun(0.00);
+//						funService.saveOrUpdate(objFun);
+//					}	
+//				}	
+//			}	
 
 			FolhaMesListController.mes = ": " + nomeMes + " " + ano;
 			classe = "Adiantamento Folha 0 Folha mes Form";
@@ -229,6 +241,7 @@ public class FolhaMesFormController implements Initializable {
 			classe = "Funcionário Folha 2 Folha mes Form";
 			List<Funcionario> listFun = funService.findAll(ano, mes);
 			listFun.removeIf(x -> x.getNomeFun().equals("Consumo Próprio"));
+			listFun.removeIf(x -> x.getNomeFun().equals("Consumo Proprio"));
 			for (Funcionario f : listFun) {
 				entity.setNumeroFolha(null);
 				entity.setFuncionarioFolha(f.getNomeFun());

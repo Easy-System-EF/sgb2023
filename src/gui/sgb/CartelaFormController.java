@@ -471,9 +471,8 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 			if (entity.getNumeroCar() != null) {
 				entity.setTotalCar(virService.sumTotalCartela(entity.getNumeroCar()));
 				if	(numCar == entity.getNumeroCar()) {
-					 entity.calculaValorPagante();
 					 if (entity.getTotalCar() > 0.00) {
-						entity.setValorPaganteCar(entity.getTotalCar() / entity.getNumeroPaganteCar());
+						entity.calculaValorPagante();
 						vlrTotMasc = Mascaras.formataValor(entity.getTotalCar());
 						labelTotalCar.setText(vlrTotMasc);						
 						labelTotalCar.viewOrderProperty();
@@ -971,13 +970,12 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 				else {
 					entity.setClienteCar(null);
 					flagP = 1;
-				}
-				pesquisa = "";
-				obsListCli = FXCollections.observableArrayList(listCli);
-				comboBoxCli.setItems(obsListCli);
-				montacomboCli();
-				notifyDataChangeListerners();
-				updateFormData();
+					obsListCli = FXCollections.observableArrayList(listCli);
+					comboBoxCli.setItems(obsListCli);
+					montacomboCli();
+					notifyDataChangeListerners();
+					updateFormData();
+				}	
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();

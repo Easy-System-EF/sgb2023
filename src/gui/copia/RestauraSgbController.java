@@ -147,7 +147,8 @@ public class RestauraSgbController implements Initializable, DataChangeListener 
 				compromisso();
 				parcela();
 				login();
-			}
+
+ 			}	
 			labelFile.setText("Kbou!!!");
 			labelFile.viewOrderProperty();
 			labelCount.viewOrderProperty();

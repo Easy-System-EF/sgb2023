@@ -28,21 +28,21 @@ public class CartelaImprimeController implements Initializable, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-//	private static String COURIER;
-//	private static Font getFont(String COURIER, float size) {
-//		return null;
-//	}
-
 	public static Integer numEmp = 0;
 	public static Integer numCar;
 
 	Locale localeBr = new Locale("pt", "BR");
  	DecimalFormat df = new DecimalFormat("##,##0.00"); 
+ 	DecimalFormat dfQtd = new DecimalFormat("#0.00"); 
+ 	DecimalFormat dfPreco = new DecimalFormat("##0.00"); 
+ 	DecimalFormat dfTotal1 = new DecimalFormat("#,##0.00"); 
+ 	DecimalFormat dfTotal2 = new DecimalFormat("##,##0.00"); 
  	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	Date data1 = new Date();
 
 	Integer codigo = 0;
 	double totalCar = 0.00;
+	Double aPagarCar = 0.00;
 	double subTotalCar = 0.00;
 	double descontoCar = 0.00;
 	double servicoCar = 0.00;
@@ -58,6 +58,7 @@ public class CartelaImprimeController implements Initializable, Serializable {
 	String linhaTelMailPix = "";
 	String linhaFiscal = "";
 	String linha02 = "";
+	String linha02A = "";
 	String linha03 = "";
 	String linha04 = "";
 	String linha05 = "";
@@ -66,6 +67,7 @@ public class CartelaImprimeController implements Initializable, Serializable {
 	String linha08 = "";
 	String linha09 = "";
 	String linha10 = "";
+	String linha11 = "";
 	
 	private Cartela cartela;
 	private Empresa empresa;
@@ -114,17 +116,23 @@ public class CartelaImprimeController implements Initializable, Serializable {
 				BufferedWriter bwC = new BufferedWriter(new FileWriter(pathI));
  					{	cartela = carService.findById(numCar);
 						linha02 = String.format("Local: %s", cartela.getLocalCar()) +
-								  String.format("%s", "       ") + 
+								  String.format("%s", "  ") + 
 						          String.format("%s%s", "Data: ", sdf.format(cartela.getDataCar()));
  					 	linha03 = "                               ";
 					 	linha04 = "*******************************"; 
-					 	linha05 = String.format("%s", "Prod           Qtd Preço  Valor");
+					 	linha05 = String.format("%s", "Prod          Qtd  Preço  Valor");
 					 	bwC.newLine();
 					 	bwC.write(linhaNome);
 					 	bwC.newLine();
 					 	bwC.newLine();
 						bwC.write(linha02);
 					 	bwC.newLine();
+						if (cartela.getNomeSituacaoCar().contentEquals("Convênio")) {
+							linha02A = "Cliente: " + cartela.getClienteCar();
+							bwC.write(linha02A);
+						 	bwC.newLine();
+						 	linha02A = "";
+						}	
 						bwC.write(linha03);
 					 	bwC.newLine();
 						bwC.write(linha04);
@@ -175,29 +183,25 @@ public class CartelaImprimeController implements Initializable, Serializable {
 					for (int i = 1 ; i < 30 ; i++) {
 						if (nomeV[i] != null) {
 							nomeProd = nomeV[i];
-							if (nomeProd.length() > 10) {
-								nomeProd = nomeProd.substring(0, 10);
+							if (nomeProd.length() > 9) {
+								nomeProd = nomeProd.substring(0, 9);
 							}
 							quantidade = qtdV[i];
 							venda = vdaV[i];
 							total = totV[i];
-							String qtdFd = FormataGabarito.formataQtd5(quantidade);
-							String precoFd = FormataGabarito.formataQtd5(venda);
-							String totalFd = FormataGabarito.formataQtd5(total);
 							totalCar += total;
-							linha06 = String.format("%-13s", nomeProd + " ") +
-							  String.format("%s%s", qtdFd, df.format(quantidade) + " ") +
-							  String.format("%s%s", precoFd, df.format(venda) + "  ") +
-							  String.format("%s%s", totalFd, df.format(total));
+							
+							linha06 = String.format("%-11s%s", nomeProd, " ") +
+									String.format("%5s%s", dfQtd.format(quantidade), " ") +
+									String.format("%6s%s", dfPreco.format(venda), " ") +
+									String.format("%6s", dfPreco.format(total));
 							bwC.write(linha06); 
 							bwC.newLine();
 						}
 					}	
-					cartela.setTotalCar(virService.sumTotalCartela(cartela.getNumeroCar()));
-					if (cartela.getDescontoCar() > 0.00 || 
-						cartela.getValorServicoCar() > 0.00) {
+					if (cartela.getDescontoCar() > 0.00) { 
 						String subTotalFd = FormataGabarito.formataDouble(cartela.getSubTotalCar());
-						subTotalCar = cartela.getSubTotalCar();
+						subTotalCar = cartela.getTotalCar();
 						linha07 = String.format("%-19s%s%s", 
 							"(=)SubTotal", subTotalFd, df.format(subTotalCar));
 						bwC.write(linha07);
@@ -224,11 +228,20 @@ public class CartelaImprimeController implements Initializable, Serializable {
 						bwC.newLine();
 					}	
 					String totalFd = FormataGabarito.formataDouble(cartela.getTotalCar());
-					totalCar = cartela.getTotalCar();
+					totalCar = cartela.getTotalCar() - cartela.getDescontoCar();
 					linha10 = 
 						String.format("%-19s%s%s", "Total   ", 
 								totalFd, df.format(totalCar));
+					
+					String pagto = "Pagante(s): " + cartela.getNumeroPaganteCar() + "  vlr: " + df.format(cartela.getValorPaganteCar());
+					
+					linha11 = String.format("%s", pagto);						
+					
 					bwC.write(linha10);
+					bwC.newLine();
+					bwC.write(linha03);
+					bwC.newLine();
+					bwC.write(linha11);
 					bwC.newLine();
 					bwC.write(linha03);
 					bwC.newLine();

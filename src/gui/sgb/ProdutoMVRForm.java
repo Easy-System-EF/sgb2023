@@ -53,9 +53,8 @@ public class ProdutoMVRForm {
 			listProd1.removeIf(x -> x.getVendaProd() == 0);
 			listProd1.removeIf(x -> x.getSaldoProd() == 0);
 			for (Produto m : listProd1) {
-
-							m.calculaPercentual();
-							proService.saveOrUpdate(m);
+				m.calculaPercentual();
+				proService.saveOrUpdate(m);
 			}
 		}
 
