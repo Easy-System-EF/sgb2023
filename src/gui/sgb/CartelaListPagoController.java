@@ -2,6 +2,7 @@ package gui.sgb;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import gui.sgbmodel.service.AnosService;
 import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.MesesService;
 import gui.util.Alerts;
+import gui.util.Mascaras;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -149,6 +151,48 @@ public class CartelaListPagoController implements Initializable, DataChangeListe
 				Alerts.showAlert("Cartela Paga por período ", "Período ", "Não há Cartela Paga no período ", AlertType.INFORMATION);
 			} else  {	
 				labelTitulo.setText(String.format("%s%s%s%d ", nomeTitulo, nomeMes, " ", aa));
+				Date dt  = new Date();
+				double pix = 0.0;
+				double deb = 0.0;
+				double din = 0.0;
+				double cc  = 0.0;
+				double tot = 0.0;
+				
+				for (CartelaPagante cp : list) {
+					if (cp.getFormaCartelaPag().equals("Dinheiro")) {
+						din += cp.getValorCartelaPag();
+					}
+					if (cp.getFormaCartelaPag().equals("Pix")) {
+						pix += cp.getValorCartelaPag();
+					}
+					if (cp.getFormaCartelaPag().equals("Débito")) {
+						deb += cp.getValorCartelaPag();
+					}
+					if (cp.getFormaCartelaPag().equals("CC")) {
+						cc += cp.getValorCartelaPag();
+					}
+					tot +=cp.getValorCartelaPag();
+				}
+				String vlrDin = "";
+				String vlrPix = "";
+				String vlrDeb = "";
+				String vlrCC = "";
+				String vlrTot = "";
+				try {
+					vlrDin = "R$" + Mascaras.formataValor(din);
+					vlrPix = "R$" + Mascaras.formataValor(pix);
+					vlrDeb = "R$" + Mascaras.formataValor(deb);
+					vlrCC = "R$" + Mascaras.formataValor(cc);
+					vlrTot = "R$" + Mascaras.formataValor(tot);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+				list.add(new CartelaPagante(null, null, dt, "Tot Dinheiro =>", 0.0, vlrDin, null, null, null, null, 0, 0));
+				list.add(new CartelaPagante(null, null, dt, "Tot Pix........ =>", 0.0, vlrPix, null, null, null, null, 0, 0));
+				list.add(new CartelaPagante(null, null, dt, "Tot Débito... =>", 0.0, vlrDeb, null, null, null, null, 0, 0));
+				list.add(new CartelaPagante(null, null, dt, "Tot CC......... =>", 0.0, vlrCC, null, null, null, null, 0, 0));
+				list.add(new CartelaPagante(null, null, dt, "Tot Total..... =>", 0.0, vlrTot, null, null, null, null, 0, 0));
 				obsList = FXCollections.observableArrayList(list);
 				tableViewCartelaPagante.setItems(obsList);
 			}	

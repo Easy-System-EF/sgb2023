@@ -951,6 +951,7 @@ public class CartelaFormController implements Initializable, DataChangeListener 
 	public void onDataChanged() {
 		updateTableView();
 	}
+	
 	@FXML
 	public void onBtPesquisaAction(ActionEvent event) {
 		classe = "Cartela Cliente Form";

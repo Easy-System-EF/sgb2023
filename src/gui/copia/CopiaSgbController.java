@@ -8,11 +8,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.MainSgb;
-import gui.listerneres.DataChangeListener;
 import gui.sgbmodel.entities.Adiantamento;
 import gui.sgbmodel.entities.Cargo;
 import gui.sgbmodel.entities.Cartela;
@@ -58,7 +56,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -68,7 +65,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class CopiaSgbController implements Initializable, DataChangeListener {
+public class CopiaSgbController implements Initializable {
 	
 	@FXML
 	private VBox vBoxBackUp;
@@ -103,6 +100,7 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  	private ObservableList<Copia> obsList;
 
 	int count = 0;
+	int flagStart = 0;
 	String status = "";
 	String crip = "";
 	Date dataI = new Date(System.currentTimeMillis());
@@ -122,8 +120,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  	private CopiaService service;
  	private Copia entity;
  	
-	private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
-
  	public void setBackUpService(CopiaService service) {
  		this.service = service;
  	}
@@ -136,22 +132,20 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
   	public void onBtOkAdiAction(ActionEvent event) {
  		status = "<<<aguarde>>>";
  		count = 0;
+ 		flagStart = 1;
  		labelFile.setText(status);
  		labelFile.viewOrderProperty();
  		labelCount.setText(String.valueOf(count));
-		Optional<ButtonType> result = Alerts.showConfirmation("Processo lento", "Confirma?");
-		if (result.get() == ButtonType.OK) {
-			Stage parentStage = Utils.currentStage(event);
-// instanciando novo obj depto e injetando via
-			createDialogForm("/gui/copia/CopiaForm.fxml", parentStage);
-			updateTableView();
-			executaBack();
-		} 	
+ 		updateTableView();
+		Stage parentStage = Utils.currentStage(event);
+		createDialogForm("/gui/copia/CopiaForm.fxml", parentStage);
+		executaBack();
+		flagStart = 0;
+		updateTableView();
    	}
  	
  	public void executaBack() {
- 		if (unid != null) { 
-// 			Alerts.showAlert("Atenção", "isoo pode demorar um pouco", null, AlertType.WARNING);
+ 		if (unid != null) {
  	 		labelCount.setText("");
  			count = 0; 			
  			grw = 0;
@@ -657,21 +651,15 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
  		labelUser.setText(user);
  		List<Copia> list = new ArrayList<>();
 		list = service.findAll();
+		if (flagStart == 1) {
+			list.removeIf(x -> x.getDataIBackUp() != null);
+			list.add(new Copia(null, null, null, "   processando", null));
+			list.add(new Copia(null, null, null, "<<<aguarde>>>", null));
+		}	
   		obsList = FXCollections.observableArrayList(list);
   		tableViewBackUp.setItems(obsList);
 	}
 
-	private void notifyDataChangeListerners() {
-		for (DataChangeListener listener : dataChangeListeners) {
-			listener.onDataChanged();
-		}
-	}
-
-	@Override
-	public void onDataChanged() {
-		updateTableView();
-	}
-	
 	public void limpaBackUp() {
 		LocalDate dt1 = DataStaticSGB.dateParaLocal(dataI);
 		int ano1 = DataStaticSGB.anoDaData(dt1);
@@ -718,7 +706,6 @@ public class CopiaSgbController implements Initializable, DataChangeListener {
 		entity.setDataFBackUp(dtf);
 		entity.setUnidadeBackUp(unid);
 		service.saveOrUpdate(entity);
-		notifyDataChangeListerners();
 		updateTableView();
  	}
  	

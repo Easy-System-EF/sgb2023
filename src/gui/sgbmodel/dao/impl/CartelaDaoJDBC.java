@@ -255,6 +255,37 @@ public class CartelaDaoJDBC implements CartelaDao {
 	} 
 
 	@Override
+	public List<Cartela> findByAno(Integer aa) {
+		PreparedStatement st = null; 
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement( 
+					 "SELECT cartela.* " +
+							   "FROM cartela " +
+								 "WHERE AnoCar = ? " +
+							   " ORDER BY NumeroCar" );
+			
+			st.setInt(1, aa);
+			rs = st.executeQuery();
+			
+ 			List<Cartela> list = new ArrayList<>();
+ 			
+			while (rs.next()) {
+ 			    Cartela obj = instantiateCartela(rs);
+  				list.add(obj);
+ 			}
+			return list;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	} 
+
+	@Override
 	public List<Cartela> findByMesAno(Integer mm, Integer aa, String str) {
 		PreparedStatement st = null; 
 		ResultSet rs = null;

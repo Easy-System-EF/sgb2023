@@ -27,6 +27,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -110,7 +112,7 @@
                   </TextField>
                </children>
             </HBox>
-            <Label text="Convênio(S/N)" GridPane.rowIndex="4">
+            <Label text="Convênio(S/N)" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" top="5.0" />
                </GridPane.margin>
@@ -121,17 +123,17 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <TextField fx:id="textConvenioCliente" prefHeight="22.0" prefWidth="25.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <TextField fx:id="textConvenioCliente" prefHeight="22.0" prefWidth="25.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets bottom="2.0" right="170.0" top="10.0" />
                </GridPane.margin>
             </TextField>
-            <Label fx:id="labelErrorConvenioCliente" prefHeight="15.0" prefWidth="186.0" text=" " textFill="#d71a1a" GridPane.columnIndex="2" GridPane.rowIndex="4">
+            <Label fx:id="labelErrorConvenioCliente" prefHeight="15.0" prefWidth="186.0" text=" " textFill="#d71a1a" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <font>
                   <Font size="12.0" />
                </font>
             </Label>
-            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <children>
                   <Button fx:id="btSaveCliente" mnemonicParsing="false" onAction="#onBtSaveClienteAction" prefHeight="24.0" prefWidth="90.0" text="Ok">
                      <HBox.margin>
@@ -195,7 +197,7 @@
                   <Font size="12.0" />
                </font>
             </Label>
-            <Button fx:id="btSairCliente" mnemonicParsing="false" onAction="#onBtSairClienteAction" prefHeight="27.0" prefWidth="90.0" text="Sair" GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Button fx:id="btSairCliente" mnemonicParsing="false" onAction="#onBtSairClienteAction" prefHeight="27.0" prefWidth="90.0" text="Sair" GridPane.columnIndex="2" GridPane.rowIndex="7">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -203,6 +205,30 @@
                   <Insets bottom="5.0" left="5.0" top="5.0" />
                </GridPane.margin>
             </Button>
+            <Label text="Endereço" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets bottom="2.0" left="5.0" top="2.0" />
+               </GridPane.margin>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label text="Referência" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets bottom="2.0" left="5.0" top="2.0" />
+               </GridPane.margin>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="textEnderecoCliente" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="textReferenciaCliente" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
          <effect>
             <Blend />

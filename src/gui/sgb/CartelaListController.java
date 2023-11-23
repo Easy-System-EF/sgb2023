@@ -104,7 +104,6 @@ public class CartelaListController implements Initializable, DataChangeListener 
  	public static Integer numEmp = 0;
  	public static Integer nivel = 0;
  	
- 	
 // carrega aqui os fornecedores Updatetableview (metodo)
  	private ObservableList<Cartela> obsList;
 
@@ -163,7 +162,8 @@ public class CartelaListController implements Initializable, DataChangeListener 
  		int mm = DataStaticSGB.mesDaData(dth);
  		labelUser.setText(user);
 		List<Cartela> list = service.findAll();
-		list.removeIf(x -> x.getMesCar() != mm);
+//		list.removeIf(x -> x.getMesCar() != mm );
+		list.removeIf(x -> x.getMesCar() != mm && x.getNomeSituacaoCar().equals("Pago"));
  		obsList = FXCollections.observableArrayList(list);
 		tableViewCartela.setItems(obsList);
 		notifyDataChangeListerners();
@@ -301,15 +301,15 @@ public class CartelaListController implements Initializable, DataChangeListener 
 		}
 	
 	@SuppressWarnings("static-access")
-	private void imprimeCartela(Cartela obj, CartelaVirtual objVir, Empresa emp, 
- 			Integer codCar) {
+	private void imprimeCartela(Cartela obj, CartelaVirtual objVir, Empresa emp, Integer codCar) {
 		CartelaImprimeController cartelaImpr = new CartelaImprimeController();
 		cartelaImpr.setCartela(obj, emp);
 		cartelaImpr.numEmp = numEmp;
 		cartelaImpr.numCar = obj.getNumeroCar();
 		cartelaImpr.setCartelaService(new CartelaService(),
 						 new CartelaVirtualService(),
-						 new EmpresaService());
+						 new EmpresaService(),
+						 new ClienteService());
 		cartelaImpr.imprimeCartela();
 	}	
 	

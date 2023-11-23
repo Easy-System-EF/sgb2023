@@ -12,6 +12,7 @@ public interface CartelaDao {
 	void deleteById(Integer codigo);
 	void zeraAll();
 	Cartela findById(Integer codigo); 
+	List<Cartela> findByAno(Integer aa); 
 	List<Cartela> findByMesAno(Integer mm, Integer aa, String str); 
 	List<Cartela> findByMesAnoFecha(Integer mm, Integer aa, Integer mmp, Integer aap); 
  	List<Cartela> findAll();

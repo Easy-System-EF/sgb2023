@@ -15,9 +15,11 @@ import java.util.ResourceBundle;
 
 import gui.sgbmodel.entities.Cartela;
 import gui.sgbmodel.entities.CartelaVirtual;
+import gui.sgbmodel.entities.Cliente;
 import gui.sgbmodel.entities.Empresa;
 import gui.sgbmodel.service.CartelaService;
 import gui.sgbmodel.service.CartelaVirtualService;
+import gui.sgbmodel.service.ClienteService;
 import gui.sgbmodel.service.EmpresaService;
 import gui.util.FormataGabarito;
 import gui.util.Imprimir;
@@ -56,6 +58,9 @@ public class CartelaImprimeController implements Initializable, Serializable {
 
 	String linhaNome = "";
 	String linhaTelMailPix = "";
+	String linhaNomeCli = null;
+	String linhaEndCli = null;
+	String linhaRefCli = null;
 	String linhaFiscal = "";
 	String linha02 = "";
 	String linha02A = "";
@@ -75,6 +80,7 @@ public class CartelaImprimeController implements Initializable, Serializable {
 	private CartelaService carService;
 	private CartelaVirtualService virService;
 	private EmpresaService empService;
+	private ClienteService cliService;
 
 	public void setCartela(Cartela cartela,
 							Empresa empresa) {
@@ -84,10 +90,12 @@ public class CartelaImprimeController implements Initializable, Serializable {
 
 	public void setCartelaService(CartelaService carService,
 									CartelaVirtualService virService,
-									EmpresaService empService) {
+									EmpresaService empService,
+									ClienteService cliService) {
 		this.carService = carService;
 		this.virService = virService;
 		this.empService = empService;
+		this.cliService = cliService;
 	}
 
 
@@ -115,6 +123,9 @@ public class CartelaImprimeController implements Initializable, Serializable {
 			try {	
 				BufferedWriter bwC = new BufferedWriter(new FileWriter(pathI));
  					{	cartela = carService.findById(numCar);
+ 						if (!cartela.getClienteCar().equals(null)) {
+ 							pesquisa(cartela.getClienteCar());
+ 						}
 						linha02 = String.format("Local: %s", cartela.getLocalCar()) +
 								  String.format("%s", "  ") + 
 						          String.format("%s%s", "Data: ", sdf.format(cartela.getDataCar()));
@@ -253,6 +264,17 @@ public class CartelaImprimeController implements Initializable, Serializable {
 					bwC.newLine();
 					bwC.write(linha03);
 					bwC.newLine();
+					
+					if (linhaEndCli.length() > 0) {
+						bwC.newLine();
+						bwC.write(linhaNomeCli);
+						bwC.newLine();
+						bwC.write(linhaEndCli);
+						if (linhaRefCli.length() > 0) {
+							bwC.newLine();
+							bwC.write(linhaRefCli);
+						}	
+					}
 					bwC.close();
 			}	
 	 			catch(	IOException e2) {
@@ -265,4 +287,15 @@ public class CartelaImprimeController implements Initializable, Serializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 	}
+	
+	public void pesquisa(String nome) {
+		List<Cliente> listCli = cliService.findPesquisa(nome);
+		for (Cliente c : listCli) {
+			if (c.getNomeCli().equals(nome)) {
+				linhaNomeCli = c.getNomeCli();
+				linhaEndCli = c.getEnderecoCli();
+				linhaRefCli = c.getReferenciaCli();
+			}
+		}	
+	}	
 }

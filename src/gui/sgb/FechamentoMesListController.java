@@ -29,7 +29,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -76,9 +75,6 @@ public class FechamentoMesListController implements Initializable, DataChangeLis
    	@FXML
    	private TableColumn<FechamentoMes, String> tableColumnValorAcumuladoFechamentoMes;   	
    	
-   	@FXML
-   	private Button btMesesFechamentoMes;
-   	 	
 	@FXML
 	private Label labelUser;
 
@@ -91,6 +87,7 @@ public class FechamentoMesListController implements Initializable, DataChangeLis
  	
 // auxiliar
  	String classe = "Fechamento Mes List";
+ 	int flagStart = 0;
  	 
  	// injeta a dependencia com set (invers�o de controle de inje�ao)	
  	public void setServices(FechamentoMesService service) {
@@ -99,6 +96,8 @@ public class FechamentoMesListController implements Initializable, DataChangeLis
  	
 	@FXML
 	public void onBtMesesFechamentoMesAction(ActionEvent event) {
+		updateTableView();
+		flagStart = 1;
 		Stage parentStage = Utils.currentStage(event);
 		FechamentoMes obj = new FechamentoMes();
 		Funcionario objFun = new Funcionario();
@@ -119,7 +118,9 @@ public class FechamentoMesListController implements Initializable, DataChangeLis
 			contF.updateFormData();
  		});
 		updateTableView();
-		initializeNodes();
+		service.zeraAll();
+		flagStart = 0;
+		mesNome = null;
 	}
 	 	 	
  	private <T> void createDialogOpcao(String absoluteName, Stage parentStage, Consumer<T> initializeAction) {
@@ -150,7 +151,7 @@ public class FechamentoMesListController implements Initializable, DataChangeLis
 
 // comportamento padr�o para iniciar as colunas 	
  	private void initializeNodes() {
-		labelTitulo.setText("Fechamento Mes " + mesNome);
+		labelTitulo.setText("Fechamento Mes              ");
 		tableColumnCartelaFechamentoMes.setCellValueFactory(new PropertyValueFactory<>("CartelaFechamentoMes"));
 		tableColumnDataFechamentoMes.setCellValueFactory(new PropertyValueFactory<>("DataFechamentoMes"));
 //		Utils.formatTableColumnDate(tableColumnDataFechamentoMes, "dd/MM/yyyy");
@@ -179,6 +180,19 @@ public class FechamentoMesListController implements Initializable, DataChangeLis
  		labelUser.setText(user);
 		classe = "Fechamento Mes List";
 		List<FechamentoMes> list = service.findAll();
+		if (list.size() == 0 && flagStart == 0) {
+			labelTitulo.setText("Fechamento Mes             ");
+			list.add(new FechamentoMes(null, null, null, null, null, null, null, null, null));
+			list.add(new FechamentoMes(null, null, null, null, null, null, null, null, null));
+			list.add(new FechamentoMes(null, null, null, null, null, null, null, null, null));
+			list.add(new FechamentoMes(null, null, null, null, null, null, null, null, null));
+			list.add(new FechamentoMes(null, null, null, null, null, null, null, null, null));
+			list.add(new FechamentoMes(null, null, null, null, null, null, null, null, null));
+			list.add(new FechamentoMes(null, null, null, null, null, "processando", null, null, null));
+			list.add(new FechamentoMes(null, null, null, null, null, "<<aguarde>>", null, null, null));
+		} else {
+			labelTitulo.setText("Fechamento Mes " + mesNome);
+		}	
 		obsList = FXCollections.observableArrayList(list);
 		tableViewFechamentoMes.setItems(obsList);
 	}

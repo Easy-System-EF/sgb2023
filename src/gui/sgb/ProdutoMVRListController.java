@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.MainSgb;
-import gui.listerneres.DataChangeListener;
 import gui.sgbmodel.entities.Produto;
 import gui.sgbmodel.service.ProdutoService;
 import gui.util.Alerts;
@@ -23,16 +22,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-public class ProdutoMVRListController implements Initializable, DataChangeListener {
+public class ProdutoMVRListController implements Initializable {
 
-	// inje��o de dependenia sem implementar a classe (instanciat)
-	// acoplamento forte - implementa via set
 		private ProdutoService service;
 		
 		@FXML
 	 	private TableView<Produto> tableViewProduto;
 	 	
-	// c/ entidade e coluna	
 	 	@FXML
 	 	private TableColumn<Produto, Integer>  tableColumnCodigoProd;
 	 	
@@ -54,22 +50,12 @@ public class ProdutoMVRListController implements Initializable, DataChangeListen
 		public String user = "usuário";		
 		int ok = 0;
 	 	
-	// carrega aqui os fornecedores Updatetableview (metodo)
 	 	private ObservableList<Produto> obsList;
 	 
-	 /* 
-	  * ActionEvent - referencia p/ o controle q receber o evento c/ acesso ao stage
-	  * com currentStage -
-	  * janela pai - parentstage
-	  * vamos abrir o forn form	
-	  */
-
-	// injeta a dependencia com set (invers�o de controle de inje�ao)	
 	 	public void setProdutoService(ProdutoService service) {
 	 		this.service = service;
 	 	}
 
-	 // inicializar as colunas para iniciar nossa tabela initializeNodes
 	 	@Override
 		public void initialize(URL url, ResourceBundle rb) {
 			initializeNodes();
@@ -87,7 +73,7 @@ public class ProdutoMVRListController implements Initializable, DataChangeListen
 			tableViewProduto.prefHeightProperty().bind(stage.heightProperty());
 	 	}
 
-		private void mvrForm() {
+		public void mvrForm() {
 			Optional<ButtonType> result = Alerts.showConfirmation("Pode demorar um pouco", "Confirma?");
 			if (result.get() == ButtonType.OK) {
 				ProdutoMVRForm mvr = new ProdutoMVRForm();
@@ -96,35 +82,36 @@ public class ProdutoMVRListController implements Initializable, DataChangeListen
 				mvr.materialPercentual();
 				mvr.materialClassifica();
 				ok = 1;
+			} else {
+				ok = 2;
 			}	
+			updateTableView();
 		}
 		
-	/* 	
-	 * carregar o obsList para atz tableview	
-	 * tst de seguran�a p/ servi�o vazio
-	 *  criando uma lista para receber os services
-	 *  instanciando o obsList
-	 *  acrescenta o botao edit e remove
-	 */  
-	 	public void updateTableView() {
+		public void updateTableView() {
 	 		if (service == null) {
 				throw new IllegalStateException("Serviço está vazio");
 	 		}
-	 		mvrForm();
 	 		labelUser.setText(user);
  			List<Produto> list = new ArrayList<>();
+ 			char nada = ' ';
+ 			if (ok == 0) {
+ 				list.add(new Produto(null, null, null, null, null, null, null, null, null, null, null, 0.0, nada));
+ 				list.add(new Produto(null, null, null, null, null, null, null, null, null, null, null, 0.0, nada));
+ 				list.add(new Produto(null, null, null, null, null, null, null, null, null, null, null, 0.0, nada));
+ 				list.add(new Produto(null, null, null, null, null, null, null, null, null, null, null, 0.0, nada));
+ 				list.add(new Produto(null, null, null, null, null, null, null, null, null, null, null, 0.0, nada));
+ 				list.add(new Produto(null, null, "                       processando", null, null, null, null, null, null, null, null, 0.0, nada));
+ 				list.add(new Produto(null, null, "                    <<<aguarde>>>", null, null, null, null, null, null, null, null, 0.0, nada));
+ 			}
 	 		if (ok == 1) {
 	 			list = service.findMVR();
 	 			list.removeIf(x -> x.getPercentualProd() == 0);
 	 		}	
+	 		if (ok > 1) {
+	 			list = service.findPesquisa("xyzwst");
+	 		}
 	 		obsList = FXCollections.observableArrayList(list);
 			tableViewProduto.setItems(obsList);
-			initializeNodes();
-		}
-	  	
-	//  atualiza minha lista dataChanged com dados novos 	
-		@Override
-		public void onDataChanged() {
-			updateTableView();
 		}
 }

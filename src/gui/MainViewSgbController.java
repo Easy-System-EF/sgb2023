@@ -22,6 +22,7 @@ import gui.sgb.ClienteListController;
 import gui.sgb.ComissaoListController;
 import gui.sgb.ConvenioListAbertoController;
 import gui.sgb.EntradaListController;
+import gui.sgb.FechamentoAnoListController;
 import gui.sgb.FechamentoMesListController;
 import gui.sgb.FolhaMesListController;
 import gui.sgb.FuncionarioListController;
@@ -36,6 +37,7 @@ import gui.sgbmodel.service.CartelaPaganteService;
 import gui.sgbmodel.service.CartelaService;
 import gui.sgbmodel.service.ClienteService;
 import gui.sgbmodel.service.EntradaService;
+import gui.sgbmodel.service.FechamentoAnoService;
 import gui.sgbmodel.service.FechamentoMesService;
 import gui.sgbmodel.service.FolhaMesService;
 import gui.sgbmodel.service.FuncionarioService;
@@ -137,6 +139,9 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	
 	@FXML
 	private MenuItem menuItemConsultaFechamentoMes;
+	
+	@FXML
+	private MenuItem menuItemConsultaFechamentoAno;
 	
 	@FXML
 	private MenuItem menuItemConsultaProdutoMVR;
@@ -602,6 +607,26 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 	}
   
 	@FXML
+	public void onMenuItemConsultaFechamentoAnoAction() {
+		classe = "Con Fechamnto Ano";
+		if (senha != "Ok") {
+			temLogar();
+		} 
+		if (senha == "Ok") {
+			if (nivel > 1 && nivel < 9) {
+				Alerts.showAlert("Nível de Acesso", "Atenção!!!", "nível sem Acesso", AlertType.ERROR);
+			} else {
+				loadView("/gui/sgb/FechamentoAnoList.fxml", (FechamentoAnoListController controller) -> {
+					controller.user = user;
+					controller.setServices(new FechamentoAnoService());
+					controller.updateTableView();
+					controller.montaForm();
+		});
+			}
+		}	
+	}
+  
+	@FXML
 	public void onMenuItemConsultaProdutoMVRListAction() {
 		classe = "Con Fechamnto Mes";
 		if (senha != "Ok") {
@@ -615,6 +640,7 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 					controller.user = user;
 					controller.setProdutoService(new ProdutoService());
 					controller.updateTableView();
+					controller.mvrForm();
 		});
 			}
 		}	
@@ -706,7 +732,8 @@ public class MainViewSgbController implements Initializable, DataChangeListener 
 // para executar a a��o -> fun��o accept do consumer			
 			initializingAction.accept(controller);
 		} catch (IOException e) {
-			Alerts.showAlert("IO Exception", classe + "Erro carregando a página", e.getMessage(), AlertType.ERROR);
+			e.printStackTrace();
+			Alerts.showAlert("IO Exception ", classe + " Erro carregando a página ", e.getMessage(), AlertType.ERROR);
 		}
 	}
 	

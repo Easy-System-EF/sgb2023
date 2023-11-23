@@ -36,8 +36,8 @@
         <columns>
             <TableColumn fx:id="tableColumnNumeroCartelaPagante" editable="false" prefWidth="53.0" text="Cartela" />
             <TableColumn fx:id="tableColumnDataCartelaPagante" editable="false" prefWidth="89.0" text="Data" />
-            <TableColumn fx:id="tableColumnLocalCartelaPagante" editable="false" prefWidth="89.0" text="Local" />
             <TableColumn fx:id="tableColumnValorCartelaPagante" editable="false" prefWidth="78.0" text="Valor" />
+            <TableColumn fx:id="tableColumnLocalCartelaPagante" editable="false" prefWidth="89.0" text="Local" />
             <TableColumn fx:id="tableColumnFormaCartelaPagante" editable="false" minWidth="9.0" prefWidth="93.0" text="Forma" />
         </columns>
          <effect>

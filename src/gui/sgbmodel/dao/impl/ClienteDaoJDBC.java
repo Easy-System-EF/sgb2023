@@ -31,15 +31,17 @@ public class ClienteDaoJDBC implements ClienteDao {
   		try {
 			st = conn.prepareStatement(
 					"INSERT INTO cliente " +
-				      "(NomeCli, DddCli, TelefoneCli, ConvenioCli )" + 
+				      "(NomeCli, DddCli, TelefoneCli, ConvenioCli, EnderecoCli, ReferenciaCli )" + 
   				      "VALUES " +
-				      "(?, ?, ?, ?)",
+				      "(?, ?, ?, ?, ?, ? )",
  					 Statement.RETURN_GENERATED_KEYS); 
  
  			st.setString(1, obj.getNomeCli());
  			st.setDouble(2, obj.getDddCli());
  			st.setDouble(3, obj.getTelefoneCli());
  			st.setString(4, obj.getConvenioCli());
+ 			st.setString(5, obj.getEnderecoCli());
+ 			st.setString(6, obj.getReferenciaCli());
 			 
  			int rowsaffectad = st.executeUpdate();
 			
@@ -71,9 +73,9 @@ public class ClienteDaoJDBC implements ClienteDao {
   		try {
 			st = conn.prepareStatement(
 					"INSERT INTO cliente " +
-				      "(CodigoCli, NomeCli, DddCli, TelefoneCli, ConvenioCli )" + 
+				      "(CodigoCli, NomeCli, DddCli, TelefoneCli, ConvenioCli, EnderecoCli, ReferenciaCli )" + 
   				      "VALUES " +
-				      "(?, ?, ?, ?, ?)",
+				      "(?, ?, ?, ?, ?, ?, ? )",
  					 Statement.RETURN_GENERATED_KEYS); 
  
  			st.setInt(1, obj.getCodigoCli());
@@ -81,6 +83,8 @@ public class ClienteDaoJDBC implements ClienteDao {
  			st.setDouble(3, obj.getDddCli());
  			st.setDouble(4, obj.getTelefoneCli());
  			st.setString(5, obj.getConvenioCli());
+ 			st.setString(6, obj.getEnderecoCli());
+ 			st.setString(7, obj.getReferenciaCli());
 			 
  			st.executeUpdate();
 			
@@ -100,7 +104,7 @@ public class ClienteDaoJDBC implements ClienteDao {
    		try {
 			st = conn.prepareStatement(
 					"UPDATE cliente " +  
-							"SET NomeCli = ?, DddCli = ?, TelefoneCli = ?, ConvenioCli = ? " +
+							"SET NomeCli = ?, DddCli = ?, TelefoneCli = ?, ConvenioCli = ?, EnderecoCli = ?, ReferenciaCli = ? " +
    					"WHERE (CodigoCli = ?)",
         			 Statement.RETURN_GENERATED_KEYS);
 
@@ -108,7 +112,9 @@ public class ClienteDaoJDBC implements ClienteDao {
  			st.setDouble(2, obj.getDddCli());
  			st.setDouble(3, obj.getTelefoneCli());
  			st.setString(4, obj.getConvenioCli());
- 			st.setInt(5, obj.getCodigoCli());
+ 			st.setString(5, obj.getEnderecoCli());
+ 			st.setString(6, obj.getReferenciaCli());
+ 			st.setInt(7, obj.getCodigoCli());
     			
 			st.executeUpdate();
    		} 
@@ -204,6 +210,8 @@ public class ClienteDaoJDBC implements ClienteDao {
  		cli.setDddCli(rs.getInt("DddCli"));
  		cli.setTelefoneCli(rs.getInt("TelefoneCli"));
  		cli.setConvenioCli(rs.getString("ConvenioCli"));
+ 		cli.setEnderecoCli(rs.getString("EnderecoCli"));
+ 		cli.setReferenciaCli(rs.getString("ReferenciaCli"));
         return cli;
 	}
 	

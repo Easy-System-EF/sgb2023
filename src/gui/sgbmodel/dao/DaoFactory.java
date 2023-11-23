@@ -11,6 +11,7 @@ import gui.sgbmodel.dao.impl.CartelaVirtualDaoJDBC;
 import gui.sgbmodel.dao.impl.ClienteDaoJDBC;
 import gui.sgbmodel.dao.impl.EmpresaDaoJDBC;
 import gui.sgbmodel.dao.impl.EntradaDaoJDBC;
+import gui.sgbmodel.dao.impl.FechamentoAnoDaoJDBC;
 import gui.sgbmodel.dao.impl.FechamentoMesDaoJDBC;
 import gui.sgbmodel.dao.impl.FolhaMesDaoJDBC;
 import gui.sgbmodel.dao.impl.FuncionarioDaoJDBC;
@@ -83,6 +84,10 @@ public class DaoFactory {
   	
   	public static AnosDao createAnosDao() {
 		return new AnosDaoJDBC(DB.getConnection());
+	}
+  	
+  	public static FechamentoAnoDao createFechamentoAnoDao() {
+		return new FechamentoAnoDaoJDBC(DB.getConnection());
 	}
   	
   	public static FechamentoMesDao createFechamentoMesDao() {

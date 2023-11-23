@@ -26,6 +26,10 @@ public class CartelaService {
 		return dao.findById(cod);
 	} 
 
+	public List<Cartela> findByAno(Integer aa) {
+		return dao.findByAno(aa);
+	} 
+
 	public List<Cartela> findByMesAno(Integer mm, Integer aa, String str) {
 		return dao.findByMesAno(mm, aa, str);
 	} 

@@ -49,6 +49,7 @@
                         <MenuItem fx:id="menuItemConsultaComissao" mnemonicParsing="false" onAction="#onMenuItemConsultaComissaoAction" text="Comissão" />
                         <MenuItem fx:id="menuItemConsultaFolhaMes" mnemonicParsing="false" onAction="#onMenuItemConsultaFolhaMesAction" text="Folha Mês" />
                         <MenuItem fx:id="menuItemConsultaFechamentoMes" mnemonicParsing="false" onAction="#onMenuItemConsultaFechamentoMesAction" text="FechamentoMes" />
+                        <MenuItem fx:id="menuItemConsultaFechamentoAno" mnemonicParsing="false" onAction="#onMenuItemConsultaFechamentoAnoAction" text="FechamentoAnual" />
                         <MenuItem fx:id="menuItemConsultaProdutoMVR" mnemonicParsing="false" onAction="#onMenuItemConsultaProdutoMVRListAction" text="Produto MVR" />
                      </items></Menu>
                   <Menu mnemonicParsing="false" text="Backup">

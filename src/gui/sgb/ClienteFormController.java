@@ -51,6 +51,12 @@ public class ClienteFormController implements Initializable {
 	@FXML
 	private TextField textConvenioCliente;
 	
+	@FXML
+	private TextField textEnderecoCliente;
+	
+	@FXML
+	private TextField textReferenciaCliente;
+	
  	@FXML
 	private Button btSaveCliente;
 	
@@ -193,6 +199,8 @@ public class ClienteFormController implements Initializable {
 		}
 		
 		obj.setConvenioCli(textConvenioCliente.getText().toUpperCase());
+		obj.setEnderecoCli(textEnderecoCliente.getText());
+		obj.setReferenciaCli(textReferenciaCliente.getText());
 
 		@SuppressWarnings("unused")
 		int ok = 0;
@@ -249,6 +257,8 @@ public class ClienteFormController implements Initializable {
   		Constraints.setTextFieldMaxLength(textDddCliente, 02);
   		Constraints.setTextFieldMaxLength(textTelefoneCliente, 9);
   		Constraints.setTextFieldMaxLength(textConvenioCliente, 1);
+  		Constraints.setTextFieldMaxLength(textEnderecoCliente, 30);
+  		Constraints.setTextFieldMaxLength(textReferenciaCliente, 30);
    	}
 
  /*
@@ -276,7 +286,8 @@ public class ClienteFormController implements Initializable {
  			entity.setConvenioCli("N");
  		}
   		textConvenioCliente.setText(entity.getConvenioCli());
-
+  		textEnderecoCliente.setText(entity.getEnderecoCli());
+  		textReferenciaCliente.setText(entity.getReferenciaCli());
  	}
  	
  // mandando a msg de erro para o labelErro correspondente 	

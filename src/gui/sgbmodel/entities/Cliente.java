@@ -12,17 +12,22 @@ public class Cliente implements Serializable{
 	private Integer dddCli;
 	private Integer telefoneCli;
 	private String convenioCli;
+	private String enderecoCli;
+	private String referenciaCli;
 	
 	public Cliente () {
 		
 	}
 
-	public Cliente(Integer codigoCli ,String nomeCli, Integer dddCli, Integer telefoneCli, String convenioCli) {
+	public Cliente(Integer codigoCli ,String nomeCli, Integer dddCli, Integer telefoneCli, String convenioCli,
+			String enderecoCli, String referenciaCli) {
 		this.codigoCli = codigoCli;
 		this.nomeCli = nomeCli;
 		this.dddCli = dddCli;
 		this.telefoneCli = telefoneCli;
 		this.convenioCli = convenioCli;
+		this.enderecoCli = enderecoCli;
+		
 	}
 
 	public Integer getCodigoCli() {
@@ -65,6 +70,22 @@ public class Cliente implements Serializable{
 		this.convenioCli = convenioCli;
 	}
 
+	public String getEnderecoCli() {
+		return enderecoCli;
+	}
+
+	public void setEnderecoCli(String enderecoCli) {
+		this.enderecoCli = enderecoCli;
+	}
+
+	public String getReferenciaCli() {
+		return referenciaCli;
+	}
+
+	public void setReferenciaCli(String referenciaCli) {
+		this.referenciaCli = referenciaCli;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(dddCli, telefoneCli);
@@ -85,6 +106,7 @@ public class Cliente implements Serializable{
 	@Override
 	public String toString() {
 		return "Cliente [codigoCli=" + codigoCli + ", nomeCli=" + nomeCli + ", dddCli=" + dddCli + ", telefoneCli="
-				+ telefoneCli + ", convenioCli=" + convenioCli + "]";
+				+ telefoneCli + ", convenioCli=" + convenioCli + ", enderecoCli=" + enderecoCli + ", referenciaCli="
+				+ referenciaCli + "]";
 	}
 }
